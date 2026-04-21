@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+:root {
+  --void: #08090A;
+  --deep: #0F1012;
+  --smoke: #161719;
+  --iron: #222326;
+  --graphite: #5A5B5F;
+  --silver: #8B8D93;
+  --bone: #D0D2D8;
+  --chalk: #F0F1F3;
+  --accent: #5E6AD2;
+  --accent-bright: #7B85E8;
+  --accent-dim: #4A54B0;
+  --accent-glow: rgba(94, 106, 210, 0.15);
+
+  --background: var(--void);
+  --foreground: var(--bone);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-void: #08090A;
+  --color-deep: #0F1012;
+  --color-smoke: #161719;
+  --color-iron: #222326;
+  --color-graphite: #5A5B5F;
+  --color-silver: #8B8D93;
+  --color-bone: #D0D2D8;
+  --color-chalk: #F0F1F3;
+  --color-accent: #5E6AD2;
+  --color-accent-bright: #7B85E8;
+  --color-accent-dim: #4A54B0;
+  --font-display: var(--font-syne);
+  --font-body: var(--font-afacad);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--void);
+  color: var(--bone);
+  font-family: var(--font-afacad), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent);
+  color: white;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--void);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--iron);
+}
+
+/* Glow effects */
+.glow-accent {
+  box-shadow: 0 0 60px var(--accent-glow), 0 0 120px rgba(94, 106, 210, 0.05);
+}
+
+.glow-line {
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  height: 1px;
+  opacity: 0.4;
+}
+
+/* Gradient text */
+.text-gradient {
+  background: linear-gradient(135deg, var(--chalk), var(--accent-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass card */
+.glass {
+  background: rgba(15, 16, 18, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(34, 35, 38, 0.8);
+}
+
+.glass:hover {
+  border-color: rgba(94, 106, 210, 0.3);
+  background: rgba(15, 16, 18, 0.8);
+}
+
+/* Noise texture overlay */
+.noise::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Animated gradient mesh */
+@keyframes meshShift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(2%, -1%) scale(1.02); }
+  50% { transform: translate(-1%, 2%) scale(0.98); }
+  75% { transform: translate(1%, -2%) scale(1.01); }
+}
+
+.mesh-bg {
+  animation: meshShift 20s ease-in-out infinite;
+}
+
+/* Grid background */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(34, 35, 38, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 35, 38, 0.3) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Dot grid */
+.dot-grid {
+  background-image: radial-gradient(rgba(90, 91, 95, 0.3) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Custom cursor — hide native cursor when active */
+html.custom-cursor,
+html.custom-cursor * {
+  cursor: none !important;
+}
+html.custom-cursor input,
+html.custom-cursor textarea,
+html.custom-cursor select {
+  cursor: text !important;
+}
+
+/* Magnetic CTA wrapper — its `transform` is set by JS, so child can animate freely */
+.magnetic-wrap {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Touch device override — guarantee native cursor on mobile */
+@media (pointer: coarse) {
+  html.custom-cursor,
+  html.custom-cursor * {
+    cursor: auto !important;
+  }
+}
+
+/* Section mask reveal */
+@keyframes maskWipe {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+.mask-reveal {
+  animation: maskWipe 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}

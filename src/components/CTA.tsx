@@ -1,0 +1,143 @@
+"use client";
+
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import MagneticButton from "./MagneticButton";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+export default function CTA() {
+  const container = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      gsap.from(".cta-headline", {
+        y: 60,
+        opacity: 0,
+        duration: 1,
+        scrollTrigger: {
+          trigger: container.current,
+          start: "top 75%",
+        },
+      });
+
+      gsap.from(".cta-body", {
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        scrollTrigger: {
+          trigger: ".cta-body",
+          start: "top 85%",
+        },
+      });
+
+      gsap.from(".cta-button", {
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        scrollTrigger: {
+          trigger: ".cta-button",
+          start: "top 88%",
+        },
+      });
+
+      gsap.from(".cta-micro", {
+        opacity: 0,
+        duration: 0.6,
+        scrollTrigger: {
+          trigger: ".cta-micro",
+          start: "top 90%",
+        },
+      });
+
+      // Pulsing glow animation
+      gsap.to(".cta-glow", {
+        scale: 1.15,
+        opacity: 0.06,
+        duration: 3,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+    },
+    { scope: container }
+  );
+
+  return (
+    <section
+      id="contact"
+      ref={container}
+      className="relative py-32 md:py-44 overflow-hidden"
+    >
+      <div
+        className="absolute top-0 left-0 w-full h-px"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent, var(--accent-dim), transparent)",
+        }}
+      />
+
+      {/* Pulsing background glow */}
+      <div
+        className="cta-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] opacity-[0.04] pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, var(--accent) 0%, transparent 70%)",
+          filter: "blur(60px)",
+        }}
+      />
+
+      {/* Grid background */}
+      <div className="absolute inset-0 grid-bg opacity-15 pointer-events-none" />
+
+      <div className="max-w-[680px] mx-auto px-6 text-center relative z-10">
+        <p className="text-accent text-xs font-semibold tracking-[0.2em] uppercase mb-6">
+          How to start
+        </p>
+
+        <h2
+          className="cta-headline font-[var(--font-syne)] font-extrabold leading-tight tracking-[-0.01em] mb-6"
+        >
+          <span className="text-gradient" style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}>
+            Get your positioning audit.
+          </span>
+        </h2>
+
+        <p className="cta-body text-silver text-lg leading-relaxed mb-12 font-[var(--font-afacad)]">
+          15 minutes. I&apos;ll pull up your current site, show you where you&apos;re positioned today, who you&apos;re competing with, and the unowned space you could own. No script. No deck. Just the audit.
+        </p>
+
+        <div className="cta-button">
+          <MagneticButton
+            href="mailto:nico@menconimarketing.com"
+            data-cursor="cta"
+            className="group relative inline-flex items-center gap-3 bg-accent text-void px-12 py-5 text-lg font-bold transition-all duration-300"
+            style={{
+              boxShadow:
+                "0 0 50px rgba(94, 106, 210, 0.25), 0 0 100px rgba(94, 106, 210, 0.1)",
+            }}
+          >
+            Book a call with Nico
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="group-hover:translate-x-1 transition-transform duration-300"
+            >
+              <path d="M3 8h10M9 4l4 4-4 4" />
+            </svg>
+          </MagneticButton>
+        </div>
+
+        <p className="cta-micro mt-6 text-graphite text-sm">
+          Free. No commitment. If it doesn&apos;t make sense, I&apos;ll tell you on the call.
+        </p>
+      </div>
+    </section>
+  );
+}
