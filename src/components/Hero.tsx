@@ -273,7 +273,7 @@ export default function Hero() {
 
         <div className="hero-cta-wrap mt-12 flex flex-col items-center gap-5">
           <MagneticButton
-            href="#contact"
+            href="#audit"
             data-cursor="cta"
             className="group relative inline-flex items-center gap-3 bg-accent text-void px-10 py-4 text-lg font-bold transition-all duration-300"
             style={{

@@ -1,6 +1,7 @@
 import BrandIntro from "@/components/BrandIntro";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
+import PositioningAudit from "@/components/PositioningAudit";
 import Problem from "@/components/Problem";
 import Mechanism from "@/components/Mechanism";
 import Proof from "@/components/Proof";
@@ -16,6 +17,7 @@ export default function Home() {
       <main className="noise">
         <Nav />
         <Hero />
+        <PositioningAudit />
         <Problem />
         <Mechanism />
         <Proof />
