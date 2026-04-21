@@ -7,6 +7,7 @@ import Mechanism from "@/components/Mechanism";
 import Proof from "@/components/Proof";
 import Difference from "@/components/Difference";
 import FAQ from "@/components/FAQ";
+import Calculator from "@/components/Calculator";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 
@@ -23,6 +24,7 @@ export default function Home() {
         <Proof />
         <Difference />
         <FAQ />
+        <Calculator />
         <CTA />
         <Footer />
       </main>

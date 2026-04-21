@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,10 +8,20 @@ import SiteModal from "./SiteModal";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const projects = [
+type Project = {
+  name: string;
+  trade: string;
+  category: string;
+  location: string;
+  description: string;
+  url: string;
+};
+
+const projects: Project[] = [
   {
     name: "606 Property Services",
     trade: "Property Maintenance",
+    category: "property",
     location: "Chicago, IL",
     description: "Full website rebuild with lead capture and service pages",
     url: "https://606propertyservices.menconimarketing.com",
@@ -19,6 +29,7 @@ const projects = [
   {
     name: "ParaBeach Plastering",
     trade: "Plastering",
+    category: "plastering",
     location: "Southern California",
     description: "Brand-new site build with portfolio showcase and booking",
     url: "https://parabeachplastering.menconimarketing.com",
@@ -26,10 +37,18 @@ const projects = [
   {
     name: "Martinez Landscaping",
     trade: "Landscaping",
+    category: "landscaping",
     location: "Riverside, CA",
     description: "Custom demo site with before/after project gallery",
     url: "https://martinezlandscaping.menconimarketing.com",
   },
+];
+
+const filters = [
+  { id: "all", label: "All work" },
+  { id: "property", label: "Property" },
+  { id: "plastering", label: "Plastering" },
+  { id: "landscaping", label: "Landscaping" },
 ];
 
 function ProjectCard({
@@ -37,7 +56,7 @@ function ProjectCard({
   index,
   onOpen,
 }: {
-  project: (typeof projects)[0];
+  project: Project;
   index: number;
   onOpen: () => void;
 }) {
@@ -164,7 +183,30 @@ function ProjectCard({
 
 export default function Proof() {
   const container = useRef<HTMLDivElement>(null);
-  const [activeProject, setActiveProject] = useState<(typeof projects)[0] | null>(null);
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [activeFilter, setActiveFilter] = useState<string>("all");
+
+  const visibleProjects = activeFilter === "all"
+    ? projects
+    : projects.filter((p) => p.category === activeFilter);
+
+  // Re-animate cards when filter changes
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      gsap.fromTo(
+        ".project-card",
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          stagger: 0.08,
+          ease: "power2.out",
+          overwrite: true,
+        }
+      );
+    });
+  }, [activeFilter]);
 
   useGSAP(
     () => {
@@ -252,8 +294,35 @@ export default function Proof() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-5">
-            {projects.map((project, i) => (
+          {/* Trade filter pills */}
+          <div className="flex flex-wrap gap-2 mb-8 overflow-x-auto md:justify-start">
+            {filters.map((f) => {
+              const count = f.id === "all"
+                ? projects.length
+                : projects.filter((p) => p.category === f.id).length;
+              const active = activeFilter === f.id;
+              return (
+                <button
+                  key={f.id}
+                  onClick={() => setActiveFilter(f.id)}
+                  data-cursor="link"
+                  className={`shrink-0 inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 ${
+                    active
+                      ? "bg-accent text-void"
+                      : "bg-deep border border-iron/60 text-silver hover:border-accent/50 hover:text-chalk"
+                  }`}
+                >
+                  {f.label}
+                  <span className={`text-[10px] ${active ? "text-void/60" : "text-graphite"}`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-5 min-h-[300px]">
+            {visibleProjects.map((project, i) => (
               <ProjectCard
                 key={project.name}
                 project={project}
@@ -261,6 +330,13 @@ export default function Proof() {
                 onOpen={() => setActiveProject(project)}
               />
             ))}
+            {visibleProjects.length === 0 && (
+              <div className="md:col-span-3 py-16 text-center">
+                <p className="text-silver text-sm">
+                  No projects in this category yet &mdash; but the same system applies.
+                </p>
+              </div>
+            )}
           </div>
 
           <p className="proof-closing mt-14 text-silver text-center text-lg font-[var(--font-afacad)]">

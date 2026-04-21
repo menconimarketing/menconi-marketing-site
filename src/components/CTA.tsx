@@ -4,7 +4,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import MagneticButton from "./MagneticButton";
+import BookingEmbed from "./BookingEmbed";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -92,49 +92,30 @@ export default function CTA() {
       {/* Grid background */}
       <div className="absolute inset-0 grid-bg opacity-15 pointer-events-none" />
 
-      <div className="max-w-[680px] mx-auto px-6 text-center relative z-10">
-        <p className="text-accent text-xs font-semibold tracking-[0.2em] uppercase mb-6">
-          How to start
-        </p>
+      <div className="max-w-[820px] mx-auto px-6 relative z-10">
+        <div className="text-center mb-10">
+          <p className="text-accent text-xs font-semibold tracking-[0.2em] uppercase mb-6">
+            Book your call
+          </p>
 
-        <h2
-          className="cta-headline font-[var(--font-syne)] font-extrabold leading-tight tracking-[-0.01em] mb-6"
-        >
-          <span className="text-gradient" style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}>
-            Get your positioning audit.
-          </span>
-        </h2>
-
-        <p className="cta-body text-silver text-lg leading-relaxed mb-12 font-[var(--font-afacad)]">
-          15 minutes. I&apos;ll pull up your current site, show you where you&apos;re positioned today, who you&apos;re competing with, and the unowned space you could own. No script. No deck. Just the audit.
-        </p>
-
-        <div className="cta-button">
-          <MagneticButton
-            href="mailto:nico@menconimarketing.com"
-            data-cursor="cta"
-            className="group relative inline-flex items-center gap-3 bg-accent text-void px-12 py-5 text-lg font-bold transition-all duration-300"
-            style={{
-              boxShadow:
-                "0 0 50px rgba(94, 106, 210, 0.25), 0 0 100px rgba(94, 106, 210, 0.1)",
-            }}
+          <h2
+            className="cta-headline font-[var(--font-syne)] font-extrabold leading-tight tracking-[-0.01em] mb-6"
           >
-            Book a call with Nico
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="group-hover:translate-x-1 transition-transform duration-300"
-            >
-              <path d="M3 8h10M9 4l4 4-4 4" />
-            </svg>
-          </MagneticButton>
+            <span className="text-gradient" style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}>
+              Get your positioning audit.
+            </span>
+          </h2>
+
+          <p className="cta-body text-silver text-lg leading-relaxed font-[var(--font-afacad)]">
+            15 minutes. I&apos;ll pull up your current site, show you where you&apos;re positioned today, who you&apos;re competing with, and the unowned space you could own.
+          </p>
         </div>
 
-        <p className="cta-micro mt-6 text-graphite text-sm">
+        <div className="cta-button">
+          <BookingEmbed />
+        </div>
+
+        <p className="cta-micro mt-6 text-graphite text-sm text-center">
           Free. No commitment. If it doesn&apos;t make sense, I&apos;ll tell you on the call.
         </p>
       </div>
