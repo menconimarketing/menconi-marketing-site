@@ -17,7 +17,7 @@ const fmt = (n: number) =>
 
 export default function Calculator() {
   const container = useRef<HTMLDivElement>(null);
-  const numberRef = useRef<HTMLSpanElement>(null);
+  const numberRef = useRef<HTMLDivElement>(null);
   const [jobValue, setJobValue] = useState(5000);
   const [monthlyLeads, setMonthlyLeads] = useState(15);
 

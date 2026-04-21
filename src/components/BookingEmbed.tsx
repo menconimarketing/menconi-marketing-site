@@ -16,21 +16,23 @@ export default function BookingEmbed({
     if (!CAL_LINK) return;
     (async () => {
       const cal = await getCalApi({ namespace: "menconi-audit" });
+      const palette = {
+        "cal-bg": "#0F1012",
+        "cal-bg-emphasis": "#161719",
+        "cal-bg-muted": "#222326",
+        "cal-text": "#F0F1F3",
+        "cal-text-emphasis": "#FFFFFF",
+        "cal-text-muted": "#8B8D93",
+        "cal-border": "#222326",
+        "cal-border-subtle": "#161719",
+        "cal-brand": "#5E6AD2",
+        "cal-brand-text": "#08090A",
+      };
       cal("ui", {
         theme: "dark",
         cssVarsPerTheme: {
-          dark: {
-            "cal-bg": "#0F1012",
-            "cal-bg-emphasis": "#161719",
-            "cal-bg-muted": "#222326",
-            "cal-text": "#F0F1F3",
-            "cal-text-emphasis": "#FFFFFF",
-            "cal-text-muted": "#8B8D93",
-            "cal-border": "#222326",
-            "cal-border-subtle": "#161719",
-            "cal-brand": "#5E6AD2",
-            "cal-brand-text": "#08090A",
-          },
+          dark: palette,
+          light: palette,
         },
         hideEventTypeDetails: false,
         layout: "month_view",
