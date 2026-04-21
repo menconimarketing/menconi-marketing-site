@@ -111,6 +111,19 @@ export default function Hero() {
           scrub: 1,
         },
       });
+
+      // Word rotator — slot-machine through 4 words, lands on "position"
+      gsap.set(".hero-rotator", { y: 0 });
+      gsap.to(".hero-rotator span", {
+        opacity: 1,
+        duration: 0.001,
+      });
+      const rotateWords = gsap.timeline({ delay: 1.4 });
+      // Each word is 1em tall, stacked vertically. Slide up to reveal next.
+      rotateWords
+        .to(".hero-rotator", { y: "-1em", duration: 0.4, ease: "power3.inOut" })
+        .to(".hero-rotator", { y: "-2em", duration: 0.4, ease: "power3.inOut", delay: 0.2 })
+        .to(".hero-rotator", { y: "-3em", duration: 0.5, ease: "power3.out", delay: 0.2 });
     },
     { scope: container }
   );
@@ -261,7 +274,17 @@ export default function Hero() {
           <span className="hero-word inline-block text-gradient">You&nbsp;</span>
           <span className="hero-word inline-block text-gradient">need&nbsp;</span>
           <span className="hero-word inline-block text-gradient">a&nbsp;</span>
-          <span className="hero-word inline-block text-gradient">position</span>
+          <span
+            className="hero-word inline-block text-gradient align-baseline overflow-hidden"
+            style={{ height: "1em", verticalAlign: "bottom" }}
+          >
+            <span className="hero-rotator inline-flex flex-col leading-[1.02]">
+              <span className="opacity-0">edge</span>
+              <span className="opacity-0">leverage</span>
+              <span className="opacity-0">personality</span>
+              <span>position</span>
+            </span>
+          </span>
           <br />
           <span className="hero-word inline-block text-gradient">to&nbsp;</span>
           <span className="hero-word inline-block text-gradient">market.</span>

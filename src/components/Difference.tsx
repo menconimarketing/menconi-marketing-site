@@ -4,6 +4,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ActivityTicker from "./ActivityTicker";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -226,9 +227,13 @@ export default function Difference() {
               ))}
             </div>
 
-            <p className="diff-closing text-chalk text-xl font-semibold font-[var(--font-syne)] tracking-tight">
+            <p className="diff-closing text-chalk text-xl font-semibold font-[var(--font-syne)] tracking-tight mb-8">
               Big companies have layers. I have your phone number.
             </p>
+
+            <div className="diff-closing">
+              <ActivityTicker />
+            </div>
           </div>
         </div>
       </div>

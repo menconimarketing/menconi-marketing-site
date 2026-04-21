@@ -10,6 +10,7 @@ import FAQ from "@/components/FAQ";
 import Calculator from "@/components/Calculator";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
+import MobileBottomCTA from "@/components/MobileBottomCTA";
 
 export default function Home() {
   return (
@@ -28,6 +29,7 @@ export default function Home() {
         <CTA />
         <Footer />
       </main>
+      <MobileBottomCTA />
     </>
   );
 }

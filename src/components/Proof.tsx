@@ -15,6 +15,45 @@ type Project = {
   location: string;
   description: string;
   url: string;
+  icon: "building" | "trowel" | "leaf";
+};
+
+const TradeIcon = ({ kind, className = "" }: { kind: Project["icon"]; className?: string }) => {
+  const props = {
+    width: 18,
+    height: 18,
+    viewBox: "0 0 20 20",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.4,
+    className,
+  };
+  if (kind === "building") {
+    return (
+      <svg {...props}>
+        <rect x="3" y="3" width="14" height="14" />
+        <line x1="3" y1="7" x2="17" y2="7" />
+        <line x1="3" y1="11" x2="17" y2="11" />
+        <line x1="10" y1="3" x2="10" y2="17" />
+      </svg>
+    );
+  }
+  if (kind === "trowel") {
+    return (
+      <svg {...props}>
+        <path d="M5 5l4 4-2 2-4-4z" />
+        <line x1="9" y1="9" x2="17" y2="17" />
+        <path d="M14 14l3-3 1 1-3 3z" />
+      </svg>
+    );
+  }
+  // leaf
+  return (
+    <svg {...props}>
+      <path d="M4 16c0-7 5-12 12-12-1 7-5 12-12 12z" />
+      <line x1="4" y1="16" x2="11" y2="9" />
+    </svg>
+  );
 };
 
 const projects: Project[] = [
@@ -25,6 +64,7 @@ const projects: Project[] = [
     location: "Chicago, IL",
     description: "Full website rebuild with lead capture and service pages",
     url: "https://606propertyservices.menconimarketing.com",
+    icon: "building",
   },
   {
     name: "ParaBeach Plastering",
@@ -33,6 +73,7 @@ const projects: Project[] = [
     location: "Southern California",
     description: "Brand-new site build with portfolio showcase and booking",
     url: "https://parabeachplastering.menconimarketing.com",
+    icon: "trowel",
   },
   {
     name: "Martinez Landscaping",
@@ -41,6 +82,7 @@ const projects: Project[] = [
     location: "Riverside, CA",
     description: "Custom demo site with before/after project gallery",
     url: "https://martinezlandscaping.menconimarketing.com",
+    icon: "leaf",
   },
 ];
 
@@ -146,9 +188,14 @@ function ProjectCard({
 
       <div className="p-7 relative z-10">
         <div className="flex items-start justify-between gap-3 mb-1.5">
-          <h3 className="font-[var(--font-syne)] text-chalk font-bold text-lg group-hover:text-white transition-colors duration-300">
-            {project.name}
-          </h3>
+          <div className="flex items-center gap-3">
+            <span className="text-accent/70 group-hover:text-accent transition-colors duration-300">
+              <TradeIcon kind={project.icon} />
+            </span>
+            <h3 className="font-[var(--font-syne)] text-chalk font-bold text-lg group-hover:text-white transition-colors duration-300">
+              {project.name}
+            </h3>
+          </div>
           <svg
             width="14"
             height="14"
