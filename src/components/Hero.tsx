@@ -133,7 +133,7 @@ export default function Hero() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
       {/* 3D hero canvas — morphing distorted orb, mouse-responsive */}
-      <div className="absolute inset-0 pointer-events-none opacity-80">
+      <div className="absolute inset-0 pointer-events-none z-[1]">
         <HeroCanvas />
       </div>
 
