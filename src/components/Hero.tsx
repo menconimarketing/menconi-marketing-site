@@ -89,13 +89,41 @@ export default function Hero() {
           0.8
         );
 
-      gsap.to(".hero-content", {
-        y: -150,
+      // Scroll-driven letter explosion \u2014 each .hero-word scatters outward
+      const words = gsap.utils.toArray<HTMLElement>(".hero-word");
+      words.forEach((el) => {
+        // Random direction + rotation for each word
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 200 + Math.random() * 300;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance * 0.6 - 100; // bias upward
+        const rot = (Math.random() - 0.5) * 180;
+
+        gsap.to(el, {
+          x: dx,
+          y: dy,
+          rotation: rot,
+          scale: 0.5 + Math.random() * 0.5,
+          opacity: 0,
+          filter: "blur(6px)",
+          ease: "power2.in",
+          scrollTrigger: {
+            trigger: container.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1.2,
+          },
+        });
+      });
+
+      // Sub-text, CTA, micro all just lift + fade
+      gsap.to([".hero-sub", ".hero-cta-wrap", ".hero-micro"], {
+        y: -120,
         opacity: 0,
         scrollTrigger: {
           trigger: container.current,
           start: "top top",
-          end: "80% top",
+          end: "70% top",
           scrub: 1.5,
         },
       });
