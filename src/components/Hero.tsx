@@ -5,9 +5,12 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HeroCanvas from "./HeroCanvas";
+import SplineScene from "./SplineScene";
 import MagneticButton from "./MagneticButton";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+const SPLINE_SCENE_URL = process.env.NEXT_PUBLIC_SPLINE_SCENE_URL ?? "";
 
 export default function Hero() {
   const container = useRef<HTMLDivElement>(null);
@@ -160,9 +163,15 @@ export default function Hero() {
       ref={container}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* 3D hero canvas — morphing distorted orb, mouse-responsive */}
-      <div className="absolute inset-0 pointer-events-none z-[1]">
-        <HeroCanvas />
+      {/* 3D hero — Spline scene if configured, else native Three.js shard star */}
+      <div className="absolute inset-0 z-[1]">
+        {SPLINE_SCENE_URL ? (
+          <SplineScene sceneUrl={SPLINE_SCENE_URL} />
+        ) : (
+          <div className="pointer-events-none w-full h-full">
+            <HeroCanvas />
+          </div>
+        )}
       </div>
 
       {/* Gradient mesh background - responds to mouse */}
