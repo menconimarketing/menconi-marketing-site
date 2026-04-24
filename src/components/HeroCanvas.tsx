@@ -1,169 +1,105 @@
 "use client";
 
-import { useRef, useMemo, useEffect } from "react";
+import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { EffectComposer, Bloom, ToneMapping } from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
 import * as THREE from "three";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-const LINE_COUNT = 140;
-const POINTS_PER_LINE = 220;
-const WAVE_WIDTH = 22;
+const vertexShader = /* glsl */ `
+  uniform float uTime;
+  varying vec2 vUv;
+  varying float vElevation;
 
-type Ribbon = {
-  line: THREE.Line;
-  geometry: THREE.BufferGeometry;
-  yBase: number;
-  phase: number;
-  freqMul: number;
-  hueShift: number;
-};
+  void main() {
+    vUv = uv;
+    vec3 pos = position;
 
-function WaveField({ mouseRef }: { mouseRef: React.RefObject<{ x: number; y: number }> }) {
-  const groupRef = useRef<THREE.Group>(null);
+    // Traveling waves — negative time so peaks move left to right
+    float wave1 = sin((pos.x - uTime * 1.4) * 0.55) * 0.6;
+    float wave2 = sin((pos.x - uTime * 0.9) * 1.1 + 1.0) * 0.32;
+    float wave3 = sin((pos.x - uTime * 0.5) * 2.3 + 2.0) * 0.14;
 
-  const ribbons = useMemo<Ribbon[]>(() => {
-    const arr: Ribbon[] = [];
-    for (let i = 0; i < LINE_COUNT; i++) {
-      const positions = new Float32Array(POINTS_PER_LINE * 3);
-      const colors = new Float32Array(POINTS_PER_LINE * 3);
+    // Slow envelope so peaks are uneven
+    float envelope = sin(pos.x * 0.28 + uTime * 0.18) * 0.45 + 0.7;
 
-      const t = i / (LINE_COUNT - 1);
-      // Hue: 0.5 (cyan) → 0.95 (magenta/red) — full premium spectrum
-      const baseHue = 0.5 + t * 0.45;
+    float displacement = (wave1 + wave2 + wave3) * envelope;
 
-      for (let j = 0; j < POINTS_PER_LINE; j++) {
-        positions[j * 3] =
-          (j / (POINTS_PER_LINE - 1)) * WAVE_WIDTH - WAVE_WIDTH / 2;
-        positions[j * 3 + 1] = 0;
-        positions[j * 3 + 2] = 0;
+    pos.y += displacement;
+    // Subtle Z displacement so the ribbon has 3D depth, not just 2D up/down
+    pos.z += sin(pos.x * 0.35 - uTime * 0.6) * 0.45;
 
-        // Edge fade: 0 at line ends, 1 in the middle
-        const u = j / (POINTS_PER_LINE - 1);
-        const edgeFade = Math.sin(u * Math.PI);
+    vElevation = displacement;
 
-        // Saturate + add HDR boost in the middle so bloom triggers there
-        const c = new THREE.Color().setHSL(baseHue, 0.95, 0.55);
-        const intensity = 0.4 + edgeFade * 3.2; // > 1.0 in middle = HDR → bloom
-        colors[j * 3] = c.r * intensity;
-        colors[j * 3 + 1] = c.g * intensity;
-        colors[j * 3 + 2] = c.b * intensity;
-      }
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+  }
+`;
 
-      const geometry = new THREE.BufferGeometry();
-      geometry.setAttribute(
-        "position",
-        new THREE.BufferAttribute(positions, 3)
-      );
-      geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+const fragmentShader = /* glsl */ `
+  varying vec2 vUv;
+  varying float vElevation;
 
-      const material = new THREE.LineBasicMaterial({
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.55 + Math.random() * 0.35,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      });
+  vec3 hsl2rgb(vec3 c) {
+    vec3 rgb = clamp(abs(mod(c.x * 6.0 + vec3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
+    return c.z + c.y * (rgb - 0.5) * (1.0 - abs(2.0 * c.z - 1.0));
+  }
 
-      const line = new THREE.Line(geometry, material);
+  void main() {
+    // Hue gradient across the X axis: cyan → blue → purple → magenta → pink
+    float hue = 0.5 + vUv.x * 0.45;
+    vec3 color = hsl2rgb(vec3(hue, 0.95, 0.55));
 
-      arr.push({
-        line,
-        geometry,
-        yBase: (i - LINE_COUNT / 2) * 0.022,
-        phase: Math.random() * Math.PI * 2,
-        freqMul: 0.65 + Math.random() * 0.55,
-        hueShift: t,
-      });
-    }
-    return arr;
-  }, []);
+    // Vertical center fade — brightest in the middle of the ribbon, fades to soft edges
+    float verticalFade = 1.0 - abs(vUv.y - 0.5) * 2.0;
+    verticalFade = pow(max(verticalFade, 0.0), 1.4);
+
+    // HDR intensity in the middle (>1.0 triggers bloom)
+    float intensity = 0.4 + verticalFade * 3.0;
+
+    // Slight elevation-based brightness boost — high peaks glow a touch brighter
+    intensity += abs(vElevation) * 0.5;
+
+    // Edge alpha falloff so the ribbon doesn't have hard top/bottom edges
+    float edgeAlpha = smoothstep(0.0, 0.12, vUv.y) * smoothstep(1.0, 0.88, vUv.y);
+
+    gl_FragColor = vec4(color * intensity, edgeAlpha);
+  }
+`;
+
+function WaveRibbon() {
+  const matRef = useRef<THREE.ShaderMaterial>(null);
+
+  const uniforms = useMemo(() => ({ uTime: { value: 0 } }), []);
 
   useFrame((state) => {
-    const t = state.clock.elapsedTime;
-    const mx = mouseRef.current.x;
-    const my = mouseRef.current.y;
-
-    ribbons.forEach((b) => {
-      const positions = b.geometry.attributes.position.array as Float32Array;
-
-      for (let j = 0; j < POINTS_PER_LINE; j++) {
-        const u = j / (POINTS_PER_LINE - 1);
-
-        // Layered sines = organic non-repeating motion
-        const w1 = Math.sin(u * 5 + t * b.freqMul + b.phase) * 0.7;
-        const w2 = Math.sin(u * 11 - t * 0.9 + b.phase * 1.7) * 0.32;
-        const w3 = Math.sin(u * 19 + t * 0.55) * 0.16;
-        const w4 = Math.sin(u * 31 - t * 0.4 + b.phase) * 0.08;
-
-        // Slow envelope creates random-looking peak zones
-        const envelope =
-          (Math.sin(u * 4.2 + t * 0.2) * 0.5 + 0.5) * 0.8 + 0.2;
-
-        // Cross modulation between lines for organic group feel
-        const crossMod = Math.sin(t * 0.18 + b.hueShift * Math.PI * 2) * 0.25;
-
-        // Mouse bulge — wave rises toward cursor x, scaled by cursor y
-        const normX = u * 2 - 1;
-        const distToMouse = Math.abs(normX - mx);
-        const mouseEffect = Math.max(0, 1 - distToMouse * 1.4) * my * 1.4;
-
-        const y =
-          (w1 + w2 + w3 + w4) * envelope +
-          crossMod +
-          b.yBase +
-          mouseEffect -
-          1.4;
-        positions[j * 3 + 1] = y;
-      }
-      b.geometry.attributes.position.needsUpdate = true;
-    });
-
-    if (groupRef.current) {
-      // Very subtle group sway
-      groupRef.current.rotation.z = Math.sin(t * 0.1) * 0.02;
+    if (matRef.current) {
+      matRef.current.uniforms.uTime.value = state.clock.elapsedTime;
     }
   });
 
   return (
-    <group ref={groupRef}>
-      {ribbons.map((b, i) => (
-        <primitive key={i} object={b.line} />
-      ))}
-    </group>
+    <mesh position={[0, -1.4, 0]} rotation={[-0.06, 0, 0]}>
+      <planeGeometry args={[28, 2.4, 280, 24]} />
+      <shaderMaterial
+        ref={matRef}
+        uniforms={uniforms}
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+        side={THREE.DoubleSide}
+        transparent
+        depthWrite={false}
+      />
+    </mesh>
   );
 }
 
 export default function HeroCanvas() {
   const reduced = useReducedMotion();
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const targetRef = useRef({ x: 0, y: 0 });
-
-  // Listen to window mousemove globally so pointer-events-none on parent doesn't block us
-  useEffect(() => {
-    if (reduced) return;
-    const onMove = (e: MouseEvent) => {
-      targetRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-      targetRef.current.y = -((e.clientY / window.innerHeight) * 2 - 1);
-    };
-    let raf = 0;
-    const tick = () => {
-      mouseRef.current.x += (targetRef.current.x - mouseRef.current.x) * 0.05;
-      mouseRef.current.y += (targetRef.current.y - mouseRef.current.y) * 0.05;
-      raf = requestAnimationFrame(tick);
-    };
-    window.addEventListener("mousemove", onMove);
-    raf = requestAnimationFrame(tick);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf);
-    };
-  }, [reduced]);
 
   if (reduced) {
     return (
-      <div className="absolute bottom-[15%] left-0 right-0 h-[200px] pointer-events-none">
+      <div className="absolute bottom-[18%] left-0 right-0 h-[200px] pointer-events-none">
         <div
           className="w-full h-full"
           style={{
@@ -189,11 +125,10 @@ export default function HeroCanvas() {
       }}
     >
       <fog attach="fog" args={["#08090A", 6, 22]} />
-      <ambientLight intensity={0.2} />
-      <WaveField mouseRef={mouseRef} />
+      <WaveRibbon />
       <EffectComposer>
         <Bloom
-          intensity={1.6}
+          intensity={1.4}
           luminanceThreshold={0.35}
           luminanceSmoothing={0.85}
           mipmapBlur
