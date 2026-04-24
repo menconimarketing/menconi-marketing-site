@@ -74,11 +74,11 @@ function WaveField({
       arr.push({
         line,
         geometry,
-        yBase: (i - LINE_COUNT / 2) * 0.012,
-        phaseOffset: (Math.random() - 0.5) * 0.18,
-        // Per-fiber amplitude scale (0.88 → 1.12). Spreads out the points where
-        // fibers would otherwise converge, killing the bright "clump" highlights.
-        ampMul: 0.88 + Math.random() * 0.24,
+        // Tighter bundle — total bundle height ~= LINE_COUNT * 0.009 ≈ 1.44 units
+        yBase: (i - LINE_COUNT / 2) * 0.009,
+        phaseOffset: (Math.random() - 0.5) * 0.14,
+        // Tighter per-fiber amp variation (±5%) — keeps wave uniform, still kills clumps
+        ampMul: 0.95 + Math.random() * 0.1,
       });
     }
     return arr;
@@ -98,17 +98,18 @@ function WaveField({
         const x =
           (j / (POINTS_PER_LINE - 1)) * WAVE_WIDTH - WAVE_WIDTH / 2;
 
-        // Higher frequency than before → more waves visible across the screen
-        const wave1 = Math.sin((x - t * 1.0) * 0.55 + b.phaseOffset) * 0.5;
-        const wave2 = Math.sin((x - t * 0.6) * 1.05 + 1.3) * 0.16;
-        const wave3 = Math.sin((x - t * 0.35) * 1.9 + 2.1) * 0.05;
+        // Thinner wave — amplitudes ~50% smaller for a slim, uniform ribbon
+        const wave1 = Math.sin((x - t * 1.0) * 0.55 + b.phaseOffset) * 0.26;
+        const wave2 = Math.sin((x - t * 0.6) * 1.05 + 1.3) * 0.08;
+        const wave3 = Math.sin((x - t * 0.35) * 1.9 + 2.1) * 0.025;
 
-        const envelope = Math.sin(x * 0.2 + t * 0.11) * 0.22 + 0.78;
+        // Tighter envelope so peaks are closer to the same height (more uniform)
+        const envelope = Math.sin(x * 0.2 + t * 0.11) * 0.1 + 0.9;
 
-        // Magnetic cursor peak — gaussian centered at cursor X
+        // Magnetic cursor peak — way more subtle (max ~0.3 vs prior 1.1)
         const dist = x - cursorWaveX;
         const cursorPeak =
-          Math.exp(-(dist * dist) / 3.5) * cursorIntensity * 1.1;
+          Math.exp(-(dist * dist) / 4) * cursorIntensity * 0.3;
 
         const y =
           (wave1 + wave2 + wave3) * envelope * b.ampMul +
@@ -116,8 +117,9 @@ function WaveField({
           b.yBase;
 
         positions[j * 3 + 1] = y;
+        // Reduced Z depth so the bundle is visually thinner front-to-back too
         positions[j * 3 + 2] =
-          Math.sin((x - t * 0.45) * 0.25) * 0.25 + b.yBase * 3.5;
+          Math.sin((x - t * 0.45) * 0.25) * 0.15 + b.yBase * 2;
       }
       b.geometry.attributes.position.needsUpdate = true;
     });
