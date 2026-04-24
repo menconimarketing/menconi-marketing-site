@@ -7,90 +7,114 @@ import { ToneMappingMode } from "postprocessing";
 import * as THREE from "three";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-const vertexShader = /* glsl */ `
-  uniform float uTime;
-  varying vec2 vUv;
-  varying float vElevation;
+const LINE_COUNT = 160;
+const POINTS_PER_LINE = 280;
+const WAVE_WIDTH = 26;
 
-  void main() {
-    vUv = uv;
-    vec3 pos = position;
+type Ribbon = {
+  line: THREE.Line;
+  geometry: THREE.BufferGeometry;
+  yBase: number;
+  phaseOffset: number;
+};
 
-    // Traveling waves — negative time so peaks move left to right
-    float wave1 = sin((pos.x - uTime * 1.4) * 0.55) * 0.6;
-    float wave2 = sin((pos.x - uTime * 0.9) * 1.1 + 1.0) * 0.32;
-    float wave3 = sin((pos.x - uTime * 0.5) * 2.3 + 2.0) * 0.14;
+function WaveField() {
+  const groupRef = useRef<THREE.Group>(null);
 
-    // Slow envelope so peaks are uneven
-    float envelope = sin(pos.x * 0.28 + uTime * 0.18) * 0.45 + 0.7;
+  const ribbons = useMemo<Ribbon[]>(() => {
+    const arr: Ribbon[] = [];
+    for (let i = 0; i < LINE_COUNT; i++) {
+      const positions = new Float32Array(POINTS_PER_LINE * 3);
+      const colors = new Float32Array(POINTS_PER_LINE * 3);
 
-    float displacement = (wave1 + wave2 + wave3) * envelope;
+      // Per-vertex color: gradient by X position so all lines share the same
+      // cyan → blue → purple → magenta → pink rainbow across the wave.
+      for (let j = 0; j < POINTS_PER_LINE; j++) {
+        positions[j * 3] =
+          (j / (POINTS_PER_LINE - 1)) * WAVE_WIDTH - WAVE_WIDTH / 2;
+        positions[j * 3 + 1] = 0;
+        positions[j * 3 + 2] = 0;
 
-    pos.y += displacement;
-    // Subtle Z displacement so the ribbon has 3D depth, not just 2D up/down
-    pos.z += sin(pos.x * 0.35 - uTime * 0.6) * 0.45;
+        const u = j / (POINTS_PER_LINE - 1);
+        const hue = 0.5 + u * 0.45;
+        const c = new THREE.Color().setHSL(hue, 0.95, 0.55);
+        const hdr = 1.6; // baseline HDR boost so bloom catches every fiber
+        colors[j * 3] = c.r * hdr;
+        colors[j * 3 + 1] = c.g * hdr;
+        colors[j * 3 + 2] = c.b * hdr;
+      }
 
-    vElevation = displacement;
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(positions, 3)
+      );
+      geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-  }
-`;
+      // Lines closer to center are brighter; edges fade out softly.
+      const distFromCenter = Math.abs(i - LINE_COUNT / 2) / (LINE_COUNT / 2);
+      const centerFade = 1 - Math.pow(distFromCenter, 1.4);
+      const opacity = 0.18 + centerFade * 0.55;
 
-const fragmentShader = /* glsl */ `
-  varying vec2 vUv;
-  varying float vElevation;
+      const material = new THREE.LineBasicMaterial({
+        vertexColors: true,
+        transparent: true,
+        opacity,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
 
-  vec3 hsl2rgb(vec3 c) {
-    vec3 rgb = clamp(abs(mod(c.x * 6.0 + vec3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
-    return c.z + c.y * (rgb - 0.5) * (1.0 - abs(2.0 * c.z - 1.0));
-  }
+      const line = new THREE.Line(geometry, material);
 
-  void main() {
-    // Hue gradient across the X axis: cyan → blue → purple → magenta → pink
-    float hue = 0.5 + vUv.x * 0.45;
-    vec3 color = hsl2rgb(vec3(hue, 0.95, 0.55));
-
-    // Vertical center fade — brightest in the middle of the ribbon, fades to soft edges
-    float verticalFade = 1.0 - abs(vUv.y - 0.5) * 2.0;
-    verticalFade = pow(max(verticalFade, 0.0), 1.4);
-
-    // HDR intensity in the middle (>1.0 triggers bloom)
-    float intensity = 0.4 + verticalFade * 3.0;
-
-    // Slight elevation-based brightness boost — high peaks glow a touch brighter
-    intensity += abs(vElevation) * 0.5;
-
-    // Edge alpha falloff so the ribbon doesn't have hard top/bottom edges
-    float edgeAlpha = smoothstep(0.0, 0.12, vUv.y) * smoothstep(1.0, 0.88, vUv.y);
-
-    gl_FragColor = vec4(color * intensity, edgeAlpha);
-  }
-`;
-
-function WaveRibbon() {
-  const matRef = useRef<THREE.ShaderMaterial>(null);
-
-  const uniforms = useMemo(() => ({ uTime: { value: 0 } }), []);
+      arr.push({
+        line,
+        geometry,
+        // Tight bundle — total bundle height ~= LINE_COUNT * 0.012 ≈ 1.92 units
+        yBase: (i - LINE_COUNT / 2) * 0.012,
+        // Tiny phase offset per line — gives fiber texture without breaking the
+        // unified wave shape. ALL lines still flow with the same core function.
+        phaseOffset: (Math.random() - 0.5) * 0.12,
+      });
+    }
+    return arr;
+  }, []);
 
   useFrame((state) => {
-    if (matRef.current) {
-      matRef.current.uniforms.uTime.value = state.clock.elapsedTime;
-    }
+    // Slow time multiplier — cinematic drift, not pulsing
+    const t = state.clock.elapsedTime * 0.45;
+
+    ribbons.forEach((b) => {
+      const positions = b.geometry.attributes.position.array as Float32Array;
+
+      for (let j = 0; j < POINTS_PER_LINE; j++) {
+        const x =
+          (j / (POINTS_PER_LINE - 1)) * WAVE_WIDTH - WAVE_WIDTH / 2;
+
+        // SHARED wave function — every fiber rides the same path
+        const wave1 = Math.sin((x - t * 1.1) * 0.5 + b.phaseOffset) * 0.62;
+        const wave2 = Math.sin((x - t * 0.7) * 1.0 + 1.3) * 0.3;
+        const wave3 = Math.sin((x - t * 0.4) * 2.0 + 2.1) * 0.12;
+
+        // Slow envelope = peaks aren't all the same height across the wave
+        const envelope = Math.sin(x * 0.22 + t * 0.13) * 0.4 + 0.7;
+
+        const y = (wave1 + wave2 + wave3) * envelope + b.yBase;
+        positions[j * 3 + 1] = y;
+
+        // Subtle Z so the bundle has 3D depth (some fibers in front, some behind)
+        positions[j * 3 + 2] =
+          Math.sin((x - t * 0.5) * 0.28) * 0.35 + b.yBase * 4;
+      }
+      b.geometry.attributes.position.needsUpdate = true;
+    });
   });
 
   return (
-    <mesh position={[0, -1.4, 0]} rotation={[-0.06, 0, 0]}>
-      <planeGeometry args={[28, 2.4, 280, 24]} />
-      <shaderMaterial
-        ref={matRef}
-        uniforms={uniforms}
-        vertexShader={vertexShader}
-        fragmentShader={fragmentShader}
-        side={THREE.DoubleSide}
-        transparent
-        depthWrite={false}
-      />
-    </mesh>
+    <group ref={groupRef} position={[0, -1.4, 0]}>
+      {ribbons.map((b, i) => (
+        <primitive key={i} object={b.line} />
+      ))}
+    </group>
   );
 }
 
@@ -125,14 +149,14 @@ export default function HeroCanvas() {
       }}
     >
       <fog attach="fog" args={["#08090A", 6, 22]} />
-      <WaveRibbon />
+      <WaveField />
       <EffectComposer>
         <Bloom
-          intensity={1.4}
-          luminanceThreshold={0.35}
+          intensity={1.3}
+          luminanceThreshold={0.4}
           luminanceSmoothing={0.85}
           mipmapBlur
-          radius={0.85}
+          radius={0.8}
         />
         <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
       </EffectComposer>
