@@ -163,7 +163,7 @@ export default function Hero() {
       ref={container}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* 3D hero — Spline scene if configured, else native Three.js shard star */}
+      {/* 3D hero — Spline if configured, else native bloom-rendered wave */}
       <div className="absolute inset-0 z-[1] pointer-events-none">
         {SPLINE_SCENE_URL ? (
           <SplineScene sceneUrl={SPLINE_SCENE_URL} />
@@ -171,15 +171,6 @@ export default function Hero() {
           <HeroCanvas />
         )}
       </div>
-
-      {/* Central darkening veil — keeps hero text readable over the 3D scene */}
-      <div
-        className="absolute inset-0 z-[2] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(8, 9, 10, 0.7) 0%, rgba(8, 9, 10, 0.35) 45%, transparent 75%)",
-        }}
-      />
 
       {/* Gradient mesh background - responds to mouse */}
       <div className="hero-bg-layer absolute inset-0 pointer-events-none">
