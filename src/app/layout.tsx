@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Afacad, Syne } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
-import Cursor from "@/components/Cursor";
 
 const afacad = Afacad({
   variable: "--font-afacad",
@@ -42,7 +41,6 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <SmoothScroll />
-        <Cursor />
         {children}
       </body>
     </html>
