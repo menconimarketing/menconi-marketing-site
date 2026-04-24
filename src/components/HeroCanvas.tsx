@@ -20,6 +20,8 @@ type Ribbon = {
 
 function WaveField() {
   const groupRef = useRef<THREE.Group>(null);
+  // Randomize the wave's starting frame on every page load so it's never the same scene twice
+  const startOffset = useMemo(() => Math.random() * 200, []);
 
   const ribbons = useMemo<Ribbon[]>(() => {
     const arr: Ribbon[] = [];
@@ -80,8 +82,8 @@ function WaveField() {
   }, []);
 
   useFrame((state) => {
-    // Slow time multiplier — cinematic drift, not pulsing
-    const t = state.clock.elapsedTime * 0.45;
+    // Slow time multiplier + random start offset
+    const t = (state.clock.elapsedTime + startOffset) * 0.45;
 
     ribbons.forEach((b) => {
       const positions = b.geometry.attributes.position.array as Float32Array;
@@ -90,20 +92,22 @@ function WaveField() {
         const x =
           (j / (POINTS_PER_LINE - 1)) * WAVE_WIDTH - WAVE_WIDTH / 2;
 
-        // SHARED wave function — every fiber rides the same path
-        const wave1 = Math.sin((x - t * 1.1) * 0.5 + b.phaseOffset) * 0.62;
-        const wave2 = Math.sin((x - t * 0.7) * 1.0 + 1.3) * 0.3;
-        const wave3 = Math.sin((x - t * 0.4) * 2.0 + 2.1) * 0.12;
+        // Dominant base wave (low freq, strong) — gives the structured rhythm
+        const wave1 = Math.sin((x - t * 1.0) * 0.42 + b.phaseOffset) * 0.42;
+        // Secondary modulation (mid freq, lighter) — keeps it unpredictable
+        const wave2 = Math.sin((x - t * 0.55) * 0.85 + 1.3) * 0.14;
+        // Tiny detail layer (slight, just enough to keep it from being mechanical)
+        const wave3 = Math.sin((x - t * 0.35) * 1.7 + 2.1) * 0.05;
 
-        // Slow envelope = peaks aren't all the same height across the wave
-        const envelope = Math.sin(x * 0.22 + t * 0.13) * 0.4 + 0.7;
+        // Tighter envelope so peaks vary less wildly (reduces overall spread)
+        const envelope = Math.sin(x * 0.2 + t * 0.11) * 0.22 + 0.78;
 
         const y = (wave1 + wave2 + wave3) * envelope + b.yBase;
         positions[j * 3 + 1] = y;
 
-        // Subtle Z so the bundle has 3D depth (some fibers in front, some behind)
+        // Z depth — slightly reduced too
         positions[j * 3 + 2] =
-          Math.sin((x - t * 0.5) * 0.28) * 0.35 + b.yBase * 4;
+          Math.sin((x - t * 0.45) * 0.25) * 0.25 + b.yBase * 3.5;
       }
       b.geometry.attributes.position.needsUpdate = true;
     });
