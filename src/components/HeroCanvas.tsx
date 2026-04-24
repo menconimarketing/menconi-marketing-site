@@ -87,7 +87,7 @@ function WaveField() {
   }, []);
 
   useFrame((state) => {
-    const t = (state.clock.elapsedTime + startOffset) * 0.4;
+    const t = (state.clock.elapsedTime + startOffset) * 0.55;
 
     ribbons.forEach((b) => {
       const positions = b.geometry.attributes.position.array as Float32Array;
@@ -96,13 +96,13 @@ function WaveField() {
         const x =
           (j / (POINTS_PER_LINE - 1)) * WAVE_WIDTH - WAVE_WIDTH / 2;
 
-        // Smooth dominant wave — clear traveling rhythm left → right
-        const mainWave = Math.sin((x - t * 1.4) * 0.42 + b.phaseOffset) * 0.42;
+        // Higher spatial frequency = ~3 visible peaks across the screen
+        const mainWave = Math.sin((x - t * 1.2) * 1.3 + b.phaseOffset) * 0.4;
         // Mid-scale simplex noise — organic non-repeating undulation
-        const midNoise = noise3D(x * 0.32 - t * 0.18, t * 0.09, 0) * 0.18;
+        const midNoise = noise3D(x * 0.55 - t * 0.22, t * 0.12, 0) * 0.18;
         // Tiny fiber-specific noise so adjacent fibers have subtle individuality
         const fiberNoise =
-          noise3D(x * 0.7, t * 0.06, b.fiberSeed) * 0.06;
+          noise3D(x * 0.85, t * 0.08, b.fiberSeed) * 0.06;
 
         let dynamicY = (mainWave + midNoise + fiberNoise) * b.ampMul;
 
