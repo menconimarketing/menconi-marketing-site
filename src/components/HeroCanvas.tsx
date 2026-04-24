@@ -7,9 +7,11 @@ import { ToneMappingMode } from "postprocessing";
 import * as THREE from "three";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-const LINE_COUNT = 160;
+const LINE_COUNT = 110;
 const POINTS_PER_LINE = 280;
 const WAVE_WIDTH = 26;
+// Hard cap on how high any peak can rise above the bundle baseline
+const MAX_PEAK = 0.55;
 // Approximate visible half-width on screen for camera (z=7, fov=42, 16:9)
 const VISIBLE_HALF_WIDTH = 5.0;
 
@@ -74,11 +76,12 @@ function WaveField({
       arr.push({
         line,
         geometry,
-        // Tighter bundle — total bundle height ~= LINE_COUNT * 0.009 ≈ 1.44 units
-        yBase: (i - LINE_COUNT / 2) * 0.009,
-        phaseOffset: (Math.random() - 0.5) * 0.14,
-        // Tighter per-fiber amp variation (±5%) — keeps wave uniform, still kills clumps
-        ampMul: 0.95 + Math.random() * 0.1,
+        // Very tight bundle — total bundle height ~= LINE_COUNT * 0.005 ≈ 0.55 units
+        // Fibers nearly overlap → reads as a single neon-highlighter strand under bloom
+        yBase: (i - LINE_COUNT / 2) * 0.005,
+        phaseOffset: (Math.random() - 0.5) * 0.1,
+        // Tight per-fiber amp variation (±4%)
+        ampMul: 0.96 + Math.random() * 0.08,
       });
     }
     return arr;
@@ -98,35 +101,36 @@ function WaveField({
         const x =
           (j / (POINTS_PER_LINE - 1)) * WAVE_WIDTH - WAVE_WIDTH / 2;
 
-        // Thinner wave — amplitudes ~50% smaller for a slim, uniform ribbon
-        const wave1 = Math.sin((x - t * 1.0) * 0.55 + b.phaseOffset) * 0.26;
-        const wave2 = Math.sin((x - t * 0.6) * 1.05 + 1.3) * 0.08;
-        const wave3 = Math.sin((x - t * 0.35) * 1.9 + 2.1) * 0.025;
+        // Wave layers — bumped back up so it actually flows
+        const wave1 = Math.sin((x - t * 1.0) * 0.55 + b.phaseOffset) * 0.55;
+        const wave2 = Math.sin((x - t * 0.6) * 1.05 + 1.3) * 0.18;
+        const wave3 = Math.sin((x - t * 0.35) * 1.9 + 2.1) * 0.06;
 
-        // Tighter envelope so peaks are closer to the same height (more uniform)
-        const envelope = Math.sin(x * 0.2 + t * 0.11) * 0.1 + 0.9;
+        // Envelope variation back up so peaks have drama, but capped below
+        const envelope = Math.sin(x * 0.2 + t * 0.11) * 0.18 + 0.82;
 
-        // Magnetic cursor peak — way more subtle (max ~0.3 vs prior 1.1)
-        const dist = x - cursorWaveX;
+        const cursorDist = x - cursorWaveX;
         const cursorPeak =
-          Math.exp(-(dist * dist) / 4) * cursorIntensity * 0.3;
+          Math.exp(-(cursorDist * cursorDist) / 4) * cursorIntensity * 0.22;
 
-        const y =
-          (wave1 + wave2 + wave3) * envelope * b.ampMul +
-          cursorPeak +
-          b.yBase;
+        let dynamicY =
+          (wave1 + wave2 + wave3) * envelope * b.ampMul + cursorPeak;
 
-        positions[j * 3 + 1] = y;
-        // Reduced Z depth so the bundle is visually thinner front-to-back too
+        // Hard ceiling on peak height — smooth tanh clamp so it bends naturally
+        // rather than chopping flat. Wave can't go higher than MAX_PEAK above bundle.
+        dynamicY = MAX_PEAK * Math.tanh(dynamicY / MAX_PEAK);
+
+        positions[j * 3 + 1] = dynamicY + b.yBase;
+        // Tight Z depth — barely-there 3D feel
         positions[j * 3 + 2] =
-          Math.sin((x - t * 0.45) * 0.25) * 0.15 + b.yBase * 2;
+          Math.sin((x - t * 0.45) * 0.25) * 0.1 + b.yBase * 1.5;
       }
       b.geometry.attributes.position.needsUpdate = true;
     });
   });
 
   return (
-    <group ref={groupRef} position={[0, -1.4, 0]}>
+    <group ref={groupRef} position={[0, -2.1, 0]}>
       {ribbons.map((b, i) => (
         <primitive key={i} object={b.line} />
       ))}

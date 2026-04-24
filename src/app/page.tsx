@@ -1,4 +1,3 @@
-import BrandIntro from "@/components/BrandIntro";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import PositioningAudit from "@/components/PositioningAudit";
@@ -15,7 +14,6 @@ import MobileBottomCTA from "@/components/MobileBottomCTA";
 export default function Home() {
   return (
     <>
-      <BrandIntro />
       <main className="noise">
         <Nav />
         <Hero />

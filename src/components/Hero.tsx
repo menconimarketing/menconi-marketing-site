@@ -4,9 +4,25 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import HeroCanvas from "./HeroCanvas";
+import dynamic from "next/dynamic";
 import SplineScene from "./SplineScene";
 import MagneticButton from "./MagneticButton";
+
+// Lazy-load the heavy Three.js canvas so the page paints before WebGL boots
+const HeroCanvas = dynamic(() => import("./HeroCanvas"), {
+  ssr: false,
+  loading: () => (
+    <div
+      className="absolute bottom-[10%] left-0 right-0 h-[180px] pointer-events-none"
+      style={{
+        background:
+          "linear-gradient(90deg, transparent, rgba(94, 106, 210, 0.25) 25%, rgba(168, 85, 247, 0.4) 50%, rgba(236, 72, 153, 0.25) 75%, transparent)",
+        filter: "blur(50px)",
+        opacity: 0.6,
+      }}
+    />
+  ),
+});
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
