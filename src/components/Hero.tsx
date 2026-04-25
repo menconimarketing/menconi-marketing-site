@@ -5,7 +5,6 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import dynamic from "next/dynamic";
-import SplineScene from "./SplineScene";
 import MagneticButton from "./MagneticButton";
 
 // Lazy-load the heavy Three.js canvas so the page paints before WebGL boots
@@ -24,9 +23,13 @@ const HeroCanvas = dynamic(() => import("./HeroCanvas"), {
   ),
 });
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
-
+// Spline only loads if a scene URL is configured (currently empty → skipped entirely)
 const SPLINE_SCENE_URL = process.env.NEXT_PUBLIC_SPLINE_SCENE_URL ?? "";
+const SplineScene = SPLINE_SCENE_URL
+  ? dynamic(() => import("./SplineScene"), { ssr: false })
+  : null;
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function Hero() {
   const container = useRef<HTMLDivElement>(null);
@@ -181,7 +184,7 @@ export default function Hero() {
     >
       {/* 3D hero — Spline if configured, else native bloom-rendered wave */}
       <div className="absolute inset-0 z-[1] pointer-events-none">
-        {SPLINE_SCENE_URL ? (
+        {SPLINE_SCENE_URL && SplineScene ? (
           <SplineScene sceneUrl={SPLINE_SCENE_URL} />
         ) : (
           <HeroCanvas />

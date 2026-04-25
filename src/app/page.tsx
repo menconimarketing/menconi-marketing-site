@@ -1,15 +1,19 @@
+import dynamic from "next/dynamic";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
-import PositioningAudit from "@/components/PositioningAudit";
-import Problem from "@/components/Problem";
-import Mechanism from "@/components/Mechanism";
-import Proof from "@/components/Proof";
-import Difference from "@/components/Difference";
-import FAQ from "@/components/FAQ";
-import Calculator from "@/components/Calculator";
-import CTA from "@/components/CTA";
-import Footer from "@/components/Footer";
-import MobileBottomCTA from "@/components/MobileBottomCTA";
+
+// Below-the-fold sections lazy-loaded so the initial JS bundle is tiny.
+// SSR stays ON so HTML is still pre-rendered for SEO + first paint.
+const PositioningAudit = dynamic(() => import("@/components/PositioningAudit"));
+const Problem = dynamic(() => import("@/components/Problem"));
+const Mechanism = dynamic(() => import("@/components/Mechanism"));
+const Proof = dynamic(() => import("@/components/Proof"));
+const Difference = dynamic(() => import("@/components/Difference"));
+const FAQ = dynamic(() => import("@/components/FAQ"));
+const Calculator = dynamic(() => import("@/components/Calculator"));
+const CTA = dynamic(() => import("@/components/CTA"));
+const Footer = dynamic(() => import("@/components/Footer"));
+const MobileBottomCTA = dynamic(() => import("@/components/MobileBottomCTA"));
 
 export default function Home() {
   return (
