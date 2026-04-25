@@ -1,238 +1,252 @@
 "use client";
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import ActivityTicker from "./ActivityTicker";
+import Eyebrow from "./Eyebrow";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
-
-const trustBullets = [
-  "You work directly with the person who builds everything",
-  "Nothing gets outsourced or passed downstream",
-  "Your site, your code, your data \u2014 you own all of it",
-  "No long-term contracts. Leave whenever you want.",
+const FACTS: [string, string, string][] = [
+  ["Active retainers", "4 / 6", "Capped, on purpose"],
+  ["Years in", "8", "Ads · sites · automation"],
+  ["Reply window", "< 24h", "Mon–Thu, 9–5 CT"],
+  ["Stack", "Custom", "No WordPress themes"],
 ];
 
 export default function Difference() {
-  const container = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      gsap.from(".diff-label", {
-        x: -30,
-        opacity: 0,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top 80%",
-        },
-      });
-
-      gsap.from(".diff-headline", {
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        scrollTrigger: {
-          trigger: ".diff-headline",
-          start: "top 85%",
-        },
-      });
-
-      gsap.from(".diff-photo", {
-        y: 80,
-        opacity: 0,
-        duration: 1.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".diff-photo",
-          start: "top 85%",
-        },
-      });
-
-      gsap.from(".diff-corner", {
-        scale: 0,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.15,
-        ease: "back.out(2)",
-        scrollTrigger: {
-          trigger: ".diff-photo",
-          start: "top 80%",
-        },
-      });
-
-      gsap.from(".diff-body", {
-        y: 40,
-        opacity: 0,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: ".diff-body",
-          start: "top 85%",
-        },
-      });
-
-      trustBullets.forEach((_, i) => {
-        gsap.from(`.trust-bullet-${i}`, {
-          x: -30,
-          opacity: 0,
-          duration: 0.6,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: `.trust-bullet-${i}`,
-            start: "top 88%",
-          },
-        });
-      });
-
-      gsap.from(".diff-closing", {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: ".diff-closing",
-          start: "top 88%",
-        },
-      });
-
-      // Parallax between photo and text
-      gsap.to(".diff-photo-wrap", {
-        y: -40,
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1.5,
-        },
-      });
-
-      gsap.to(".diff-text-wrap", {
-        y: -20,
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1.5,
-        },
-      });
-    },
-    { scope: container }
-  );
-
   return (
     <section
       id="about"
-      ref={container}
-      className="relative py-32 md:py-44 overflow-hidden"
+      data-screen-label="08 Founder"
+      style={{
+        padding: "160px 48px",
+        position: "relative",
+        background: "var(--mm-black)",
+      }}
     >
-      <div
-        className="absolute top-0 left-0 w-full h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, var(--iron), transparent)",
-        }}
-      />
-
-      {/* Accent glow */}
-      <div
-        className="absolute bottom-1/4 -right-40 w-[500px] h-[500px] opacity-[0.03] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, var(--accent) 0%, transparent 70%)",
-          filter: "blur(80px)",
-        }}
-      />
-
-      <div className="max-w-[1100px] mx-auto px-6 relative z-10">
-        <div className="grid md:grid-cols-2 gap-16 md:gap-20 items-center">
-          {/* Left — visual */}
-          <div className="diff-photo-wrap">
+      <div className="max-w-[1400px] mx-auto">
+        <div
+          className="grid"
+          style={{
+            gridTemplateColumns: "1fr 1.4fr",
+            gap: 96,
+            alignItems: "flex-start",
+          }}
+        >
+          {/* Sticky portrait card */}
+          <div style={{ position: "sticky", top: 96 }}>
             <div
-              className="diff-photo relative aspect-[4/5] overflow-hidden group"
               style={{
-                background: "rgba(15, 16, 18, 0.6)",
-                border: "1px solid rgba(34, 35, 38, 0.5)",
+                aspectRatio: "4 / 5",
+                background:
+                  "linear-gradient(180deg, #1F1F1F 0%, #0A0A0A 100%)",
+                border: "1px solid var(--mm-charcoal)",
+                position: "relative",
+                overflow: "hidden",
               }}
             >
-              {/* Placeholder content */}
-              <div className="absolute inset-0 grid-bg opacity-20" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div
-                    className="w-24 h-24 mx-auto mb-4 border border-accent/30 flex items-center justify-center bg-accent/5"
-                    style={{
-                      clipPath:
-                        "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
-                    }}
-                  >
-                    <span className="font-[var(--font-afacad)] text-accent text-2xl font-bold">
-                      NM
-                    </span>
-                  </div>
-                  <p className="text-graphite text-xs tracking-wide">
-                    Photo placeholder
-                  </p>
-                </div>
+              {/* Faux portrait — typographic monogram on darkroom plate */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: `
+                    radial-gradient(ellipse 60% 80% at 55% 35%, rgba(184,181,174,0.18) 0%, transparent 55%),
+                    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(10,10,10,0.95) 0%, transparent 60%),
+                    linear-gradient(135deg, #2A2A2A 0%, #141414 50%, #0A0A0A 100%)
+                  `,
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  opacity: 0.06,
+                  backgroundImage:
+                    'url("data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22/></filter><rect width=%22120%22 height=%22120%22 filter=%22url(%23n)%22/></svg>")',
+                }}
+              />
+              <img
+                src="/brand/monogram/mm-white.svg"
+                alt=""
+                style={{
+                  position: "absolute",
+                  bottom: 32,
+                  left: 32,
+                  height: 28,
+                  opacity: 0.85,
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  top: 24,
+                  right: 24,
+                  fontFamily: "ui-monospace, monospace",
+                  fontSize: 10,
+                  color: "var(--mm-fg-3)",
+                  letterSpacing: "0.18em",
+                }}
+              >
+                NM · 2026
               </div>
-
-              {/* Corner accents */}
-              <div className="diff-corner absolute top-3 left-3 w-8 h-8 border-t border-l border-accent/50" />
-              <div className="diff-corner absolute top-3 right-3 w-8 h-8 border-t border-r border-accent/50" />
-              <div className="diff-corner absolute bottom-3 left-3 w-8 h-8 border-b border-l border-accent/50" />
-              <div className="diff-corner absolute bottom-3 right-3 w-8 h-8 border-b border-r border-accent/50" />
-
-              {/* Bottom accent bar */}
-              <div className="absolute bottom-0 left-0 right-0 h-px bg-accent/20 group-hover:bg-accent/40 transition-colors duration-500" />
+            </div>
+            <div
+              style={{
+                marginTop: 20,
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: 11,
+                color: "var(--mm-fg-3)",
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+              }}
+            >
+              <span>Nico Menconi</span>
+              <span>Chicago, IL</span>
             </div>
           </div>
 
-          {/* Right — copy */}
-          <div className="diff-text-wrap">
-            <p className="diff-label text-accent text-xs font-semibold tracking-[0.2em] uppercase mb-6">
-              Who you&apos;re working with
-            </p>
+          {/* Right column */}
+          <div>
+            <Eyebrow number="08" label="Who you actually work with" />
             <h2
-              className="diff-headline font-[var(--font-afacad)] text-chalk font-extrabold leading-tight tracking-[-0.01em] mb-8"
-              style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}
+              style={{
+                margin: 0,
+                fontSize: "clamp(48px, 6.5vw, 96px)",
+                letterSpacing: "-0.035em",
+                lineHeight: 0.95,
+                fontWeight: 600,
+              }}
             >
-              Not your agency.
+              One person.
               <br />
-              <span className="text-gradient">Your positioning partner.</span>
+              <span style={{ color: "var(--mm-fg-3-inv)" }}>
+                That&apos;s the entire org chart.
+              </span>
             </h2>
 
-            <div className="diff-body space-y-4 text-silver text-lg leading-relaxed mb-10 font-[var(--font-afacad)]">
-              <p>
-                I&apos;m Nico Menconi. I run Menconi Marketing out of Chicago.
+            <div
+              style={{
+                marginTop: 56,
+                display: "flex",
+                flexDirection: "column",
+                gap: 28,
+                maxWidth: 620,
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 21,
+                  lineHeight: 1.5,
+                  color: "var(--mm-fg-1)",
+                  letterSpacing: "-0.005em",
+                }}
+              >
+                I&apos;m Nico. I do the work. I write the strategy doc, design the site, write the code, build the ad account, write the headlines, configure the AI agent, and answer your texts on Saturday.
               </p>
-              <p>
-                At most agencies, you talk to a salesperson. Then you get handed to a coordinator. Then your project gets passed to a designer you&apos;ll never meet. Three weeks in, no one remembers what you said on the first call &mdash; let alone what makes your business different.
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 17,
+                  lineHeight: 1.55,
+                  color: "var(--mm-fg-2)",
+                }}
+              >
+                That&apos;s not a constraint I&apos;m apologizing for. It&apos;s the entire offer. When you hire an agency, you usually buy a sales rep with access to a junior team. When you hire me, you get the person making the decisions on your account &mdash; directly, every week, no proxy layer.
               </p>
-              <p>
-                That doesn&apos;t happen here. I&apos;m the one on the call. I&apos;m the one who finds your position. I&apos;m the one who builds your site. I&apos;m the one who sets up your ads. When you text me a question, I text you back.
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 17,
+                  lineHeight: 1.55,
+                  color: "var(--mm-fg-2)",
+                }}
+              >
+                I cap the studio at six active retainers. If I can&apos;t do your account well, I won&apos;t take it. If I take it and the work slips, you&apos;ll hear it from me first.
               </p>
             </div>
 
-            <div className="space-y-4 mb-10">
-              {trustBullets.map((bullet, i) => (
+            <div
+              style={{
+                marginTop: 64,
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: 0,
+                border: "1px solid var(--mm-charcoal)",
+              }}
+            >
+              {FACTS.map(([k, v, sub], i) => (
                 <div
-                  key={i}
-                  className={`trust-bullet-${i} flex items-start gap-3 group/bullet`}
+                  key={k}
+                  style={{
+                    padding: "28px 24px",
+                    borderRight:
+                      i % 2 === 0 ? "1px solid var(--mm-charcoal)" : "none",
+                    borderBottom:
+                      i < 2 ? "1px solid var(--mm-charcoal)" : "none",
+                  }}
                 >
-                  <div className="w-1.5 h-1.5 bg-accent mt-2.5 shrink-0 group-hover/bullet:shadow-[0_0_8px_rgba(168, 176, 196,0.5)] transition-shadow duration-300" />
-                  <p className="text-bone font-[var(--font-afacad)] group-hover/bullet:text-chalk transition-colors duration-300">
-                    {bullet}
-                  </p>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      color: "var(--mm-fg-3)",
+                      fontWeight: 500,
+                      marginBottom: 12,
+                    }}
+                  >
+                    {k}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 32,
+                      fontWeight: 600,
+                      letterSpacing: "-0.02em",
+                      lineHeight: 1,
+                      marginBottom: 8,
+                    }}
+                  >
+                    {v}
+                  </div>
+                  <div style={{ fontSize: 13, color: "var(--mm-fg-3)" }}>
+                    {sub}
+                  </div>
                 </div>
               ))}
             </div>
 
-            <p className="diff-closing text-chalk text-xl font-semibold font-[var(--font-afacad)] tracking-tight mb-8">
-              Big companies have layers. I have your phone number.
-            </p>
-
-            <div className="diff-closing">
-              <ActivityTicker />
+            <div
+              style={{
+                marginTop: 48,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: 16,
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "serif",
+                  fontStyle: "italic",
+                  fontSize: 32,
+                  color: "var(--mm-fg-1)",
+                  letterSpacing: "-0.01em",
+                  fontWeight: 400,
+                }}
+              >
+                — N.M.
+              </div>
+              <a
+                href="#contact"
+                className="mm-link"
+                style={{
+                  fontSize: 13,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                }}
+              >
+                Email me direct →
+              </a>
             </div>
           </div>
         </div>

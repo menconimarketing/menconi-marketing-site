@@ -3,13 +3,18 @@ import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import GradientHairline from "@/components/GradientHairline";
 
-const PositioningAudit = dynamic(() => import("@/components/PositioningAudit"));
+// Below-the-fold sections — lazy-loaded.
+// Order is WWP-grounded:
+//  Hero (recognition) → Problem (pain named) → Audit (live proof of skill)
+//  → Mechanism (the system) → Proof (case studies) → Calculator (desire)
+//  → Founder (trust) → FAQ (objections) → Contact (action) → Footer
 const Problem = dynamic(() => import("@/components/Problem"));
+const PositioningAudit = dynamic(() => import("@/components/PositioningAudit"));
 const Mechanism = dynamic(() => import("@/components/Mechanism"));
 const Proof = dynamic(() => import("@/components/Proof"));
+const Calculator = dynamic(() => import("@/components/Calculator"));
 const Difference = dynamic(() => import("@/components/Difference"));
 const FAQ = dynamic(() => import("@/components/FAQ"));
-const Calculator = dynamic(() => import("@/components/Calculator"));
 const CTA = dynamic(() => import("@/components/CTA"));
 const Footer = dynamic(() => import("@/components/Footer"));
 const MobileBottomCTA = dynamic(() => import("@/components/MobileBottomCTA"));
@@ -21,22 +26,21 @@ export default function Home() {
         <Nav />
         <Hero />
         <GradientHairline />
-        <PositioningAudit />
-        <GradientHairline />
         <Problem />
+        <GradientHairline />
+        <PositioningAudit />
         <GradientHairline />
         <Mechanism />
         <GradientHairline />
         <Proof />
         <GradientHairline />
+        <Calculator />
+        <GradientHairline />
         <Difference />
         <GradientHairline />
         <FAQ />
         <GradientHairline />
-        <Calculator />
-        <GradientHairline />
         <CTA />
-        <GradientHairline />
         <Footer />
       </main>
       <MobileBottomCTA />

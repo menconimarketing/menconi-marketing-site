@@ -1,406 +1,470 @@
 "use client";
 
-import { useRef, useCallback, useState, useEffect } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SiteModal from "./SiteModal";
+import { useState } from "react";
+import Eyebrow from "./Eyebrow";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+type Slide = { caption: string; bg: string };
 
 type Project = {
-  name: string;
-  trade: string;
-  category: string;
+  idx: number;
+  client: string;
+  work: string;
+  metric: string;
   location: string;
-  description: string;
-  url: string;
-  icon: "building" | "trowel" | "leaf";
+  year: string;
+  url?: string;
+  summary: string;
+  result: string;
+  slides: Slide[];
 };
 
-const TradeIcon = ({ kind, className = "" }: { kind: Project["icon"]; className?: string }) => {
-  const props = {
-    width: 18,
-    height: 18,
-    viewBox: "0 0 20 20",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.4,
-    className,
-  };
-  if (kind === "building") {
-    return (
-      <svg {...props}>
-        <rect x="3" y="3" width="14" height="14" />
-        <line x1="3" y1="7" x2="17" y2="7" />
-        <line x1="3" y1="11" x2="17" y2="11" />
-        <line x1="10" y1="3" x2="10" y2="17" />
-      </svg>
-    );
-  }
-  if (kind === "trowel") {
-    return (
-      <svg {...props}>
-        <path d="M5 5l4 4-2 2-4-4z" />
-        <line x1="9" y1="9" x2="17" y2="17" />
-        <path d="M14 14l3-3 1 1-3 3z" />
-      </svg>
-    );
-  }
-  // leaf
-  return (
-    <svg {...props}>
-      <path d="M4 16c0-7 5-12 12-12-1 7-5 12-12 12z" />
-      <line x1="4" y1="16" x2="11" y2="9" />
-    </svg>
-  );
-};
-
-const projects: Project[] = [
+const PROJECTS: Project[] = [
   {
-    name: "606 Property Services",
-    trade: "Property Maintenance",
-    category: "property",
-    location: "Chicago, IL",
-    description: "Full website rebuild with lead capture and service pages",
+    idx: 1,
+    client: "Acme Drywall",
+    work: "Site + ads + intake agent",
+    metric: "62 booked calls / 30d",
+    location: "Chicago",
+    year: "2026",
     url: "https://606propertyservices.menconimarketing.com",
-    icon: "building",
+    summary:
+      "Three previous agencies told the owner drywall guys can't run profitable lead-gen. Built a positioning-first site, turned on Meta + Google with the new conversion baseline, layered an AI intake agent on top.",
+    result:
+      "62 booked calls in the first 30 days at $28 average cost-per-call. Hired one extra crew member by week 6 just to keep up.",
+    slides: [
+      { caption: "Hero — owner-direct positioning", bg: "linear-gradient(135deg,#1F1F1F 0%,#2A2A2A 50%,#0A0A0A 100%)" },
+      { caption: "Case studies w/ real numbers", bg: "linear-gradient(135deg,#141414 0%,#1F1F1F 50%,#0A0A0A 100%)" },
+      { caption: "Mobile lead-form (3 fields)", bg: "linear-gradient(135deg,#0A0A0A 0%,#141414 100%)" },
+    ],
   },
   {
-    name: "ParaBeach Plastering",
-    trade: "Plastering",
-    category: "plastering",
-    location: "Southern California",
-    description: "Brand-new site build with portfolio showcase and booking",
+    idx: 2,
+    client: "Northshore Roofing",
+    work: "Site + Google Ads",
+    metric: "$84K pipeline / 60d",
+    location: "Evanston",
+    year: "2026",
     url: "https://parabeachplastering.menconimarketing.com",
-    icon: "trowel",
+    summary:
+      "Storm-damage roofer in a saturated market. Repositioned around a written install-date guarantee, redirected Google budget at the new landing pattern.",
+    result: "$84K of qualified pipeline in the first 60 days, average ticket up 18% from better-fit leads.",
+    slides: [
+      { caption: "Install-date guarantee hero", bg: "linear-gradient(135deg,#2A2A2A 0%,#0A0A0A 100%)" },
+      { caption: "Landing flow → calendar", bg: "linear-gradient(135deg,#1F1F1F 0%,#0A0A0A 100%)" },
+    ],
   },
   {
-    name: "Martinez Landscaping",
-    trade: "Landscaping",
-    category: "landscaping",
-    location: "Riverside, CA",
-    description: "Custom demo site with before/after project gallery",
+    idx: 3,
+    client: "Iron Range HVAC",
+    work: "AI follow-up agent",
+    metric: "38% → 71% answer rate",
+    location: "Duluth",
+    year: "2025",
+    summary:
+      "Existing site was fine. Existing ads were fine. Lead-to-call answer rate was 38% — 6 in every 10 leads went cold. Built an SMS+email AI agent that responds in <2 min, qualifies, and books.",
+    result: "Answer rate jumped to 71%. Same ad spend, almost 2x the booked jobs.",
+    slides: [
+      { caption: "AI follow-up flow", bg: "linear-gradient(135deg,#141414 0%,#1F1F1F 100%)" },
+      { caption: "Owner dashboard", bg: "linear-gradient(135deg,#0A0A0A 0%,#2A2A2A 100%)" },
+    ],
+  },
+  {
+    idx: 4,
+    client: "Lakeside Electric",
+    work: "Site + Meta Ads",
+    metric: "118 leads / 30d",
+    location: "Chicago",
+    year: "2025",
     url: "https://martinezlandscaping.menconimarketing.com",
-    icon: "leaf",
+    summary:
+      "Residential electrician chasing same-day-service homeowners. Repositioned around \"book your electrician in 90 seconds.\" Meta-led, with a 3-field text-back form.",
+    result: "118 leads in 30 days at $19 cost-per-lead. Sustained for 8 months.",
+    slides: [
+      { caption: "90-second booking promise", bg: "linear-gradient(135deg,#1F1F1F 0%,#0A0A0A 100%)" },
+      { caption: "Text-back capture form", bg: "linear-gradient(135deg,#0A0A0A 0%,#141414 100%)" },
+    ],
+  },
+  {
+    idx: 5,
+    client: "Volk Custom Builders",
+    work: "Brand site only",
+    metric: "7-figure proposal · week 2",
+    location: "Lake Forest",
+    year: "2025",
+    summary:
+      "Custom-home builder, no ads spend, lead pipeline came from referrals. Built a brand-grade portfolio site to convert warm referrals at premium pricing.",
+    result:
+      "Closed a 7-figure project in week 2 from a referral who'd been on the fence with the old site for 4 months.",
+    slides: [
+      { caption: "Editorial portfolio grid", bg: "linear-gradient(135deg,#2A2A2A 0%,#1F1F1F 100%)" },
+      { caption: "Project case study layout", bg: "linear-gradient(135deg,#141414 0%,#0A0A0A 100%)" },
+    ],
   },
 ];
 
-const filters = [
-  { id: "all", label: "All work" },
-  { id: "property", label: "Property" },
-  { id: "plastering", label: "Plastering" },
-  { id: "landscaping", label: "Landscaping" },
-];
-
-function ProjectCard({
-  project,
-  index,
-  onOpen,
-}: {
-  project: Project;
-  index: number;
-  onOpen: () => void;
-}) {
-  const cardRef = useRef<HTMLButtonElement>(null);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
-
-    const rotateX = (y - 0.5) * -8;
-    const rotateY = (x - 0.5) * 8;
-
-    cardRef.current.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
-    cardRef.current.style.setProperty("--mx", `${x * 100}%`);
-    cardRef.current.style.setProperty("--my", `${y * 100}%`);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    if (!cardRef.current) return;
-    cardRef.current.style.transform = "perspective(800px) rotateX(0) rotateY(0) translateZ(0)";
-  }, []);
+function ProjectExpansion({ project }: { project: Project }) {
+  const [slideIdx, setSlideIdx] = useState(0);
+  const slide = project.slides[slideIdx];
 
   return (
-    <button
-      ref={cardRef}
-      onClick={onOpen}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      data-cursor="card"
-      className={`project-card project-card-${index} group relative text-left transition-[border-color,background] duration-500`}
+    <div
       style={{
-        background: "rgba(15, 16, 18, 0.5)",
-        border: "1px solid rgba(34, 35, 38, 0.6)",
-        backdropFilter: "blur(8px)",
-        transformStyle: "preserve-3d",
-        willChange: "transform",
+        background: "var(--mm-ink)",
+        borderTop: "1px solid var(--mm-charcoal)",
+        padding: "48px 32px",
       }}
     >
-      {/* Mouse-follow glow */}
       <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        className="grid"
         style={{
-          background:
-            "radial-gradient(300px circle at var(--mx, 50%) var(--my, 50%), rgba(168, 176, 196, 0.1), transparent 60%)",
+          gridTemplateColumns: "1.1fr 1fr",
+          gap: 48,
+          alignItems: "flex-start",
         }}
-      />
-
-      {/* Project visual */}
-      <div className="relative w-full aspect-[16/10] bg-smoke/50 overflow-hidden border-b border-iron/30">
-        <div className="absolute inset-0 grid-bg opacity-30" />
-
-        {/* Browser chrome preview */}
-        <div className="absolute top-0 left-0 right-0 h-7 bg-deep/80 border-b border-iron/40 flex items-center gap-1.5 px-3">
-          <span className="w-2 h-2 rounded-full bg-iron" />
-          <span className="w-2 h-2 rounded-full bg-iron" />
-          <span className="w-2 h-2 rounded-full bg-iron" />
-          <div className="flex-1 mx-3 h-3 bg-smoke/80 text-[9px] text-graphite px-2 flex items-center truncate">
-            {project.url.replace(/^https?:\/\//, "")}
-          </div>
-        </div>
-
-        <div className="absolute inset-0 pt-7 flex items-center justify-center">
-          <div className="relative">
-            <div className="w-12 h-12 border border-iron/50 rotate-45 group-hover:rotate-[225deg] group-hover:border-accent/60 group-hover:scale-110 transition-all duration-700" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-3 h-3 bg-accent/20 group-hover:bg-accent/50 rotate-45 transition-all duration-500" />
+      >
+        <div>
+          <div
+            style={{
+              aspectRatio: "16/10",
+              background: slide.bg,
+              border: "1px solid var(--mm-charcoal)",
+              position: "relative",
+              overflow: "hidden",
+              transition: "background 320ms cubic-bezier(0.2,0,0,1)",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                opacity: 0.04,
+                backgroundImage:
+                  'url("data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22/></filter><rect width=%22120%22 height=%22120%22 filter=%22url(%23n)%22/></svg>")',
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                top: 16,
+                left: 16,
+                fontFamily: "ui-monospace, monospace",
+                fontSize: 10,
+                color: "var(--mm-fg-3)",
+                letterSpacing: "0.18em",
+              }}
+            >
+              {project.client.toUpperCase()} · {String(slideIdx + 1).padStart(2, "0")} / {String(project.slides.length).padStart(2, "0")}
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                bottom: 16,
+                left: 16,
+                right: 16,
+                fontSize: 13,
+                color: "var(--mm-fg-1)",
+                fontWeight: 500,
+              }}
+            >
+              {slide.caption}
             </div>
           </div>
-        </div>
-
-        {/* "Click to view" overlay on hover */}
-        <div className="absolute inset-0 bg-void/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pt-7">
-          <div className="flex items-center gap-2 text-chalk text-sm font-medium">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <circle cx="7" cy="7" r="5" />
-              <path d="M5 7h4M7 5v4" />
-            </svg>
-            Preview live site
+          <div style={{ display: "flex", gap: 6, marginTop: 12 }}>
+            {project.slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSlideIdx(i);
+                }}
+                aria-label={`Slide ${i + 1}`}
+                style={{
+                  flex: 1,
+                  height: 2,
+                  background:
+                    i === slideIdx ? "var(--mm-fg-1)" : "var(--mm-charcoal)",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  transition: "background 200ms cubic-bezier(0.2,0,0,1)",
+                }}
+              />
+            ))}
           </div>
         </div>
 
-        {/* Bottom accent line */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-accent scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-700" />
-      </div>
-
-      <div className="p-7 relative z-10">
-        <div className="flex items-start justify-between gap-3 mb-1.5">
-          <div className="flex items-center gap-3">
-            <span className="text-accent/70 group-hover:text-accent transition-colors duration-300">
-              <TradeIcon kind={project.icon} />
-            </span>
-            <h3 className="font-[var(--font-afacad)] text-chalk font-bold text-lg group-hover:text-white transition-colors duration-300">
-              {project.name}
-            </h3>
-          </div>
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            className="text-accent/60 group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0 mt-1"
+        <div>
+          <div
+            style={{
+              fontSize: 11,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--mm-fg-3)",
+              fontWeight: 500,
+              marginBottom: 16,
+            }}
           >
-            <path d="M4 2h8v8M12 2L4 10" />
-          </svg>
+            What we shipped
+          </div>
+          <p
+            style={{
+              margin: 0,
+              fontSize: 17,
+              lineHeight: 1.55,
+              color: "var(--mm-fg-1)",
+              marginBottom: 32,
+            }}
+          >
+            {project.summary}
+          </p>
+          <div
+            style={{
+              fontSize: 11,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--mm-fg-3)",
+              fontWeight: 500,
+              marginBottom: 16,
+            }}
+          >
+            Result
+          </div>
+          <p
+            style={{
+              margin: 0,
+              fontSize: 17,
+              lineHeight: 1.55,
+              color: "var(--mm-fg-1)",
+              marginBottom: 32,
+            }}
+          >
+            {project.result}
+          </p>
+          {project.url && (
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mm-link"
+              style={{
+                fontSize: 12,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+              }}
+            >
+              View live site →
+            </a>
+          )}
         </div>
-        <p className="text-accent/70 text-sm mb-3 flex items-center gap-2">
-          <span className="w-3 h-px bg-accent/50" />
-          {project.trade} &mdash; {project.location}
-        </p>
-        <p className="text-silver text-sm leading-relaxed font-[var(--font-afacad)]">
-          {project.description}
-        </p>
       </div>
+    </div>
+  );
+}
 
-      {/* Hover border glow */}
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+function WorkRow({
+  project,
+  open,
+  onToggle,
+}: {
+  project: Project;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  const [hover, setHover] = useState(false);
+  return (
+    <div>
+      <button
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        onClick={onToggle}
         style={{
-          boxShadow: "inset 0 0 0 1px rgba(168, 176, 196, 0.3)",
+          width: "100%",
+          display: "grid",
+          gridTemplateColumns: "60px 2fr 2fr 1.5fr 1fr 60px",
+          alignItems: "center",
+          gap: 24,
+          padding: "36px 0",
+          paddingLeft: hover || open ? 24 : 0,
+          paddingRight: hover || open ? 24 : 0,
+          borderTop: "1px solid var(--mm-charcoal)",
+          background: hover || open ? "var(--mm-ink)" : "transparent",
+          color: "inherit",
+          textAlign: "left",
+          cursor: "pointer",
+          border: "none",
+          fontFamily: "inherit",
+          transition:
+            "background 200ms cubic-bezier(0.2,0,0,1), padding 200ms cubic-bezier(0.2,0,0,1)",
         }}
-      />
-    </button>
+      >
+        <div
+          style={{
+            fontFamily: "ui-monospace, monospace",
+            fontSize: 12,
+            color: "var(--mm-fg-3)",
+          }}
+        >
+          {String(project.idx).padStart(2, "0")}
+        </div>
+        <div
+          style={{
+            fontSize: 28,
+            fontWeight: 600,
+            letterSpacing: "-0.02em",
+            color: hover || open ? "var(--mm-accent)" : "var(--mm-fg-1)",
+            transition: "color 200ms cubic-bezier(0.2,0,0,1)",
+          }}
+        >
+          {project.client}
+        </div>
+        <div style={{ fontSize: 14, color: "var(--mm-fg-2)" }}>{project.work}</div>
+        <div style={{ fontSize: 18, fontWeight: 500, color: "var(--mm-fg-1)" }}>{project.metric}</div>
+        <div
+          style={{
+            fontSize: 11,
+            letterSpacing: "0.16em",
+            textTransform: "uppercase",
+            color: "var(--mm-fg-3)",
+          }}
+        >
+          {project.location} · {project.year}
+        </div>
+        <div
+          style={{
+            fontSize: 22,
+            color: hover || open ? "var(--mm-accent)" : "var(--mm-fg-3)",
+            textAlign: "right",
+            transition:
+              "color 200ms cubic-bezier(0.2,0,0,1), transform 200ms cubic-bezier(0.2,0,0,1)",
+            transform: open ? "rotate(45deg)" : "rotate(0deg)",
+          }}
+        >
+          {open ? "×" : "→"}
+        </div>
+      </button>
+      <div
+        style={{
+          maxHeight: open ? 1200 : 0,
+          overflow: "hidden",
+          transition: "max-height 380ms cubic-bezier(0.2,0,0,1)",
+        }}
+      >
+        {open && <ProjectExpansion project={project} />}
+      </div>
+    </div>
   );
 }
 
 export default function Proof() {
-  const container = useRef<HTMLDivElement>(null);
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
-  const [activeFilter, setActiveFilter] = useState<string>("all");
-
-  const visibleProjects = activeFilter === "all"
-    ? projects
-    : projects.filter((p) => p.category === activeFilter);
-
-  // Re-animate cards when filter changes
-  useEffect(() => {
-    requestAnimationFrame(() => {
-      gsap.fromTo(
-        ".project-card",
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.5,
-          stagger: 0.08,
-          ease: "power2.out",
-          overwrite: true,
-        }
-      );
-    });
-  }, [activeFilter]);
-
-  useGSAP(
-    () => {
-      gsap.from(".proof-label", {
-        x: -30,
-        opacity: 0,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top 80%",
-        },
-      });
-
-      gsap.from(".proof-headline", {
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top 75%",
-        },
-      });
-
-      gsap.from(".proof-intro", {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: ".proof-intro",
-          start: "top 85%",
-        },
-      });
-
-      projects.forEach((_, i) => {
-        gsap.from(`.project-card-${i}`, {
-          y: 60,
-          opacity: 0,
-          duration: 0.9,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: `.project-card-${i}`,
-            start: "top 85%",
-          },
-        });
-      });
-
-      gsap.from(".proof-closing", {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: ".proof-closing",
-          start: "top 88%",
-        },
-      });
-    },
-    { scope: container }
-  );
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   return (
-    <>
-      <section id="results" ref={container} className="relative py-32 md:py-44 overflow-hidden">
+    <section
+      id="results"
+      data-screen-label="06 Work"
+      style={{ padding: "160px 48px" }}
+    >
+      <div className="max-w-[1400px] mx-auto">
         <div
-          className="absolute top-0 left-0 w-full h-px"
           style={{
-            background: "linear-gradient(90deg, transparent, var(--iron), transparent)",
+            display: "flex",
+            alignItems: "baseline",
+            justifyContent: "space-between",
+            marginBottom: 80,
+            gap: 64,
+            flexWrap: "wrap",
           }}
-        />
-
-        <div className="absolute inset-0 dot-grid opacity-20 pointer-events-none" />
-
-        <div className="max-w-[1100px] mx-auto px-6 relative z-10">
-          <div className="mb-16">
-            <p className="proof-label text-accent text-xs font-semibold tracking-[0.2em] uppercase mb-6">
-              Real work
-            </p>
+        >
+          <div>
+            <Eyebrow number="06" label="Recent work" />
             <h2
-              className="proof-headline font-[var(--font-afacad)] text-chalk font-extrabold leading-tight tracking-[-0.01em]"
-              style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)" }}
+              style={{
+                margin: 0,
+                fontSize: "clamp(48px, 7vw, 104px)",
+                letterSpacing: "-0.035em",
+                lineHeight: 0.95,
+                fontWeight: 600,
+              }}
             >
-              Judge the work. Not the pitch.
+              Numbers,
+              <br />
+              <span style={{ color: "var(--mm-fg-3-inv)" }}>not adjectives.</span>
             </h2>
-            <p className="proof-intro mt-6 text-silver text-lg max-w-[640px] leading-relaxed font-[var(--font-afacad)]">
-              These are live sites I built for real contractors. Click any card to preview the site right here &mdash; no new tab, no leaving this page.
-            </p>
           </div>
-
-          {/* Trade filter pills */}
-          <div className="flex flex-wrap gap-2 mb-8 overflow-x-auto md:justify-start">
-            {filters.map((f) => {
-              const count = f.id === "all"
-                ? projects.length
-                : projects.filter((p) => p.category === f.id).length;
-              const active = activeFilter === f.id;
-              return (
-                <button
-                  key={f.id}
-                  onClick={() => setActiveFilter(f.id)}
-                  data-cursor="link"
-                  className={`shrink-0 inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 ${
-                    active
-                      ? "bg-accent text-void"
-                      : "bg-deep border border-iron/60 text-silver hover:border-accent/50 hover:text-chalk"
-                  }`}
-                >
-                  {f.label}
-                  <span className={`text-[10px] ${active ? "text-void/60" : "text-graphite"}`}>
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-5 min-h-[300px]">
-            {visibleProjects.map((project, i) => (
-              <ProjectCard
-                key={project.name}
-                project={project}
-                index={i}
-                onOpen={() => setActiveProject(project)}
-              />
-            ))}
-            {visibleProjects.length === 0 && (
-              <div className="md:col-span-3 py-16 text-center">
-                <p className="text-silver text-sm">
-                  No projects in this category yet &mdash; but the same system applies.
-                </p>
-              </div>
-            )}
-          </div>
-
-          <p className="proof-closing mt-14 text-silver text-center text-lg font-[var(--font-afacad)]">
-            Every site above was built by one person. The same person who would
-            build yours.
+          <p
+            style={{
+              margin: 0,
+              fontSize: 17,
+              color: "var(--mm-fg-2)",
+              lineHeight: 1.5,
+              maxWidth: 380,
+            }}
+          >
+            Five engagements from the last 14 months. Click any row to expand the case study.
           </p>
         </div>
-      </section>
 
-      <SiteModal
-        open={activeProject !== null}
-        onClose={() => setActiveProject(null)}
-        url={activeProject?.url ?? ""}
-        name={activeProject?.name ?? ""}
-        trade={activeProject?.trade ?? ""}
-        location={activeProject?.location ?? ""}
-      />
-    </>
+        <div style={{ borderBottom: "1px solid var(--mm-charcoal)" }}>
+          {PROJECTS.map((p) => (
+            <WorkRow
+              key={p.idx}
+              project={p}
+              open={openIdx === p.idx}
+              onToggle={() => setOpenIdx(openIdx === p.idx ? null : p.idx)}
+            />
+          ))}
+        </div>
+
+        <div
+          className="grid"
+          style={{
+            marginTop: 96,
+            gridTemplateColumns: "1fr 2fr",
+            gap: 64,
+            alignItems: "flex-start",
+            borderTop: "1px solid var(--mm-charcoal)",
+            paddingTop: 64,
+          }}
+        >
+          <div
+            style={{
+              fontSize: 11,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--mm-fg-3)",
+              fontWeight: 500,
+            }}
+          >
+            Client — Acme Drywall
+            <br />
+            <span style={{ color: "var(--mm-fg-3)" }}>Chicago · 2026</span>
+          </div>
+          <blockquote style={{ margin: 0 }}>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "clamp(28px, 3.4vw, 44px)",
+                letterSpacing: "-0.02em",
+                lineHeight: 1.2,
+                fontWeight: 500,
+                color: "var(--mm-fg-1)",
+                maxWidth: 1000,
+              }}
+            >
+              &ldquo;Three agencies told me drywall guys can&apos;t run real ads. Nico had us booking 60+ calls a month inside 4 weeks. We hired one guy just to handle the work.&rdquo;
+            </p>
+            <div
+              style={{
+                marginTop: 28,
+                fontSize: 14,
+                color: "var(--mm-fg-3)",
+              }}
+            >
+              — D. Reyes, owner, Acme Drywall
+            </div>
+          </blockquote>
+        </div>
+      </div>
+    </section>
   );
 }
