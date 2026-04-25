@@ -120,7 +120,7 @@ export default function FAQ() {
 
       <div className="max-w-[800px] mx-auto px-6 relative z-10">
         <h2
-          className="faq-headline font-[var(--font-syne)] text-chalk font-extrabold mb-12 tracking-[-0.01em]"
+          className="faq-headline font-[var(--font-afacad)] text-chalk font-extrabold mb-12 tracking-[-0.01em]"
           style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)" }}
         >
           Common questions.

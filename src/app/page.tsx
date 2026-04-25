@@ -1,9 +1,8 @@
 import dynamic from "next/dynamic";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
+import GradientHairline from "@/components/GradientHairline";
 
-// Below-the-fold sections lazy-loaded so the initial JS bundle is tiny.
-// SSR stays ON so HTML is still pre-rendered for SEO + first paint.
 const PositioningAudit = dynamic(() => import("@/components/PositioningAudit"));
 const Problem = dynamic(() => import("@/components/Problem"));
 const Mechanism = dynamic(() => import("@/components/Mechanism"));
@@ -18,17 +17,26 @@ const MobileBottomCTA = dynamic(() => import("@/components/MobileBottomCTA"));
 export default function Home() {
   return (
     <>
-      <main className="noise">
+      <main>
         <Nav />
         <Hero />
+        <GradientHairline />
         <PositioningAudit />
+        <GradientHairline />
         <Problem />
+        <GradientHairline />
         <Mechanism />
+        <GradientHairline />
         <Proof />
+        <GradientHairline />
         <Difference />
+        <GradientHairline />
         <FAQ />
+        <GradientHairline />
         <Calculator />
+        <GradientHairline />
         <CTA />
+        <GradientHairline />
         <Footer />
       </main>
       <MobileBottomCTA />

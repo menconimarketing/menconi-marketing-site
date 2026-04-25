@@ -105,7 +105,7 @@ export default function Calculator() {
             What it&apos;s worth
           </p>
           <h2
-            className="calc-headline font-[var(--font-syne)] text-chalk font-extrabold leading-tight tracking-[-0.01em] mb-6"
+            className="calc-headline font-[var(--font-afacad)] text-chalk font-extrabold leading-tight tracking-[-0.01em] mb-6"
             style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)" }}
           >
             Owning a position isn&apos;t a brand exercise.
@@ -122,10 +122,10 @@ export default function Calculator() {
           style={{
             background:
               "linear-gradient(135deg, rgba(15, 16, 18, 0.95), rgba(22, 23, 25, 0.85))",
-            border: "1px solid rgba(94, 106, 210, 0.25)",
+            border: "1px solid rgba(168, 176, 196, 0.25)",
             backdropFilter: "blur(12px)",
             boxShadow:
-              "0 0 60px rgba(94, 106, 210, 0.1), inset 0 0 40px rgba(94, 106, 210, 0.03)",
+              "0 0 60px rgba(168, 176, 196, 0.1), inset 0 0 40px rgba(168, 176, 196, 0.03)",
           }}
         >
           {/* Left: sliders */}
@@ -136,7 +136,7 @@ export default function Calculator() {
                 <label className="text-graphite text-[10px] uppercase tracking-[0.15em] font-bold">
                   Average job value
                 </label>
-                <span className="text-chalk font-[var(--font-syne)] font-bold text-xl">
+                <span className="text-chalk font-[var(--font-afacad)] font-bold text-xl">
                   {fmt(jobValue)}
                 </span>
               </div>
@@ -169,7 +169,7 @@ export default function Calculator() {
                 <label className="text-graphite text-[10px] uppercase tracking-[0.15em] font-bold">
                   Current monthly leads
                 </label>
-                <span className="text-chalk font-[var(--font-syne)] font-bold text-xl">
+                <span className="text-chalk font-[var(--font-afacad)] font-bold text-xl">
                   {monthlyLeads}
                 </span>
               </div>
@@ -210,7 +210,7 @@ export default function Calculator() {
             </p>
             <div
               ref={numberRef}
-              className="font-[var(--font-syne)] text-chalk font-extrabold leading-none mb-2"
+              className="font-[var(--font-afacad)] text-chalk font-extrabold leading-none mb-2"
               style={{ fontSize: "clamp(3rem, 7vw, 5.5rem)" }}
             >
               {fmt(monthlyDelta)}
@@ -269,7 +269,7 @@ export default function Calculator() {
           border: 2px solid var(--accent);
           cursor: pointer;
           transition: transform 0.2s;
-          box-shadow: 0 0 12px rgba(94, 106, 210, 0.5);
+          box-shadow: 0 0 12px rgba(168, 176, 196, 0.5);
         }
         .calc-slider::-webkit-slider-thumb:hover {
           transform: scale(1.15);
@@ -280,7 +280,7 @@ export default function Calculator() {
           background: var(--chalk);
           border: 2px solid var(--accent);
           cursor: pointer;
-          box-shadow: 0 0 12px rgba(94, 106, 210, 0.5);
+          box-shadow: 0 0 12px rgba(168, 176, 196, 0.5);
         }
       `}</style>
     </section>

@@ -1,136 +1,161 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import MagneticButton from "./MagneticButton";
+
+const LINKS = [
+  { href: "#audit", label: "Audit" },
+  { href: "#how-it-works", label: "Process" },
+  { href: "#results", label: "Work" },
+  { href: "#about", label: "About" },
+];
 
 export default function Nav() {
-  const [visible, setVisible] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setVisible(window.scrollY > window.innerHeight * 0.4);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
-        visible
-          ? "translate-y-0 opacity-100"
-          : "-translate-y-full opacity-0 pointer-events-none"
-      }`}
+      className="fixed top-0 left-0 right-0 z-50"
+      style={{
+        background: scrolled ? "rgba(10, 10, 10, 0.85)" : "transparent",
+        backdropFilter: scrolled ? "blur(14px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(14px)" : "none",
+        borderBottom: scrolled
+          ? "1px solid var(--mm-border-soft)"
+          : "1px solid transparent",
+        transition:
+          "background 200ms cubic-bezier(0.2,0,0,1), border-color 200ms cubic-bezier(0.2,0,0,1)",
+      }}
     >
       <div
-        className="border-b border-iron/50"
-        style={{
-          backdropFilter: "blur(20px) saturate(180%)",
-          background: "rgba(8, 9, 10, 0.8)",
-        }}
+        className="max-w-[1400px] mx-auto flex items-center justify-between"
+        style={{ padding: "18px 48px" }}
       >
-        <div className="max-w-[1280px] mx-auto px-6 flex items-center justify-between h-14">
-          <a
-            href="#top"
-            className="flex items-center transition-opacity duration-300 hover:opacity-70"
-          >
-            <img
-              src="/brand/monogram/mm-white.svg"
-              alt="Menconi Marketing"
-              className="h-5 w-auto"
-            />
-          </a>
+        <a
+          href="#top"
+          className="flex items-center"
+          style={{ transition: "opacity 200ms cubic-bezier(0.2,0,0,1)" }}
+        >
+          <img
+            src="/brand/wordmark/wordmark-white.svg"
+            alt="Menconi Marketing"
+            style={{ height: 22, width: "auto" }}
+          />
+        </a>
 
-          <div className="hidden md:flex items-center gap-8">
-            {[
-              { href: "#how-it-works", label: "How It Works" },
-              { href: "#results", label: "Results" },
-              { href: "#about", label: "About" },
-            ].map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-silver hover:text-chalk transition-colors duration-300 text-sm font-medium relative group"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent group-hover:w-full transition-all duration-300" />
-              </a>
-            ))}
-            <MagneticButton
-              href="#contact"
-              data-cursor="cta"
-              strength={0.25}
-              radius={70}
-              className="relative bg-accent/10 text-accent border border-accent/20 px-5 py-2 text-sm font-semibold hover:bg-accent hover:text-void transition-all duration-300 inline-block"
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center" style={{ gap: 36 }}>
+          {LINKS.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              style={{
+                color: "var(--mm-fg-1)",
+                textDecoration: "none",
+                fontSize: 13,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                fontWeight: 500,
+                transition: "color 200ms cubic-bezier(0.2,0,0,1)",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.color = "var(--mm-accent)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.color = "var(--mm-fg-1)")
+              }
             >
-              Book a Call
-            </MagneticButton>
-          </div>
-
-          <button
-            className="md:hidden text-chalk"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
+              {l.label}
+            </a>
+          ))}
+          <a
+            href="#contact"
+            className="mm-btn-primary"
+            style={{ fontSize: 13, padding: "10px 18px" }}
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              {mobileOpen ? (
-                <path d="M6 6l12 12M6 18L18 6" />
-              ) : (
-                <>
-                  <line x1="4" y1="7" x2="20" y2="7" />
-                  <line x1="4" y1="12" x2="16" y2="12" />
-                  <line x1="4" y1="17" x2="12" y2="17" />
-                </>
-              )}
-            </svg>
-          </button>
+            Book a call <span aria-hidden>→</span>
+          </a>
         </div>
+
+        {/* Mobile hamburger */}
+        <button
+          className="md:hidden"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle menu"
+          style={{ background: "transparent", border: "none", color: "var(--mm-fg-1)" }}
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 22 22"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="butt"
+          >
+            {mobileOpen ? (
+              <path d="M5 5l12 12M5 17L17 5" />
+            ) : (
+              <>
+                <line x1="3" y1="7" x2="19" y2="7" />
+                <line x1="3" y1="11" x2="19" y2="11" />
+                <line x1="3" y1="15" x2="19" y2="15" />
+              </>
+            )}
+          </svg>
+        </button>
       </div>
 
+      {/* Mobile drawer */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-500 ${
-          mobileOpen ? "max-h-80" : "max-h-0"
-        }`}
+        className="md:hidden overflow-hidden"
         style={{
-          backdropFilter: "blur(20px) saturate(180%)",
-          background: "rgba(8, 9, 10, 0.95)",
+          maxHeight: mobileOpen ? 360 : 0,
+          transition: "max-height 280ms cubic-bezier(0.2,0,0,1)",
+          background: "rgba(10, 10, 10, 0.95)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          borderBottom: mobileOpen ? "1px solid var(--mm-border-soft)" : "none",
         }}
       >
-        <div className="px-6 py-6 flex flex-col gap-4 border-b border-iron/30">
-          {[
-            { href: "#how-it-works", label: "How It Works" },
-            { href: "#results", label: "Results" },
-            { href: "#about", label: "About" },
-          ].map((link) => (
+        <div
+          className="flex flex-col"
+          style={{ padding: "16px 32px 32px", gap: 18 }}
+        >
+          {LINKS.map((l) => (
             <a
-              key={link.href}
-              href={link.href}
+              key={l.href}
+              href={l.href}
               onClick={() => setMobileOpen(false)}
-              className="text-bone text-lg hover:text-accent transition-colors"
+              style={{
+                color: "var(--mm-fg-1)",
+                textDecoration: "none",
+                fontSize: 18,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                fontWeight: 500,
+              }}
             >
-              {link.label}
+              {l.label}
             </a>
           ))}
           <a
             href="#contact"
             onClick={() => setMobileOpen(false)}
-            className="bg-accent text-void px-5 py-3 text-center font-bold mt-2 hover:brightness-110 transition-all"
+            className="mm-btn-primary"
+            style={{ fontSize: 14, padding: "14px 20px", justifyContent: "center", marginTop: 12 }}
           >
-            Book a Call
+            Book a call <span aria-hidden>→</span>
           </a>
         </div>
       </div>
-
-      {/* Bottom glow line */}
-      {visible && (
-        <div
-          className="absolute bottom-0 left-0 right-0 h-px opacity-40"
-          style={{
-            background: "linear-gradient(90deg, transparent, var(--accent), transparent)",
-          }}
-        />
-      )}
     </nav>
   );
 }

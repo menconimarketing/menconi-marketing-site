@@ -30,14 +30,14 @@ export default function MobileBottomCTA() {
       style={{
         background: "rgba(8, 9, 10, 0.92)",
         backdropFilter: "blur(20px) saturate(180%)",
-        borderTop: "1px solid rgba(94, 106, 210, 0.25)",
+        borderTop: "1px solid rgba(168, 176, 196, 0.25)",
       }}
     >
       <a
         href="#audit"
         className="flex items-center justify-center gap-2 w-full bg-accent text-void px-6 py-3.5 text-sm font-bold tracking-wide"
         style={{
-          boxShadow: "0 0 30px rgba(94, 106, 210, 0.35)",
+          boxShadow: "0 0 30px rgba(168, 176, 196, 0.35)",
         }}
       >
         Audit my positioning

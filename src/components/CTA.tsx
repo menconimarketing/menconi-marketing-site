@@ -99,7 +99,7 @@ export default function CTA() {
           </p>
 
           <h2
-            className="cta-headline font-[var(--font-syne)] font-extrabold leading-tight tracking-[-0.01em] mb-6"
+            className="cta-headline font-[var(--font-afacad)] font-extrabold leading-tight tracking-[-0.01em] mb-6"
           >
             <span className="text-gradient" style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}>
               Get your positioning audit.

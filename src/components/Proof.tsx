@@ -144,7 +144,7 @@ function ProjectCard({
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
         style={{
           background:
-            "radial-gradient(300px circle at var(--mx, 50%) var(--my, 50%), rgba(94, 106, 210, 0.1), transparent 60%)",
+            "radial-gradient(300px circle at var(--mx, 50%) var(--my, 50%), rgba(168, 176, 196, 0.1), transparent 60%)",
         }}
       />
 
@@ -192,7 +192,7 @@ function ProjectCard({
             <span className="text-accent/70 group-hover:text-accent transition-colors duration-300">
               <TradeIcon kind={project.icon} />
             </span>
-            <h3 className="font-[var(--font-syne)] text-chalk font-bold text-lg group-hover:text-white transition-colors duration-300">
+            <h3 className="font-[var(--font-afacad)] text-chalk font-bold text-lg group-hover:text-white transition-colors duration-300">
               {project.name}
             </h3>
           </div>
@@ -221,7 +221,7 @@ function ProjectCard({
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
         style={{
-          boxShadow: "inset 0 0 0 1px rgba(94, 106, 210, 0.3)",
+          boxShadow: "inset 0 0 0 1px rgba(168, 176, 196, 0.3)",
         }}
       />
     </button>
@@ -331,7 +331,7 @@ export default function Proof() {
               Real work
             </p>
             <h2
-              className="proof-headline font-[var(--font-syne)] text-chalk font-extrabold leading-tight tracking-[-0.01em]"
+              className="proof-headline font-[var(--font-afacad)] text-chalk font-extrabold leading-tight tracking-[-0.01em]"
               style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)" }}
             >
               Judge the work. Not the pitch.

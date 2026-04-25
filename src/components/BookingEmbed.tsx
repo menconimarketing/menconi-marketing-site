@@ -25,7 +25,7 @@ export default function BookingEmbed({
         "cal-text-muted": "#8B8D93",
         "cal-border": "#222326",
         "cal-border-subtle": "#161719",
-        "cal-brand": "#5E6AD2",
+        "cal-brand": "#A8B0C4",
         "cal-brand-text": "#08090A",
       };
       cal("ui", {
@@ -70,7 +70,7 @@ export default function BookingEmbed({
       className="overflow-hidden"
       style={{
         background: "rgba(15, 16, 18, 0.6)",
-        border: "1px solid rgba(94, 106, 210, 0.25)",
+        border: "1px solid rgba(168, 176, 196, 0.25)",
         backdropFilter: "blur(8px)",
       }}
     >

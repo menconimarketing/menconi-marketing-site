@@ -79,9 +79,9 @@ export default function SiteModal({
         className="relative w-full max-w-[1400px] h-[calc(100vh-8rem)] mt-8 flex flex-col animate-[scaleIn_0.4s_cubic-bezier(0.16,1,0.3,1)]"
         style={{
           background: "var(--void)",
-          border: "1px solid rgba(94, 106, 210, 0.25)",
+          border: "1px solid rgba(168, 176, 196, 0.25)",
           boxShadow:
-            "0 0 60px rgba(94, 106, 210, 0.15), 0 0 120px rgba(94, 106, 210, 0.08)",
+            "0 0 60px rgba(168, 176, 196, 0.15), 0 0 120px rgba(168, 176, 196, 0.08)",
         }}
       >
         {/* Browser chrome */}
@@ -105,7 +105,7 @@ export default function SiteModal({
           </div>
           <div className="hidden md:flex items-center gap-3 text-right">
             <div>
-              <p className="text-chalk text-xs font-bold font-[var(--font-syne)]">{name}</p>
+              <p className="text-chalk text-xs font-bold font-[var(--font-afacad)]">{name}</p>
               <p className="text-graphite text-[10px]">{trade} &mdash; {location}</p>
             </div>
           </div>

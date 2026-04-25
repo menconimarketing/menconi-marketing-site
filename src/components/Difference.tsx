@@ -166,7 +166,7 @@ export default function Difference() {
                         "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
                     }}
                   >
-                    <span className="font-[var(--font-syne)] text-accent text-2xl font-bold">
+                    <span className="font-[var(--font-afacad)] text-accent text-2xl font-bold">
                       NM
                     </span>
                   </div>
@@ -193,7 +193,7 @@ export default function Difference() {
               Who you&apos;re working with
             </p>
             <h2
-              className="diff-headline font-[var(--font-syne)] text-chalk font-extrabold leading-tight tracking-[-0.01em] mb-8"
+              className="diff-headline font-[var(--font-afacad)] text-chalk font-extrabold leading-tight tracking-[-0.01em] mb-8"
               style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}
             >
               Not your agency.
@@ -219,7 +219,7 @@ export default function Difference() {
                   key={i}
                   className={`trust-bullet-${i} flex items-start gap-3 group/bullet`}
                 >
-                  <div className="w-1.5 h-1.5 bg-accent mt-2.5 shrink-0 group-hover/bullet:shadow-[0_0_8px_rgba(94,106,210,0.5)] transition-shadow duration-300" />
+                  <div className="w-1.5 h-1.5 bg-accent mt-2.5 shrink-0 group-hover/bullet:shadow-[0_0_8px_rgba(168, 176, 196,0.5)] transition-shadow duration-300" />
                   <p className="text-bone font-[var(--font-afacad)] group-hover/bullet:text-chalk transition-colors duration-300">
                     {bullet}
                   </p>
@@ -227,7 +227,7 @@ export default function Difference() {
               ))}
             </div>
 
-            <p className="diff-closing text-chalk text-xl font-semibold font-[var(--font-syne)] tracking-tight mb-8">
+            <p className="diff-closing text-chalk text-xl font-semibold font-[var(--font-afacad)] tracking-tight mb-8">
               Big companies have layers. I have your phone number.
             </p>
 

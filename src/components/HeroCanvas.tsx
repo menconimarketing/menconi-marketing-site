@@ -35,6 +35,11 @@ function WaveField() {
       const positions = new Float32Array(POINTS_PER_LINE * 3);
       const colors = new Float32Array(POINTS_PER_LINE * 3);
 
+      // Smoke → amber gradient (Menconi signature gradient)
+      // smoke #A8B0C4 = (168, 176, 196) at left
+      // amber #E8D49A = (232, 212, 154) at right
+      const smoke = new THREE.Color(0xA8B0C4);
+      const amber = new THREE.Color(0xE8D49A);
       for (let j = 0; j < POINTS_PER_LINE; j++) {
         positions[j * 3] =
           (j / (POINTS_PER_LINE - 1)) * WAVE_WIDTH - WAVE_WIDTH / 2;
@@ -42,9 +47,8 @@ function WaveField() {
         positions[j * 3 + 2] = 0;
 
         const u = j / (POINTS_PER_LINE - 1);
-        const hue = 0.5 + u * 0.45;
-        const c = new THREE.Color().setHSL(hue, 0.95, 0.55);
-        const hdr = 1.7;
+        const c = smoke.clone().lerp(amber, u);
+        const hdr = 1.4; // slightly toned-down HDR — brand says muted, not neon
         colors[j * 3] = c.r * hdr;
         colors[j * 3 + 1] = c.g * hdr;
         colors[j * 3 + 2] = c.b * hdr;
@@ -163,11 +167,11 @@ export default function HeroCanvas() {
       <WaveField />
       <EffectComposer>
         <Bloom
-          intensity={1.5}
-          luminanceThreshold={0.4}
+          intensity={0.95}
+          luminanceThreshold={0.55}
           luminanceSmoothing={0.85}
           mipmapBlur
-          radius={0.85}
+          radius={0.7}
         />
         <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
       </EffectComposer>

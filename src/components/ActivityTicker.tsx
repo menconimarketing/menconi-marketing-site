@@ -25,7 +25,7 @@ export default function ActivityTicker() {
       className="inline-flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-2.5"
       style={{
         background: "rgba(15, 16, 18, 0.7)",
-        border: "1px solid rgba(94, 106, 210, 0.2)",
+        border: "1px solid rgba(168, 176, 196, 0.2)",
         backdropFilter: "blur(10px)",
       }}
     >

@@ -224,7 +224,7 @@ export default function Mechanism() {
                     {p.label}
                   </p>
                   <h3
-                    className="font-[var(--font-syne)] text-chalk font-extrabold leading-tight tracking-[-0.01em] mb-6"
+                    className="font-[var(--font-afacad)] text-chalk font-extrabold leading-tight tracking-[-0.01em] mb-6"
                     style={{ fontSize: "clamp(1.5rem, 2.6vw, 2.2rem)" }}
                   >
                     {p.title}
@@ -249,9 +249,9 @@ export default function Mechanism() {
                 className="mock-site relative w-[440px] h-[300px] z-10"
                 style={{
                   background: "rgba(15, 16, 18, 0.95)",
-                  border: "1px solid rgba(94, 106, 210, 0.2)",
+                  border: "1px solid rgba(168, 176, 196, 0.2)",
                   boxShadow:
-                    "0 0 60px rgba(94, 106, 210, 0.1), 0 20px 60px rgba(0, 0, 0, 0.5)",
+                    "0 0 60px rgba(168, 176, 196, 0.1), 0 20px 60px rgba(0, 0, 0, 0.5)",
                 }}
               >
                 {/* Browser chrome */}
@@ -281,7 +281,7 @@ export default function Mechanism() {
                 className="ad-google absolute top-12 left-0 w-44 p-3 z-20"
                 style={{
                   background: "rgba(15, 16, 18, 0.95)",
-                  border: "1px solid rgba(94, 106, 210, 0.3)",
+                  border: "1px solid rgba(168, 176, 196, 0.3)",
                   backdropFilter: "blur(8px)",
                 }}
               >
@@ -299,7 +299,7 @@ export default function Mechanism() {
                 className="ad-meta absolute top-12 right-0 w-44 z-20"
                 style={{
                   background: "rgba(15, 16, 18, 0.95)",
-                  border: "1px solid rgba(94, 106, 210, 0.3)",
+                  border: "1px solid rgba(168, 176, 196, 0.3)",
                   backdropFilter: "blur(8px)",
                 }}
               >
@@ -349,13 +349,13 @@ export default function Mechanism() {
               <div className="lead-counter absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2"
                 style={{
                   background: "rgba(15, 16, 18, 0.9)",
-                  border: "1px solid rgba(94, 106, 210, 0.3)",
+                  border: "1px solid rgba(168, 176, 196, 0.3)",
                   backdropFilter: "blur(8px)",
                 }}
               >
                 <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
                 <span className="text-graphite text-[10px] uppercase tracking-wider">Leads this week</span>
-                <span className="text-chalk font-[var(--font-syne)] font-bold text-base">47</span>
+                <span className="text-chalk font-[var(--font-afacad)] font-bold text-base">47</span>
               </div>
 
               {/* PHASE 3: Phone */}
@@ -363,10 +363,10 @@ export default function Mechanism() {
                 className="phone-frame absolute right-0 top-1/2 -translate-y-1/2 w-[180px] h-[360px] z-30"
                 style={{
                   background: "rgba(8, 9, 10, 0.98)",
-                  border: "1px solid rgba(94, 106, 210, 0.3)",
+                  border: "1px solid rgba(168, 176, 196, 0.3)",
                   borderRadius: "24px",
                   boxShadow:
-                    "0 0 40px rgba(94, 106, 210, 0.15), 0 30px 60px rgba(0, 0, 0, 0.6)",
+                    "0 0 40px rgba(168, 176, 196, 0.15), 0 30px 60px rgba(0, 0, 0, 0.6)",
                 }}
               >
                 {/* Phone notch */}
@@ -411,17 +411,17 @@ export default function Mechanism() {
               <div className="dashboard-stat absolute bottom-4 right-0 z-30 flex flex-col gap-1.5 px-3 py-2"
                 style={{
                   background: "rgba(15, 16, 18, 0.9)",
-                  border: "1px solid rgba(94, 106, 210, 0.3)",
+                  border: "1px solid rgba(168, 176, 196, 0.3)",
                   backdropFilter: "blur(8px)",
                 }}
               >
                 <div className="flex items-baseline gap-2">
                   <span className="text-graphite text-[8px] uppercase tracking-wider">Reactivated</span>
-                  <span className="text-chalk font-[var(--font-syne)] font-bold text-sm">12</span>
+                  <span className="text-chalk font-[var(--font-afacad)] font-bold text-sm">12</span>
                 </div>
                 <div className="flex items-baseline gap-2">
                   <span className="text-graphite text-[8px] uppercase tracking-wider">Avg response</span>
-                  <span className="text-accent font-[var(--font-syne)] font-bold text-sm">4 min</span>
+                  <span className="text-accent font-[var(--font-afacad)] font-bold text-sm">4 min</span>
                 </div>
               </div>
             </div>
@@ -435,7 +435,7 @@ export default function Mechanism() {
           How I work
         </p>
         <h2
-          className="font-[var(--font-syne)] text-chalk font-extrabold leading-tight tracking-[-0.01em] mb-12"
+          className="font-[var(--font-afacad)] text-chalk font-extrabold leading-tight tracking-[-0.01em] mb-12"
           style={{ fontSize: "clamp(1.75rem, 6vw, 2.2rem)" }}
         >
           I don&apos;t sell tactics. I sell a position.
@@ -455,7 +455,7 @@ export default function Mechanism() {
               <p className="text-accent/80 text-[11px] font-bold tracking-[0.2em] uppercase mb-3">
                 {p.label}
               </p>
-              <h3 className="font-[var(--font-syne)] text-chalk font-bold text-lg mb-3 leading-snug">
+              <h3 className="font-[var(--font-afacad)] text-chalk font-bold text-lg mb-3 leading-snug">
                 {p.title}
               </h3>
               <p className="text-silver text-sm leading-relaxed mb-4 font-[var(--font-afacad)]">

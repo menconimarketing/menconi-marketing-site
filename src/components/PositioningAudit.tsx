@@ -149,7 +149,7 @@ export default function PositioningAudit() {
             See it before you buy it
           </p>
           <h2
-            className="font-[var(--font-syne)] text-chalk font-extrabold leading-tight tracking-[-0.01em] mb-6"
+            className="font-[var(--font-afacad)] text-chalk font-extrabold leading-tight tracking-[-0.01em] mb-6"
             style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)" }}
           >
             Audit your positioning. <span className="text-gradient">Right now.</span>
@@ -225,7 +225,7 @@ export default function PositioningAudit() {
                 className="group relative inline-flex items-center gap-3 bg-accent text-void px-10 py-4 text-base font-bold transition-all duration-300"
                 style={{
                   boxShadow:
-                    "0 0 40px rgba(94, 106, 210, 0.2), 0 0 80px rgba(94, 106, 210, 0.1)",
+                    "0 0 40px rgba(168, 176, 196, 0.2), 0 0 80px rgba(168, 176, 196, 0.1)",
                 }}
               >
                 Run my positioning audit
@@ -284,7 +284,7 @@ export default function PositioningAudit() {
               <p className="text-accent text-[11px] uppercase tracking-[0.2em] font-bold mb-3">
                 Positioning snapshot
               </p>
-              <p className="text-chalk text-2xl md:text-3xl font-[var(--font-syne)] font-bold tracking-tight">
+              <p className="text-chalk text-2xl md:text-3xl font-[var(--font-afacad)] font-bold tracking-tight">
                 {snapshot.businessName}
               </p>
               <p className="text-silver text-sm mt-1">
@@ -338,7 +338,7 @@ export default function PositioningAudit() {
                 <div className="space-y-4">
                   {snapshot.trade.competitorArchetypes.map((c, i) => (
                     <div key={i}>
-                      <p className="text-chalk text-xs font-bold font-[var(--font-syne)] mb-1">
+                      <p className="text-chalk text-xs font-bold font-[var(--font-afacad)] mb-1">
                         {c.name}
                       </p>
                       <p className="text-silver text-xs leading-snug font-[var(--font-afacad)]">
@@ -356,17 +356,17 @@ export default function PositioningAudit() {
               <div
                 className="result-card result-card-3 relative p-7 overflow-hidden"
                 style={{
-                  background: "linear-gradient(135deg, rgba(94, 106, 210, 0.12), rgba(15, 16, 18, 0.8))",
-                  border: "1px solid rgba(94, 106, 210, 0.5)",
+                  background: "linear-gradient(135deg, rgba(168, 176, 196, 0.12), rgba(15, 16, 18, 0.8))",
+                  border: "1px solid rgba(168, 176, 196, 0.5)",
                   backdropFilter: "blur(8px)",
                   boxShadow:
-                    "0 0 60px rgba(94, 106, 210, 0.15), inset 0 0 40px rgba(94, 106, 210, 0.04)",
+                    "0 0 60px rgba(168, 176, 196, 0.15), inset 0 0 40px rgba(168, 176, 196, 0.04)",
                 }}
               >
                 {/* Pulsing glow corner */}
                 <div className="wedge-pulse absolute -top-12 -right-12 w-32 h-32 rounded-full"
                   style={{
-                    background: "radial-gradient(circle, rgba(94, 106, 210, 0.3) 0%, transparent 70%)",
+                    background: "radial-gradient(circle, rgba(168, 176, 196, 0.3) 0%, transparent 70%)",
                     filter: "blur(20px)",
                   }}
                 />
@@ -378,7 +378,7 @@ export default function PositioningAudit() {
                       03 \u00b7 The unowned position
                     </span>
                   </div>
-                  <p className="text-chalk text-base leading-snug font-[var(--font-syne)] font-bold mb-4">
+                  <p className="text-chalk text-base leading-snug font-[var(--font-afacad)] font-bold mb-4">
                     &ldquo;{snapshot.wedge}&rdquo;
                   </p>
                   <p className="text-silver text-xs leading-relaxed font-[var(--font-afacad)] mb-5">
@@ -405,7 +405,7 @@ export default function PositioningAudit() {
                   data-cursor="cta"
                   className="inline-flex items-center gap-3 bg-accent text-void px-8 py-3.5 text-base font-bold transition-all duration-300"
                   style={{
-                    boxShadow: "0 0 40px rgba(94, 106, 210, 0.25)",
+                    boxShadow: "0 0 40px rgba(168, 176, 196, 0.25)",
                   }}
                 >
                   Get the full audit on a call

@@ -135,7 +135,7 @@ export default function Problem() {
             >
               <div className="flex gap-6 md:gap-10 items-start">
                 <span
-                  className={`pain-number-${i} font-[var(--font-syne)] text-accent/40 font-bold text-5xl md:text-6xl shrink-0 leading-none group-hover:text-accent/70 transition-colors duration-500 select-none`}
+                  className={`pain-number-${i} font-[var(--font-afacad)] text-accent/40 font-bold text-5xl md:text-6xl shrink-0 leading-none group-hover:text-accent/70 transition-colors duration-500 select-none`}
                 >
                   {point.number}
                 </span>
