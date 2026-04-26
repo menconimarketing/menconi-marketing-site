@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import Eyebrow from "./Eyebrow";
+import SiteModal from "./SiteModal";
 
 const PHASES = [
   {
     n: "01",
-    letter: "A",
     title: "Websites",
     sub: "The foundation.",
     body:
@@ -16,25 +16,21 @@ const PHASES = [
       ["68%", "avg lift in form completions"],
       ["100/100", "pagespeed mobile · typical"],
     ] as [string, string][],
-    depends: "Required first.",
   },
   {
     n: "02",
-    letter: "B",
     title: "Paid ads",
     sub: "On top of the site.",
     body:
       "Meta + Google lead-gen. Built around your CRM and call calendar — not vanity dashboards. Ads point at the new site, which converts at a rate the old one couldn’t, so the same dollar buys more calls.",
     stats: [
       ["$28", "avg cost per booked call"],
-      ["62", "calls in first 30 days · acme drywall"],
+      ["62", "calls in first 30 days"],
       ["daily", "ad-spend monitoring · me"],
     ] as [string, string][],
-    depends: "Compounds on phase 01.",
   },
   {
     n: "03",
-    letter: "C",
     title: "AI revenue",
     sub: "On top of the ads.",
     body:
@@ -44,14 +40,31 @@ const PHASES = [
       ["<2 min", "avg follow-up time, 24/7"],
       ["+38%", "close rate vs. manual follow-up"],
     ] as [string, string][],
-    depends: "Compounds on phase 02.",
   },
 ];
 
-const HEIGHTS = [40, 70, 100];
+const PHASE_1_DEMOS = [
+  {
+    name: "Acme Drywall",
+    trade: "Drywall · Chicago, IL",
+    url: "https://606propertyservices.menconimarketing.com",
+  },
+  {
+    name: "Northshore Roofing",
+    trade: "Roofing · Evanston, IL",
+    url: "https://parabeachplastering.menconimarketing.com",
+  },
+  {
+    name: "Lakeside Electric",
+    trade: "Electrical · Chicago, IL",
+    url: "https://martinezlandscaping.menconimarketing.com",
+  },
+];
 
 export default function Mechanism() {
-  const [active, setActive] = useState(0);
+  const [activeDemo, setActiveDemo] = useState<
+    (typeof PHASE_1_DEMOS)[0] | null
+  >(null);
 
   return (
     <section
@@ -60,35 +73,34 @@ export default function Mechanism() {
       style={{ padding: "160px 48px", position: "relative" }}
     >
       <div className="max-w-[1400px] mx-auto">
+        <Eyebrow number="04" label="The system" />
+
         <div
+          className="grid"
           style={{
-            display: "flex",
-            alignItems: "baseline",
-            justifyContent: "space-between",
+            marginTop: 56,
             marginBottom: 96,
-            gap: 64,
-            flexWrap: "wrap",
+            gridTemplateColumns: "1.4fr 1fr",
+            gap: 96,
+            alignItems: "flex-end",
           }}
         >
-          <div>
-            <Eyebrow number="04" label="The system" />
-            <h2
-              style={{
-                margin: 0,
-                fontSize: "clamp(36px, 5vw, 76px)",
-                letterSpacing: "-0.035em",
-                lineHeight: 0.95,
-                fontWeight: 600,
-                maxWidth: 1100,
-              }}
-            >
-              Three phases.
-              <br />
-              <span style={{ color: "var(--mm-fg-3-inv)" }}>
-                Each one feeds the next.
-              </span>
-            </h2>
-          </div>
+          <h2
+            style={{
+              margin: 0,
+              fontSize: "clamp(36px, 5vw, 76px)",
+              letterSpacing: "-0.035em",
+              lineHeight: 0.95,
+              fontWeight: 600,
+              maxWidth: 1100,
+            }}
+          >
+            Three phases.
+            <br />
+            <span style={{ color: "var(--mm-fg-3-inv)" }}>
+              Each one feeds the next.
+            </span>
+          </h2>
           <p
             style={{
               margin: 0,
@@ -103,230 +115,271 @@ export default function Mechanism() {
           </p>
         </div>
 
-        {/* Compounding bar visualization */}
+        {/* Three equal-weight phase cards in a row, connected by arrows.
+            No boxes around each phase. Compounding shown via arrows, not size. */}
         <div
-          className="grid"
+          className="grid mm-phase-row"
           style={{
-            marginBottom: 64,
-            gridTemplateColumns: "1fr 1fr 1fr",
+            gridTemplateColumns: "1fr 32px 1fr 32px 1fr",
             gap: 0,
-            border: "1px solid var(--mm-charcoal)",
+            alignItems: "stretch",
           }}
         >
-          {PHASES.map((p, i) => (
-            <div
-              key={p.n}
-              onMouseEnter={() => setActive(i)}
-              onClick={() => setActive(i)}
-              style={{
-                padding: 32,
-                borderRight:
-                  i < 2 ? "1px solid var(--mm-charcoal)" : "none",
-                background: active === i ? "var(--mm-ink)" : "transparent",
-                cursor: "pointer",
-                transition: "background 200ms cubic-bezier(0.2,0,0,1)",
-              }}
-            >
+          {PHASES.map((p, idx) => (
+            <Fragment key={p.n}>
+              {/* Phase card — equal weight, no boxed container */}
               <div
                 style={{
                   display: "flex",
-                  alignItems: "flex-end",
-                  justifyContent: "space-between",
-                  marginBottom: 24,
-                  height: 120,
+                  flexDirection: "column",
+                  gap: 24,
+                  paddingTop: 4,
                 }}
               >
-                <div
+                {/* Top row: phase number + title */}
+                <div>
+                  <div
+                    style={{
+                      fontFamily: "ui-monospace, monospace",
+                      fontSize: 11,
+                      color: "var(--mm-fg-3)",
+                      letterSpacing: "0.18em",
+                      marginBottom: 16,
+                    }}
+                  >
+                    PHASE {p.n}
+                  </div>
+                  <h3
+                    style={{
+                      margin: 0,
+                      fontSize: "clamp(28px, 3vw, 40px)",
+                      letterSpacing: "-0.025em",
+                      lineHeight: 1,
+                      fontWeight: 600,
+                    }}
+                  >
+                    {p.title}
+                  </h3>
+                  <p
+                    style={{
+                      margin: "12px 0 0",
+                      fontSize: 18,
+                      color: "var(--mm-fg-3-inv)",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {p.sub}
+                  </p>
+                </div>
+
+                {/* Body */}
+                <p
                   style={{
-                    fontFamily: "ui-monospace, monospace",
-                    fontSize: 11,
-                    color: "var(--mm-fg-3)",
-                    letterSpacing: "0.16em",
+                    margin: 0,
+                    fontSize: 15,
+                    lineHeight: 1.6,
+                    color: "var(--mm-fg-2)",
                   }}
                 >
-                  {p.n}
-                </div>
+                  {p.body}
+                </p>
+
+                {/* Stats — single hairline on top, three quiet rows */}
                 <div
                   style={{
-                    width: 80,
-                    height: HEIGHTS[i] + "%",
-                    background:
-                      i === 2
-                        ? "linear-gradient(180deg, #A8B0C4 0%, #E8D49A 100%)"
-                        : i === 1
-                        ? "var(--mm-accent)"
-                        : "var(--mm-fg-4)",
-                    transition: "height 400ms cubic-bezier(0.2,0,0,1)",
+                    marginTop: "auto",
+                    paddingTop: 24,
+                    borderTop: "1px solid var(--mm-charcoal)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 12,
                   }}
-                />
-              </div>
-              <div
-                style={{
-                  fontSize: 11,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: "var(--mm-fg-3)",
-                  fontWeight: 500,
-                  marginBottom: 6,
-                }}
-              >
-                {p.depends}
-              </div>
-              <div style={{ fontSize: 22, fontWeight: 600, letterSpacing: "-0.02em" }}>
-                {p.title}
-              </div>
-            </div>
-          ))}
-        </div>
+                >
+                  {p.stats.map(([v, l]) => (
+                    <div
+                      key={l}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "baseline",
+                        gap: 12,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: 11,
+                          letterSpacing: "0.16em",
+                          textTransform: "uppercase",
+                          color: "var(--mm-fg-3)",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {l}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 18,
+                          fontWeight: 600,
+                          letterSpacing: "-0.02em",
+                          color: "var(--mm-fg-1)",
+                        }}
+                      >
+                        {v}
+                      </span>
+                    </div>
+                  ))}
+                </div>
 
-        {/* Active phase detail */}
-        <div
-          className="grid"
-          style={{
-            gridTemplateColumns: "1fr 1.2fr",
-            gap: 96,
-            alignItems: "flex-start",
-          }}
-        >
-          <div>
-            <div
-              style={{
-                fontFamily: "ui-monospace, monospace",
-                fontSize: 12,
-                color: "var(--mm-fg-3)",
-                letterSpacing: "0.16em",
-                marginBottom: 20,
-              }}
-            >
-              PHASE {PHASES[active].n} / {PHASES[active].letter}
-            </div>
-            <h3
-              style={{
-                margin: 0,
-                fontSize: "clamp(36px, 4.8vw, 68px)",
-                letterSpacing: "-0.035em",
-                lineHeight: 0.95,
-                fontWeight: 600,
-              }}
-            >
-              {PHASES[active].title}.
-            </h3>
-            <div
-              style={{
-                marginTop: 24,
-                fontSize: 28,
-                color: "var(--mm-fg-3-inv)",
-                letterSpacing: "-0.01em",
-                lineHeight: 1.1,
-              }}
-            >
-              {PHASES[active].sub}
-            </div>
-          </div>
-          <div>
-            <p
-              style={{
-                margin: 0,
-                fontSize: 19,
-                lineHeight: 1.55,
-                color: "var(--mm-fg-1)",
-                maxWidth: 580,
-              }}
-            >
-              {PHASES[active].body}
-            </p>
-            <div
-              style={{
-                marginTop: 56,
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                borderTop: "1px solid var(--mm-charcoal)",
-                paddingTop: 24,
-                gap: 16,
-              }}
-            >
-              {PHASES[active].stats.map(([v, l]) => (
-                <div key={l}>
-                  <div
-                    style={{
-                      fontSize: 36,
-                      fontWeight: 600,
-                      letterSpacing: "-0.03em",
-                      lineHeight: 1,
-                    }}
-                  >
-                    {v}
+                {/* Phase 1 — bring back the client demo thumbnails */}
+                {idx === 0 && (
+                  <div style={{ marginTop: 8 }}>
+                    <div
+                      style={{
+                        fontSize: 11,
+                        letterSpacing: "0.16em",
+                        textTransform: "uppercase",
+                        color: "var(--mm-fg-3)",
+                        fontWeight: 500,
+                        marginBottom: 12,
+                      }}
+                    >
+                      Live client sites
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 8,
+                      }}
+                    >
+                      {PHASE_1_DEMOS.map((d) => (
+                        <button
+                          key={d.url}
+                          onClick={() => setActiveDemo(d)}
+                          style={{
+                            background: "transparent",
+                            border: "1px solid var(--mm-charcoal)",
+                            color: "var(--mm-fg-1)",
+                            padding: "12px 14px",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            fontFamily: "inherit",
+                            cursor: "pointer",
+                            transition:
+                              "border-color 200ms cubic-bezier(0.2,0,0,1), background 200ms cubic-bezier(0.2,0,0,1)",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = "var(--mm-fg-3)";
+                            e.currentTarget.style.background = "var(--mm-ink)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = "var(--mm-charcoal)";
+                            e.currentTarget.style.background = "transparent";
+                          }}
+                        >
+                          <span style={{ textAlign: "left" }}>
+                            <span
+                              style={{
+                                display: "block",
+                                fontSize: 13,
+                                fontWeight: 500,
+                              }}
+                            >
+                              {d.name}
+                            </span>
+                            <span
+                              style={{
+                                display: "block",
+                                fontSize: 11,
+                                color: "var(--mm-fg-3)",
+                                marginTop: 2,
+                              }}
+                            >
+                              {d.trade}
+                            </span>
+                          </span>
+                          <span
+                            style={{
+                              fontSize: 16,
+                              color: "var(--mm-fg-3)",
+                            }}
+                          >
+                            →
+                          </span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
+                )}
+
+                {/* Phase 2 + 3 placeholder for future interactive proof */}
+                {idx > 0 && (
                   <div
                     style={{
-                      marginTop: 10,
+                      marginTop: 8,
+                      padding: "16px 14px",
+                      border: "1px dashed var(--mm-border-soft)",
                       fontSize: 11,
-                      letterSpacing: "0.18em",
+                      letterSpacing: "0.14em",
                       textTransform: "uppercase",
                       color: "var(--mm-fg-3)",
-                      fontWeight: 500,
+                      textAlign: "center",
                     }}
                   >
-                    {l}
+                    Interactive proof — coming soon
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+                )}
+              </div>
 
-        {/* Phase tabs at bottom */}
-        <div
-          style={{
-            marginTop: 64,
-            display: "flex",
-            gap: 0,
-            borderTop: "1px solid var(--mm-charcoal)",
-          }}
-        >
-          {PHASES.map((p, i) => (
-            <button
-              key={p.n}
-              onClick={() => setActive(i)}
-              style={{
-                flex: 1,
-                background: "transparent",
-                border: "none",
-                borderTop:
-                  active === i ? "1px solid #E8D49A" : "1px solid transparent",
-                marginTop: -1,
-                padding: "24px 0",
-                textAlign: "left",
-                cursor: "pointer",
-                color: active === i ? "var(--mm-fg-1)" : "var(--mm-fg-3)",
-                fontFamily: "inherit",
-                transition:
-                  "color 200ms cubic-bezier(0.2,0,0,1), border-color 200ms cubic-bezier(0.2,0,0,1)",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "ui-monospace, monospace",
-                  fontSize: 11,
-                  letterSpacing: "0.18em",
-                }}
-              >
-                {p.n}
-              </span>
-              <span
-                style={{
-                  fontSize: 14,
-                  letterSpacing: "0.06em",
-                  marginLeft: 16,
-                  textTransform: "uppercase",
-                }}
-              >
-                {p.title}
-              </span>
-            </button>
+              {/* Connecting arrow column — only between phases */}
+              {idx < PHASES.length - 1 && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    paddingTop: 80,
+                  }}
+                >
+                  <svg
+                    width="32"
+                    height="14"
+                    viewBox="0 0 32 14"
+                    fill="none"
+                    style={{ color: "var(--mm-accent)" }}
+                  >
+                    <line
+                      x1="0"
+                      y1="7"
+                      x2="28"
+                      y2="7"
+                      stroke="currentColor"
+                      strokeWidth="1"
+                      strokeDasharray="2 3"
+                    />
+                    <path
+                      d="M22 1L31 7L22 13"
+                      stroke="currentColor"
+                      strokeWidth="1"
+                      fill="none"
+                    />
+                  </svg>
+                </div>
+              )}
+            </Fragment>
           ))}
         </div>
       </div>
+
+      <SiteModal
+        open={activeDemo !== null}
+        onClose={() => setActiveDemo(null)}
+        url={activeDemo?.url ?? ""}
+        name={activeDemo?.name ?? ""}
+        trade={activeDemo?.trade ?? ""}
+        location=""
+      />
     </section>
   );
 }

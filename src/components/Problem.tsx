@@ -72,8 +72,19 @@ export default function Problem() {
       style={{ padding: "160px 48px", background: "var(--mm-black)", position: "relative" }}
     >
       <div className="max-w-[1400px] mx-auto">
-        <div style={{ marginBottom: 96 }}>
-          <Eyebrow number="02" label="The problem" />
+        <Eyebrow number="02" label="The problem" />
+
+        {/* Triple gap between eyebrow and headline + right-side balance */}
+        <div
+          className="grid"
+          style={{
+            marginTop: 56,
+            marginBottom: 96,
+            gridTemplateColumns: "1.4fr 1fr",
+            gap: 96,
+            alignItems: "flex-end",
+          }}
+        >
           <h2
             className="problem-headline"
             style={{
@@ -82,7 +93,7 @@ export default function Problem() {
               letterSpacing: "-0.035em",
               lineHeight: 0.95,
               fontWeight: 600,
-              maxWidth: 1300,
+              maxWidth: 1100,
             }}
           >
             You don&apos;t need
@@ -93,6 +104,32 @@ export default function Problem() {
               You need it to actually work.
             </span>
           </h2>
+
+          {/* Right-side balance — bold lede + body that primes the four pain cards */}
+          <div style={{ maxWidth: 380 }}>
+            <p
+              style={{
+                margin: 0,
+                fontSize: 22,
+                lineHeight: 1.3,
+                color: "var(--mm-fg-1)",
+                fontWeight: 600,
+                letterSpacing: "-0.015em",
+              }}
+            >
+              None of these are marketing problems.
+            </p>
+            <p
+              style={{
+                margin: "16px 0 0",
+                fontSize: 15,
+                lineHeight: 1.55,
+                color: "var(--mm-fg-2)",
+              }}
+            >
+              They&apos;re positioning problems. Four below — read them, then we fix them.
+            </p>
+          </div>
         </div>
 
         <div

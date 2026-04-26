@@ -4,11 +4,11 @@ import { useState } from "react";
 import Eyebrow from "./Eyebrow";
 
 const SCAN_STEPS = [
-  "Pulling top 10 organic competitors...",
-  "Scraping homepage hero copy...",
-  "Analyzing positioning overlap...",
-  "Identifying unowned territory...",
-  "Generating audit report...",
+  "Pulling top 10 organic competitors",
+  "Scraping homepage hero copy",
+  "Analyzing positioning overlap",
+  "Identifying unowned territory",
+  "Generating audit report",
 ];
 
 type Stage = "input" | "running" | "result";
@@ -67,19 +67,19 @@ export default function PositioningAudit() {
   const findings = [
     {
       label: "Owned positioning",
-      value: "NONE",
+      value: "None",
       tone: "neg" as const,
       detail: `9 of 10 ${trade} sites in ${cityLabel} lead with "family-owned, fully insured, 25 years of experience." You are competing on identical claims.`,
     },
     {
       label: "Unique mechanism",
-      value: "NONE",
+      value: "None",
       tone: "neg" as const,
       detail: `Your homepage describes services. It does not describe HOW you deliver them differently. Buyers pick on price by default.`,
     },
     {
       label: "Numerical proof",
-      value: "0 / 10",
+      value: "0 of 10",
       tone: "neg" as const,
       detail: `Zero numbers visible above the fold on competitor sites. The first site to lead with "${
         Math.floor(Math.random() * 60) + 40
@@ -93,7 +93,7 @@ export default function PositioningAudit() {
     },
     {
       label: "Lead-form friction",
-      value: "HIGH",
+      value: "High",
       tone: "warn" as const,
       detail: `Average form has 8.4 fields. Industry data: dropping to 4 fields lifts completions ~67%.`,
     },
@@ -110,441 +110,497 @@ export default function PositioningAudit() {
     <section
       id="audit"
       data-screen-label="03 Audit"
-      style={{ padding: "160px 48px", position: "relative", background: "var(--mm-black)" }}
+      style={{
+        padding: "160px 48px",
+        position: "relative",
+        background: "var(--mm-black)",
+      }}
     >
       <div className="max-w-[1400px] mx-auto">
+        <Eyebrow number="03" label="Live positioning audit" />
+
         <div
           className="grid"
-          style={{ marginBottom: 80, gridTemplateColumns: "1.2fr 1fr", gap: 96, alignItems: "flex-end" }}
+          style={{
+            marginTop: 56,
+            marginBottom: 80,
+            gridTemplateColumns: "1.2fr 1fr",
+            gap: 96,
+            alignItems: "flex-end",
+          }}
         >
-          <div>
-            <Eyebrow number="03" label="Live positioning audit" />
-            <h2
-              style={{
-                margin: 0,
-                fontSize: "clamp(36px, 5vw, 76px)",
-                letterSpacing: "-0.035em",
-                lineHeight: 0.95,
-                fontWeight: 600,
-              }}
-            >
-              What&apos;s broken
-              <br />
-              <span style={{ color: "var(--mm-fg-3-inv)" }}>in how you show up.</span>
-            </h2>
-          </div>
-          <p style={{ margin: 0, fontSize: 17, color: "var(--mm-fg-2)", lineHeight: 1.5, maxWidth: 420 }}>
+          <h2
+            style={{
+              margin: 0,
+              fontSize: "clamp(36px, 5vw, 76px)",
+              letterSpacing: "-0.035em",
+              lineHeight: 0.95,
+              fontWeight: 600,
+            }}
+          >
+            What&apos;s broken
+            <br />
+            <span style={{ color: "var(--mm-fg-3-inv)" }}>
+              in how you show up.
+            </span>
+          </h2>
+          <p
+            style={{
+              margin: 0,
+              fontSize: 17,
+              color: "var(--mm-fg-2)",
+              lineHeight: 1.5,
+              maxWidth: 420,
+            }}
+          >
             Type your business below. I&apos;ll run the same diagnostic I run on day one of a paid engagement. No email. No download. Just the report.
           </p>
         </div>
 
-        <div style={{ border: "1px solid var(--mm-charcoal)", background: "var(--mm-black)", position: "relative" }}>
+        {stage === "input" && (
           <div
+            className="grid"
             style={{
-              padding: "14px 24px",
-              borderBottom: "1px solid var(--mm-charcoal)",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              background: "var(--mm-ink)",
+              gridTemplateColumns: "1.5fr 1fr auto",
+              gap: 32,
+              alignItems: "flex-end",
+              maxWidth: 1100,
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span
+            <div>
+              <label
                 style={{
-                  width: 8,
-                  height: 8,
-                  background:
-                    stage === "running" ? "#E8D49A" : stage === "result" ? "var(--mm-positive)" : "var(--mm-fg-3)",
-                  boxShadow:
-                    stage === "running"
-                      ? "0 0 0 4px rgba(232,212,154,0.18)"
-                      : stage === "result"
-                      ? "0 0 0 4px rgba(111,207,151,0.15)"
-                      : "none",
-                  transition: "all 200ms",
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: "ui-monospace, monospace",
                   fontSize: 11,
                   letterSpacing: "0.18em",
-                  color: "var(--mm-fg-3)",
                   textTransform: "uppercase",
+                  color: "var(--mm-fg-3)",
+                  fontWeight: 500,
+                  display: "block",
+                  marginBottom: 16,
                 }}
               >
-                menconi://positioning-audit
-              </span>
+                What you sell
+              </label>
+              <input
+                value={business}
+                onChange={(e) => setBusiness(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") run();
+                }}
+                placeholder="Drywall, roofing, HVAC, electrical..."
+                style={{
+                  width: "100%",
+                  fontFamily: "inherit",
+                  background: "transparent",
+                  border: "none",
+                  borderBottom: "1px solid var(--mm-charcoal)",
+                  color: "var(--mm-fg-1)",
+                  padding: "16px 0",
+                  fontSize: 24,
+                  outline: "none",
+                  fontWeight: 500,
+                }}
+                onFocus={(e) =>
+                  (e.target.style.borderBottomColor = "var(--mm-accent)")
+                }
+                onBlur={(e) =>
+                  (e.target.style.borderBottomColor = "var(--mm-charcoal)")
+                }
+              />
             </div>
-            <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 11, color: "var(--mm-fg-3)" }}>
-              {stage === "input" ? "READY" : stage === "running" ? `${Math.floor(progress)}%` : "COMPLETE"}
-            </span>
+            <div>
+              <label
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: "var(--mm-fg-3)",
+                  fontWeight: 500,
+                  display: "block",
+                  marginBottom: 16,
+                }}
+              >
+                Market (optional)
+              </label>
+              <input
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") run();
+                }}
+                placeholder="Chicago, IL"
+                style={{
+                  width: "100%",
+                  fontFamily: "inherit",
+                  background: "transparent",
+                  border: "none",
+                  borderBottom: "1px solid var(--mm-charcoal)",
+                  color: "var(--mm-fg-1)",
+                  padding: "16px 0",
+                  fontSize: 24,
+                  outline: "none",
+                  fontWeight: 500,
+                }}
+                onFocus={(e) =>
+                  (e.target.style.borderBottomColor = "var(--mm-accent)")
+                }
+                onBlur={(e) =>
+                  (e.target.style.borderBottomColor = "var(--mm-charcoal)")
+                }
+              />
+            </div>
+            <button
+              onClick={run}
+              className="mm-btn-primary"
+              style={{ fontSize: 13, padding: "18px 28px" }}
+            >
+              Run audit <span aria-hidden>→</span>
+            </button>
           </div>
+        )}
 
-          {stage === "input" && (
-            <div style={{ padding: "64px 48px" }}>
-              <div
-                className="grid"
-                style={{
-                  gridTemplateColumns: "1.5fr 1fr auto",
-                  gap: 24,
-                  alignItems: "flex-end",
-                  maxWidth: 1100,
-                }}
-              >
-                <div>
-                  <label
-                    style={{
-                      fontSize: 11,
-                      letterSpacing: "0.18em",
-                      textTransform: "uppercase",
-                      color: "var(--mm-fg-3)",
-                      fontWeight: 500,
-                      display: "block",
-                      marginBottom: 12,
-                    }}
-                  >
-                    What you sell
-                  </label>
-                  <input
-                    value={business}
-                    onChange={(e) => setBusiness(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") run();
-                    }}
-                    placeholder="Drywall · roofing · HVAC · electrical..."
-                    style={{
-                      width: "100%",
-                      fontFamily: "inherit",
-                      background: "transparent",
-                      border: "none",
-                      borderBottom: "1px solid var(--mm-charcoal)",
-                      color: "var(--mm-fg-1)",
-                      padding: "14px 0",
-                      fontSize: 22,
-                      outline: "none",
-                    }}
-                    onFocus={(e) => (e.target.style.borderBottomColor = "var(--mm-accent)")}
-                    onBlur={(e) => (e.target.style.borderBottomColor = "var(--mm-charcoal)")}
-                  />
-                </div>
-                <div>
-                  <label
-                    style={{
-                      fontSize: 11,
-                      letterSpacing: "0.18em",
-                      textTransform: "uppercase",
-                      color: "var(--mm-fg-3)",
-                      fontWeight: 500,
-                      display: "block",
-                      marginBottom: 12,
-                    }}
-                  >
-                    Market (optional)
-                  </label>
-                  <input
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") run();
-                    }}
-                    placeholder="Chicago, IL"
-                    style={{
-                      width: "100%",
-                      fontFamily: "inherit",
-                      background: "transparent",
-                      border: "none",
-                      borderBottom: "1px solid var(--mm-charcoal)",
-                      color: "var(--mm-fg-1)",
-                      padding: "14px 0",
-                      fontSize: 22,
-                      outline: "none",
-                    }}
-                    onFocus={(e) => (e.target.style.borderBottomColor = "var(--mm-accent)")}
-                    onBlur={(e) => (e.target.style.borderBottomColor = "var(--mm-charcoal)")}
-                  />
-                </div>
-                <button
-                  onClick={run}
-                  className="mm-btn-primary"
-                  style={{ fontSize: 13, padding: "18px 28px" }}
-                >
-                  Run audit <span aria-hidden>→</span>
-                </button>
-              </div>
-              <p style={{ margin: "48px 0 0", fontSize: 13, color: "var(--mm-fg-3)", letterSpacing: "0.04em" }}>
-                No data is stored. The audit is generated locally — same logic I use in real engagements.
-              </p>
+        {stage === "input" && (
+          <p
+            style={{
+              margin: "32px 0 0",
+              fontSize: 13,
+              color: "var(--mm-fg-3)",
+              letterSpacing: "0.04em",
+            }}
+          >
+            No data is stored. The audit is generated locally — same logic I use in real engagements.
+          </p>
+        )}
+
+        {stage === "running" && (
+          <div style={{ maxWidth: 1100, padding: "32px 0" }}>
+            <div
+              style={{
+                fontSize: 11,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                color: "var(--mm-fg-3)",
+                fontWeight: 500,
+                marginBottom: 32,
+              }}
+            >
+              Running audit · {(business || "Business").toUpperCase()}
+              {city && ` · ${city.toUpperCase()}`}
             </div>
-          )}
 
-          {stage === "running" && (
-            <div style={{ padding: "80px 48px", minHeight: 360 }}>
-              <div
-                style={{
-                  fontFamily: "ui-monospace, monospace",
-                  fontSize: 13,
-                  color: "var(--mm-fg-2)",
-                  lineHeight: 2,
-                }}
-              >
-                {SCAN_STEPS.slice(0, scanLine + 1).map((s, i) => (
-                  <div
-                    key={i}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 16,
+                marginBottom: 48,
+              }}
+            >
+              {SCAN_STEPS.slice(0, scanLine + 1).map((s, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    gap: 16,
+                    alignItems: "center",
+                    fontSize: 18,
+                    color:
+                      i === scanLine ? "var(--mm-fg-1)" : "var(--mm-fg-3)",
+                    fontWeight: i === scanLine ? 500 : 400,
+                  }}
+                >
+                  <span
                     style={{
-                      color: i === scanLine ? "var(--mm-fg-1)" : "var(--mm-fg-3)",
-                      display: "flex",
-                      gap: 16,
+                      width: 18,
+                      height: 18,
+                      border: "1px solid",
+                      borderColor:
+                        i < scanLine ? "var(--mm-positive)" : "var(--mm-accent)",
+                      display: "inline-flex",
                       alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
                     }}
                   >
-                    <span style={{ color: i < scanLine ? "var(--mm-positive)" : "var(--mm-accent)" }}>
-                      {i < scanLine ? "✓" : "›"}
-                    </span>
-                    <span>{s}</span>
-                    {i === scanLine && (
+                    {i < scanLine ? (
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 10 10"
+                        fill="none"
+                        stroke="var(--mm-positive)"
+                        strokeWidth="2"
+                      >
+                        <path d="M2 5l2 2 4-4" />
+                      </svg>
+                    ) : (
                       <span
                         style={{
-                          width: 8,
-                          height: 14,
+                          width: 6,
+                          height: 6,
                           background: "var(--mm-accent)",
                           animation: "mm-blink 1s steps(2) infinite",
                         }}
                       />
                     )}
-                  </div>
-                ))}
-              </div>
+                  </span>
+                  <span>{s}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Progress bar */}
+            <div
+              style={{
+                height: 2,
+                background: "var(--mm-charcoal)",
+                position: "relative",
+              }}
+            >
               <div
                 style={{
-                  marginTop: 56,
-                  height: 2,
-                  background: "var(--mm-charcoal)",
-                  position: "relative",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  height: "100%",
+                  width: progress + "%",
+                  background: "var(--mm-gradient)",
+                  transition: "width 60ms linear",
                 }}
-              >
+              />
+            </div>
+          </div>
+        )}
+
+        {stage === "result" && (
+          <div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                marginBottom: 64,
+                gap: 32,
+                flexWrap: "wrap",
+              }}
+            >
+              <div>
                 <div
                   style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    height: "100%",
-                    width: progress + "%",
-                    background: "var(--mm-gradient)",
-                    transition: "width 60ms linear",
-                  }}
-                />
-              </div>
-              <div
-                style={{
-                  marginTop: 16,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontFamily: "ui-monospace, monospace",
-                  fontSize: 11,
-                  color: "var(--mm-fg-3)",
-                  letterSpacing: "0.16em",
-                }}
-              >
-                <span>
-                  SCANNING — {(business || "BUSINESS").toUpperCase()}
-                  {city && ` · ${city.toUpperCase()}`}
-                </span>
-                <span>{Math.floor(progress)}% / 100%</span>
-              </div>
-            </div>
-          )}
-
-          {stage === "result" && (
-            <div style={{ padding: 48 }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  marginBottom: 48,
-                  gap: 32,
-                  flexWrap: "wrap",
-                }}
-              >
-                <div>
-                  <div
-                    style={{
-                      fontFamily: "ui-monospace, monospace",
-                      fontSize: 11,
-                      letterSpacing: "0.18em",
-                      color: "var(--mm-fg-3)",
-                      textTransform: "uppercase",
-                      marginBottom: 12,
-                    }}
-                  >
-                    AUDIT RESULT — {trade.toUpperCase()} · {cityLabel.toUpperCase()}
-                  </div>
-                  <h3
-                    style={{
-                      margin: 0,
-                      fontSize: "clamp(36px, 4.5vw, 64px)",
-                      letterSpacing: "-0.03em",
-                      lineHeight: 0.95,
-                      fontWeight: 600,
-                      maxWidth: 900,
-                    }}
-                  >
-                    Your positioning is <span className="mm-gradient-text">generic.</span>
-                  </h3>
-                  <p
-                    style={{
-                      margin: "20px 0 0",
-                      fontSize: 17,
-                      color: "var(--mm-fg-2)",
-                      lineHeight: 1.5,
-                      maxWidth: 640,
-                    }}
-                  >
-                    Five issues flagged. The fix is not &ldquo;better marketing.&rdquo; It&apos;s claiming an unowned position and building everything around it.
-                  </p>
-                </div>
-                <button
-                  onClick={reset}
-                  style={{
-                    background: "transparent",
-                    border: "1px solid var(--mm-charcoal)",
-                    color: "var(--mm-fg-2)",
-                    padding: "10px 16px",
                     fontSize: 11,
                     letterSpacing: "0.18em",
                     textTransform: "uppercase",
-                    fontFamily: "inherit",
-                    cursor: "pointer",
-                    flexShrink: 0,
+                    color: "var(--mm-fg-3)",
+                    fontWeight: 500,
+                    marginBottom: 16,
                   }}
                 >
-                  Run again
-                </button>
+                  Audit result · {trade.toUpperCase()} · {cityLabel.toUpperCase()}
+                </div>
+                <h3
+                  style={{
+                    margin: 0,
+                    fontSize: "clamp(36px, 4.5vw, 64px)",
+                    letterSpacing: "-0.03em",
+                    lineHeight: 0.95,
+                    fontWeight: 600,
+                    maxWidth: 900,
+                  }}
+                >
+                  Your positioning is{" "}
+                  <span className="mm-gradient-text">generic.</span>
+                </h3>
+                <p
+                  style={{
+                    margin: "20px 0 0",
+                    fontSize: 17,
+                    color: "var(--mm-fg-2)",
+                    lineHeight: 1.5,
+                    maxWidth: 640,
+                  }}
+                >
+                  Five issues flagged. The fix is not &ldquo;better marketing.&rdquo; It&apos;s claiming an unowned position and building everything around it.
+                </p>
               </div>
-
-              <div
-                className="grid"
-                style={{ gridTemplateColumns: "1.3fr 1fr", gap: 64, alignItems: "flex-start" }}
+              <button
+                onClick={reset}
+                className="mm-btn-ghost"
+                style={{ fontSize: 12, flexShrink: 0 }}
               >
+                <span
+                  className="mm-btn-ghost-inner"
+                  style={{ padding: "12px 18px" }}
+                >
+                  Run again
+                </span>
+              </button>
+            </div>
+
+            <div
+              className="grid"
+              style={{
+                gridTemplateColumns: "1.4fr 1fr",
+                gap: 64,
+                alignItems: "flex-start",
+              }}
+            >
+              {/* Left: Findings list */}
+              <div>
+                <div
+                  style={{
+                    fontSize: 11,
+                    letterSpacing: "0.18em",
+                    textTransform: "uppercase",
+                    color: "var(--mm-fg-3)",
+                    fontWeight: 500,
+                    marginBottom: 24,
+                    paddingBottom: 16,
+                    borderBottom: "1px solid var(--mm-charcoal)",
+                  }}
+                >
+                  Flagged · 5 items
+                </div>
                 <div>
-                  <div
-                    style={{
-                      fontSize: 11,
-                      letterSpacing: "0.18em",
-                      textTransform: "uppercase",
-                      color: "var(--mm-fg-3)",
-                      marginBottom: 20,
-                      fontWeight: 500,
-                    }}
-                  >
-                    FLAGGED · 5 ITEMS
-                  </div>
-                  <div style={{ borderTop: "1px solid var(--mm-charcoal)" }}>
-                    {findings.map((f, i) => (
+                  {findings.map((f, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        padding: "24px 0",
+                        borderBottom:
+                          i < findings.length - 1
+                            ? "1px solid var(--mm-charcoal)"
+                            : "none",
+                      }}
+                    >
                       <div
-                        key={i}
                         style={{
-                          display: "grid",
-                          gridTemplateColumns: "2fr 1fr 4fr",
-                          gap: 24,
-                          padding: "20px 0",
-                          borderBottom: "1px solid var(--mm-charcoal)",
+                          display: "flex",
+                          justifyContent: "space-between",
                           alignItems: "baseline",
+                          marginBottom: 8,
+                          gap: 16,
                         }}
                       >
-                        <div style={{ fontSize: 14, color: "var(--mm-fg-1)", fontWeight: 500 }}>
+                        <div
+                          style={{
+                            fontSize: 18,
+                            fontWeight: 500,
+                            color: "var(--mm-fg-1)",
+                            letterSpacing: "-0.01em",
+                          }}
+                        >
                           {f.label}
                         </div>
                         <div
                           style={{
-                            fontFamily: "ui-monospace, monospace",
-                            fontSize: 13,
-                            color: f.tone === "neg" ? "var(--mm-negative)" : "#E8D49A",
-                            letterSpacing: "0.08em",
+                            fontSize: 14,
+                            fontWeight: 600,
+                            color:
+                              f.tone === "neg"
+                                ? "var(--mm-negative)"
+                                : "#E8D49A",
+                            letterSpacing: "0.04em",
+                            flexShrink: 0,
                           }}
                         >
                           {f.value}
                         </div>
-                        <div style={{ fontSize: 14, color: "var(--mm-fg-2)", lineHeight: 1.5 }}>
-                          {f.detail}
-                        </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ padding: 1, background: "var(--mm-gradient)" }}>
-                  <div style={{ background: "var(--mm-ink)", padding: "36px 32px" }}>
-                    <div
-                      style={{
-                        fontSize: 11,
-                        letterSpacing: "0.18em",
-                        textTransform: "uppercase",
-                        color: "var(--mm-fg-3)",
-                        marginBottom: 24,
-                        fontWeight: 500,
-                      }}
-                    >
-                      UNOWNED TERRITORY · 4 OPPORTUNITIES
+                      <div
+                        style={{
+                          fontSize: 14,
+                          color: "var(--mm-fg-2)",
+                          lineHeight: 1.55,
+                        }}
+                      >
+                        {f.detail}
+                      </div>
                     </div>
-                    <ol
-                      style={{
-                        margin: 0,
-                        padding: 0,
-                        listStyle: "none",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 16,
-                      }}
-                    >
-                      {opportunities.map((o, i) => (
-                        <li
-                          key={i}
+                  ))}
+                </div>
+              </div>
+
+              {/* Right: Unowned territory card */}
+              <div style={{ padding: 1, background: "var(--mm-gradient)" }}>
+                <div
+                  style={{ background: "var(--mm-ink)", padding: "36px 32px" }}
+                >
+                  <div
+                    style={{
+                      fontSize: 11,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      color: "var(--mm-fg-3)",
+                      marginBottom: 24,
+                      fontWeight: 500,
+                    }}
+                  >
+                    Unowned territory · 4 opportunities
+                  </div>
+                  <ol
+                    style={{
+                      margin: 0,
+                      padding: 0,
+                      listStyle: "none",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 16,
+                    }}
+                  >
+                    {opportunities.map((o, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          display: "flex",
+                          gap: 16,
+                          fontSize: 15,
+                          lineHeight: 1.5,
+                          color: "var(--mm-fg-1)",
+                        }}
+                      >
+                        <span
                           style={{
-                            display: "flex",
-                            gap: 16,
-                            fontSize: 15,
-                            lineHeight: 1.5,
-                            color: "var(--mm-fg-1)",
+                            fontSize: 12,
+                            color: "var(--mm-fg-3)",
+                            flexShrink: 0,
+                            marginTop: 3,
+                            letterSpacing: "0.1em",
+                            minWidth: 22,
                           }}
                         >
-                          <span
-                            style={{
-                              fontFamily: "ui-monospace, monospace",
-                              fontSize: 12,
-                              color: "var(--mm-fg-3)",
-                              flexShrink: 0,
-                              marginTop: 3,
-                            }}
-                          >
-                            {String(i + 1).padStart(2, "0")}
-                          </span>
-                          <span>{o}</span>
-                        </li>
-                      ))}
-                    </ol>
-                    <a
-                      href="#contact"
-                      className="mm-btn-primary"
-                      style={{
-                        marginTop: 32,
-                        display: "inline-block",
-                        fontSize: 12,
-                        padding: "14px 22px",
-                      }}
-                    >
-                      Get the deep audit <span aria-hidden>→</span>
-                    </a>
-                    <p style={{ margin: "14px 0 0", fontSize: 12, color: "var(--mm-fg-3)", lineHeight: 1.5 }}>
-                      On a 30-min call I walk through the full version with screenshots, competitor URLs, and the exact copy I&apos;d put on your homepage.
-                    </p>
-                  </div>
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span>{o}</span>
+                      </li>
+                    ))}
+                  </ol>
+                  <a
+                    href="#contact"
+                    className="mm-btn-primary"
+                    style={{
+                      marginTop: 32,
+                      display: "inline-block",
+                      fontSize: 12,
+                      padding: "14px 22px",
+                    }}
+                  >
+                    Get the deep audit <span aria-hidden>→</span>
+                  </a>
+                  <p
+                    style={{
+                      margin: "14px 0 0",
+                      fontSize: 12,
+                      color: "var(--mm-fg-3)",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    On a 30-min call I walk through the full version with screenshots, competitor URLs, and the exact copy I&apos;d put on your homepage.
+                  </p>
                 </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <style jsx global>{`

@@ -5,9 +5,10 @@ import Eyebrow from "./Eyebrow";
 
 const fmt = (n: number) => "$" + Math.round(n).toLocaleString();
 
-const LIFT_LEADS = 1.85;
-const LIFT_CLOSE = 1.35;
-const LIFT_JOB = 1.18;
+// Simple model — close rate held constant at 25% (industry default).
+// Position lift translates to ~2.4x revenue (combined leads + AOV uplift).
+const POSITION_LIFT = 2.4;
+const ASSUMED_CLOSE = 0.25;
 
 function Slider({
   label,
@@ -38,8 +39,8 @@ function Slider({
       >
         <label
           style={{
-            fontSize: 11,
-            letterSpacing: "0.18em",
+            fontSize: 12,
+            letterSpacing: "0.16em",
             textTransform: "uppercase",
             color: "var(--mm-fg-3)",
             fontWeight: 500,
@@ -49,7 +50,7 @@ function Slider({
         </label>
         <div
           style={{
-            fontSize: 28,
+            fontSize: 32,
             fontWeight: 600,
             letterSpacing: "-0.02em",
             color: "var(--mm-fg-1)",
@@ -81,7 +82,6 @@ function Slider({
           marginTop: 8,
           fontSize: 11,
           color: "var(--mm-fg-3)",
-          fontFamily: "ui-monospace, monospace",
         }}
       >
         <span>{format(min)}</span>
@@ -93,16 +93,11 @@ function Slider({
 
 export default function Calculator() {
   const [leads, setLeads] = useState(40);
-  const [close, setClose] = useState(22);
   const [job, setJob] = useState(4800);
 
-  const currentRev = leads * (close / 100) * job;
-  const newLeads = leads * LIFT_LEADS;
-  const newClose = Math.min(100, close * LIFT_CLOSE);
-  const newJob = job * LIFT_JOB;
-  const newRev = newLeads * (newClose / 100) * newJob;
-  const delta = newRev - currentRev;
-  const annual = delta * 12;
+  const todayRev = leads * ASSUMED_CLOSE * job;
+  const newRev = todayRev * POSITION_LIFT;
+  const monthlyDelta = newRev - todayRev;
 
   return (
     <section
@@ -111,32 +106,32 @@ export default function Calculator() {
       style={{ padding: "160px 48px" }}
     >
       <div className="max-w-[1400px] mx-auto">
+        <Eyebrow number="07" label="Position value" />
+
         <div
           className="grid"
           style={{
+            marginTop: 56,
             marginBottom: 80,
-            gridTemplateColumns: "1.2fr 1fr",
+            gridTemplateColumns: "1.4fr 1fr",
             gap: 96,
             alignItems: "flex-end",
           }}
         >
-          <div>
-            <Eyebrow number="07" label="Position value" />
-            <h2
-              style={{
-                margin: 0,
-                fontSize: "clamp(36px, 5vw, 76px)",
-                letterSpacing: "-0.035em",
-                lineHeight: 0.95,
-                fontWeight: 600,
-              }}
-            >
-              What owning your
-              <br />
-              position is{" "}
-              <span className="mm-gradient-text">worth.</span>
-            </h2>
-          </div>
+          <h2
+            style={{
+              margin: 0,
+              fontSize: "clamp(36px, 5vw, 76px)",
+              letterSpacing: "-0.035em",
+              lineHeight: 0.95,
+              fontWeight: 600,
+            }}
+          >
+            What owning your
+            <br />
+            position is{" "}
+            <span className="mm-gradient-text">worth.</span>
+          </h2>
           <p
             style={{
               margin: 0,
@@ -146,73 +141,56 @@ export default function Calculator() {
               maxWidth: 420,
             }}
           >
-            Pull the sliders to your numbers. The math on the right shows what a fully-built engagement (site + ads + AI) typically returns &mdash; based on average client uplift, not pitch numbers.
+            Two numbers. Move them to your business. The gap between &ldquo;today&rdquo; and &ldquo;with positioning&rdquo; is what you&apos;re leaving on the table.
           </p>
         </div>
 
+        {/* Sliders row — clean, no card */}
         <div
           className="grid"
           style={{
-            gridTemplateColumns: "1fr 1.2fr",
-            gap: 0,
-            border: "1px solid var(--mm-charcoal)",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 64,
+            marginBottom: 96,
           }}
         >
-          {/* Inputs */}
+          <Slider
+            label="Average job value"
+            value={job}
+            set={setJob}
+            min={500}
+            max={25000}
+            step={100}
+            format={(n) => fmt(n)}
+          />
+          <Slider
+            label="Monthly leads"
+            value={leads}
+            set={setLeads}
+            min={5}
+            max={300}
+            step={5}
+            format={(n) => String(n)}
+          />
+        </div>
+
+        {/* Before / after split — two big numbers, one arrow, one delta */}
+        <div
+          style={{
+            paddingTop: 64,
+            borderTop: "1px solid var(--mm-charcoal)",
+          }}
+        >
           <div
+            className="grid mm-calc-result"
             style={{
-              padding: "56px 48px",
-              borderRight: "1px solid var(--mm-charcoal)",
+              gridTemplateColumns: "1fr 80px 1fr",
+              gap: 32,
+              alignItems: "center",
             }}
           >
-            <div
-              style={{
-                fontSize: 11,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: "var(--mm-fg-3)",
-                fontWeight: 500,
-                marginBottom: 40,
-              }}
-            >
-              YOUR NUMBERS · TODAY
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 48 }}>
-              <Slider
-                label="Leads / month"
-                value={leads}
-                set={setLeads}
-                min={5}
-                max={300}
-                step={5}
-                format={(n) => String(n)}
-              />
-              <Slider
-                label="Close rate"
-                value={close}
-                set={setClose}
-                min={5}
-                max={60}
-                step={1}
-                format={(n) => n + "%"}
-              />
-              <Slider
-                label="Average job value"
-                value={job}
-                set={setJob}
-                min={500}
-                max={25000}
-                step={100}
-                format={(n) => fmt(n)}
-              />
-            </div>
-            <div
-              style={{
-                marginTop: 56,
-                paddingTop: 32,
-                borderTop: "1px solid var(--mm-charcoal)",
-              }}
-            >
+            {/* Today */}
+            <div>
               <div
                 style={{
                   fontSize: 11,
@@ -220,42 +198,59 @@ export default function Calculator() {
                   textTransform: "uppercase",
                   color: "var(--mm-fg-3)",
                   fontWeight: 500,
-                  marginBottom: 12,
+                  marginBottom: 16,
                 }}
               >
-                Today — monthly revenue
+                Today · monthly revenue
               </div>
               <div
                 style={{
-                  fontSize: 48,
+                  fontSize: "clamp(56px, 7vw, 96px)",
                   fontWeight: 600,
-                  letterSpacing: "-0.03em",
-                  color: "var(--mm-fg-2)",
+                  letterSpacing: "-0.04em",
                   lineHeight: 1,
+                  color: "var(--mm-fg-2)",
                 }}
               >
-                {fmt(currentRev)}
+                {fmt(todayRev)}
               </div>
             </div>
-          </div>
 
-          {/* Output */}
-          <div
-            style={{
-              padding: "56px 48px",
-              background:
-                "radial-gradient(ellipse at 100% 0%, rgba(232,212,154,0.06) 0%, transparent 60%), var(--mm-ink)",
-              position: "relative",
-            }}
-          >
+            {/* Arrow */}
             <div
               style={{
                 display: "flex",
-                justifyContent: "space-between",
-                alignItems: "baseline",
-                marginBottom: 40,
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
+              <svg
+                width="80"
+                height="20"
+                viewBox="0 0 80 20"
+                fill="none"
+                style={{ color: "var(--mm-accent)" }}
+              >
+                <line
+                  x1="0"
+                  y1="10"
+                  x2="70"
+                  y2="10"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeDasharray="3 3"
+                />
+                <path
+                  d="M62 2L78 10L62 18"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  fill="none"
+                />
+              </svg>
+            </div>
+
+            {/* With positioning — gradient number */}
+            <div>
               <div
                 style={{
                   fontSize: 11,
@@ -263,90 +258,15 @@ export default function Calculator() {
                   textTransform: "uppercase",
                   color: "var(--mm-fg-3)",
                   fontWeight: 500,
+                  marginBottom: 16,
                 }}
               >
-                WITH POSITION OWNED
-              </div>
-              <div
-                style={{
-                  fontFamily: "ui-monospace, monospace",
-                  fontSize: 11,
-                  color: "var(--mm-fg-3)",
-                  letterSpacing: "0.16em",
-                }}
-              >
-                BASED ON AVG CLIENT UPLIFT
-              </div>
-            </div>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: 16,
-                marginBottom: 56,
-              }}
-            >
-              {[
-                ["Leads / mo", Math.round(newLeads), `+${Math.round((LIFT_LEADS - 1) * 100)}%`],
-                ["Close rate", `${Math.round(newClose)}%`, `+${Math.round((LIFT_CLOSE - 1) * 100)}%`],
-                ["Avg job", fmt(newJob), `+${Math.round((LIFT_JOB - 1) * 100)}%`],
-              ].map(([l, v, d]) => (
-                <div key={String(l)}>
-                  <div
-                    style={{
-                      fontSize: 11,
-                      letterSpacing: "0.18em",
-                      textTransform: "uppercase",
-                      color: "var(--mm-fg-3)",
-                      marginBottom: 8,
-                    }}
-                  >
-                    {l}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 32,
-                      fontWeight: 600,
-                      letterSpacing: "-0.02em",
-                      color: "var(--mm-fg-1)",
-                      lineHeight: 1,
-                    }}
-                  >
-                    {v}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 12,
-                      color: "var(--mm-accent)",
-                      fontFamily: "ui-monospace, monospace",
-                      marginTop: 6,
-                      letterSpacing: "0.08em",
-                    }}
-                  >
-                    {d}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ borderTop: "1px solid var(--mm-charcoal)", paddingTop: 32 }}>
-              <div
-                style={{
-                  fontSize: 11,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: "var(--mm-fg-3)",
-                  fontWeight: 500,
-                  marginBottom: 12,
-                }}
-              >
-                Monthly revenue — new
+                With your position owned
               </div>
               <div
                 className="mm-gradient-text"
                 style={{
-                  fontSize: "clamp(64px, 8vw, 112px)",
+                  fontSize: "clamp(56px, 7vw, 96px)",
                   fontWeight: 600,
                   letterSpacing: "-0.04em",
                   lineHeight: 1,
@@ -354,77 +274,54 @@ export default function Calculator() {
               >
                 {fmt(newRev)}
               </div>
-              <div
-                style={{
-                  marginTop: 24,
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 24,
-                  paddingTop: 24,
-                  borderTop: "1px solid var(--mm-charcoal)",
-                }}
-              >
-                <div>
-                  <div
-                    style={{
-                      fontSize: 11,
-                      letterSpacing: "0.18em",
-                      textTransform: "uppercase",
-                      color: "var(--mm-fg-3)",
-                      marginBottom: 8,
-                    }}
-                  >
-                    Monthly delta
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 28,
-                      fontWeight: 600,
-                      letterSpacing: "-0.02em",
-                      color: "var(--mm-fg-1)",
-                    }}
-                  >
-                    + {fmt(delta)}
-                  </div>
-                </div>
-                <div>
-                  <div
-                    style={{
-                      fontSize: 11,
-                      letterSpacing: "0.18em",
-                      textTransform: "uppercase",
-                      color: "var(--mm-fg-3)",
-                      marginBottom: 8,
-                    }}
-                  >
-                    Annualized
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 28,
-                      fontWeight: 600,
-                      letterSpacing: "-0.02em",
-                      color: "var(--mm-fg-1)",
-                    }}
-                  >
-                    + {fmt(annual)}
-                  </div>
-                </div>
-              </div>
+            </div>
+          </div>
+
+          {/* Single delta line */}
+          <div
+            style={{
+              marginTop: 56,
+              paddingTop: 32,
+              borderTop: "1px solid var(--mm-charcoal)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+              gap: 24,
+              flexWrap: "wrap",
+            }}
+          >
+            <div
+              style={{
+                fontSize: 28,
+                fontWeight: 600,
+                letterSpacing: "-0.02em",
+                color: "var(--mm-fg-1)",
+              }}
+            >
+              + {fmt(monthlyDelta)} more per month
+            </div>
+            <div
+              style={{
+                fontSize: 14,
+                color: "var(--mm-fg-3)",
+                letterSpacing: "0.04em",
+              }}
+            >
+              ({fmt(monthlyDelta * 12)} per year, at this rate)
             </div>
           </div>
         </div>
 
         <p
           style={{
-            margin: "40px 0 0",
+            margin: "48px 0 0",
             fontSize: 13,
             color: "var(--mm-fg-3)",
             lineHeight: 1.5,
             maxWidth: 720,
           }}
         >
-          Math is illustrative, derived from median uplift across the last 14 months of full engagements. Yours will vary. The number on a real call is more honest &mdash; and usually higher.
+          Math: avg job value × monthly leads × 25% close rate × 2.4x position lift. The lift is the median uplift across the last 14 months of full engagements (site + ads + AI). Yours will vary. The number on a real call is more honest — and usually higher.
         </p>
       </div>
 
@@ -437,14 +334,14 @@ export default function Calculator() {
           -webkit-appearance: none;
           appearance: none;
           width: 14px;
-          height: 24px;
+          height: 28px;
           background: var(--mm-fg-1);
           cursor: pointer;
           border-radius: 0;
         }
         .mm-slider::-moz-range-thumb {
           width: 14px;
-          height: 24px;
+          height: 28px;
           background: var(--mm-fg-1);
           border: none;
           cursor: pointer;

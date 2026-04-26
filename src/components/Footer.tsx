@@ -104,7 +104,7 @@ export default function Footer() {
         >
           <div
             style={{
-              fontSize: "clamp(80px, 14vw, 200px)",
+              fontSize: "clamp(48px, 9.2vw, 140px)",
               fontWeight: 600,
               letterSpacing: "-0.04em",
               lineHeight: 0.9,
