@@ -8,96 +8,93 @@ type Slide = { caption: string; bg: string };
 type Project = {
   idx: number;
   client: string;
-  work: string;
-  metric: string;
+  trade: string;
   location: string;
-  year: string;
-  url?: string;
+  url: string;
+  status: "live" | "demo";
   summary: string;
-  result: string;
   slides: Slide[];
 };
 
 const PROJECTS: Project[] = [
   {
     idx: 1,
-    client: "Acme Drywall",
-    work: "Site + ads + intake agent",
-    metric: "62 booked calls / 30d",
-    location: "Chicago",
-    year: "2026",
+    client: "606 Property Services",
+    trade: "Property Maintenance",
+    location: "Chicago, IL",
     url: "https://606propertyservices.menconimarketing.com",
+    status: "live",
     summary:
-      "Three previous agencies told the owner drywall guys can't run profitable lead-gen. Built a positioning-first site, turned on Meta + Google with the new conversion baseline, layered an AI intake agent on top.",
-    result:
-      "62 booked calls in the first 30 days at $28 average cost-per-call. Hired one extra crew member by week 6 just to keep up.",
+      "Active client. Site built around Matthew's full-service property maintenance offer — the only company in his market built around landlords + investors instead of homeowners. Ongoing engagement.",
     slides: [
-      { caption: "Hero — owner-direct positioning", bg: "linear-gradient(135deg,#1F1F1F 0%,#2A2A2A 50%,#0A0A0A 100%)" },
-      { caption: "Case studies w/ real numbers", bg: "linear-gradient(135deg,#141414 0%,#1F1F1F 50%,#0A0A0A 100%)" },
-      { caption: "Mobile lead-form (3 fields)", bg: "linear-gradient(135deg,#0A0A0A 0%,#141414 100%)" },
+      {
+        caption: "Hero — landlord-direct positioning",
+        bg: "linear-gradient(135deg,#1F1F1F 0%,#2A2A2A 50%,#0A0A0A 100%)",
+      },
+      {
+        caption: "Service grid + lead capture",
+        bg: "linear-gradient(135deg,#141414 0%,#1F1F1F 50%,#0A0A0A 100%)",
+      },
     ],
   },
   {
     idx: 2,
-    client: "Northshore Roofing",
-    work: "Site + Google Ads",
-    metric: "$84K pipeline / 60d",
-    location: "Evanston",
-    year: "2026",
+    client: "ParaBeach Plastering",
+    trade: "Plastering / Stucco",
+    location: "Norwalk, CA",
     url: "https://parabeachplastering.menconimarketing.com",
+    status: "demo",
     summary:
-      "Storm-damage roofer in a saturated market. Repositioned around a written install-date guarantee, redirected Google budget at the new landing pattern.",
-    result: "$84K of qualified pipeline in the first 60 days, average ticket up 18% from better-fit leads.",
+      "Speculative build. Built for Cesar Cruz as part of outreach — full positioning + custom site demonstrating the kind of work I'd do on a paid engagement. Not yet engaged.",
     slides: [
-      { caption: "Install-date guarantee hero", bg: "linear-gradient(135deg,#2A2A2A 0%,#0A0A0A 100%)" },
-      { caption: "Landing flow → calendar", bg: "linear-gradient(135deg,#1F1F1F 0%,#0A0A0A 100%)" },
+      {
+        caption: "Stucco-specialist hero",
+        bg: "linear-gradient(135deg,#2A2A2A 0%,#0A0A0A 100%)",
+      },
+      {
+        caption: "Portfolio grid",
+        bg: "linear-gradient(135deg,#1F1F1F 0%,#0A0A0A 100%)",
+      },
     ],
   },
   {
     idx: 3,
-    client: "Iron Range HVAC",
-    work: "AI follow-up agent",
-    metric: "38% → 71% answer rate",
-    location: "Duluth",
-    year: "2025",
+    client: "Martinez Landscaping",
+    trade: "Landscaping",
+    location: "Riverside, CA",
+    url: "https://martinezlandscaping.menconimarketing.com",
+    status: "demo",
     summary:
-      "Existing site was fine. Existing ads were fine. Lead-to-call answer rate was 38% — 6 in every 10 leads went cold. Built an SMS+email AI agent that responds in <2 min, qualifies, and books.",
-    result: "Answer rate jumped to 71%. Same ad spend, almost 2x the booked jobs.",
+      "Speculative build. Full landscaping site with a before/after gallery angle — sample of what a paid engagement looks like for residential landscapers in California. Not yet engaged.",
     slides: [
-      { caption: "AI follow-up flow", bg: "linear-gradient(135deg,#141414 0%,#1F1F1F 100%)" },
-      { caption: "Owner dashboard", bg: "linear-gradient(135deg,#0A0A0A 0%,#2A2A2A 100%)" },
+      {
+        caption: "Before/after gallery hero",
+        bg: "linear-gradient(135deg,#1F1F1F 0%,#0A0A0A 100%)",
+      },
+      {
+        caption: "Service breakdown",
+        bg: "linear-gradient(135deg,#0A0A0A 0%,#141414 100%)",
+      },
     ],
   },
   {
     idx: 4,
-    client: "Lakeside Electric",
-    work: "Site + Meta Ads",
-    metric: "118 leads / 30d",
-    location: "Chicago",
-    year: "2025",
-    url: "https://martinezlandscaping.menconimarketing.com",
+    client: "Sergio's Lawn Care",
+    trade: "Lawn Care",
+    location: "California",
+    url: "https://sergioslawncare.menconimarketing.com",
+    status: "demo",
     summary:
-      "Residential electrician chasing same-day-service homeowners. Repositioned around \"book your electrician in 90 seconds.\" Meta-led, with a 3-field text-back form.",
-    result: "118 leads in 30 days at $19 cost-per-lead. Sustained for 8 months.",
+      "Speculative build. Local lawn-care site demonstrating a route-based recurring service positioning angle. Not yet engaged.",
     slides: [
-      { caption: "90-second booking promise", bg: "linear-gradient(135deg,#1F1F1F 0%,#0A0A0A 100%)" },
-      { caption: "Text-back capture form", bg: "linear-gradient(135deg,#0A0A0A 0%,#141414 100%)" },
-    ],
-  },
-  {
-    idx: 5,
-    client: "Volk Custom Builders",
-    work: "Brand site only",
-    metric: "7-figure proposal · week 2",
-    location: "Lake Forest",
-    year: "2025",
-    summary:
-      "Custom-home builder, no ads spend, lead pipeline came from referrals. Built a brand-grade portfolio site to convert warm referrals at premium pricing.",
-    result:
-      "Closed a 7-figure project in week 2 from a referral who'd been on the fence with the old site for 4 months.",
-    slides: [
-      { caption: "Editorial portfolio grid", bg: "linear-gradient(135deg,#2A2A2A 0%,#1F1F1F 100%)" },
-      { caption: "Project case study layout", bg: "linear-gradient(135deg,#141414 0%,#0A0A0A 100%)" },
+      {
+        caption: "Recurring-service hero",
+        bg: "linear-gradient(135deg,#2A2A2A 0%,#1F1F1F 100%)",
+      },
+      {
+        caption: "Booking flow",
+        bg: "linear-gradient(135deg,#141414 0%,#0A0A0A 100%)",
+      },
     ],
   },
 ];
@@ -153,7 +150,9 @@ function ProjectExpansion({ project }: { project: Project }) {
                 letterSpacing: "0.18em",
               }}
             >
-              {project.client.toUpperCase()} · {String(slideIdx + 1).padStart(2, "0")} / {String(project.slides.length).padStart(2, "0")}
+              {project.client.toUpperCase()} ·{" "}
+              {String(slideIdx + 1).padStart(2, "0")} /{" "}
+              {String(project.slides.length).padStart(2, "0")}
             </div>
             <div
               style={{
@@ -204,7 +203,7 @@ function ProjectExpansion({ project }: { project: Project }) {
               marginBottom: 16,
             }}
           >
-            What we shipped
+            {project.status === "live" ? "Active engagement" : "Demo build"}
           </div>
           <p
             style={{
@@ -217,47 +216,57 @@ function ProjectExpansion({ project }: { project: Project }) {
           >
             {project.summary}
           </p>
-          <div
+          <a
+            href={project.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mm-link"
             style={{
-              fontSize: 11,
+              fontSize: 12,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
-              color: "var(--mm-fg-3)",
-              fontWeight: 500,
-              marginBottom: 16,
             }}
           >
-            Result
-          </div>
-          <p
-            style={{
-              margin: 0,
-              fontSize: 17,
-              lineHeight: 1.55,
-              color: "var(--mm-fg-1)",
-              marginBottom: 32,
-            }}
-          >
-            {project.result}
-          </p>
-          {project.url && (
-            <a
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mm-link"
-              style={{
-                fontSize: 12,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-              }}
-            >
-              View live site →
-            </a>
-          )}
+            View live site →
+          </a>
         </div>
       </div>
     </div>
+  );
+}
+
+function StatusBadge({ status }: { status: Project["status"] }) {
+  if (status === "live") {
+    return (
+      <span
+        style={{
+          fontSize: 9,
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          color: "var(--mm-positive)",
+          fontWeight: 600,
+          padding: "3px 8px",
+          border: "1px solid var(--mm-positive)",
+        }}
+      >
+        Live client
+      </span>
+    );
+  }
+  return (
+    <span
+      style={{
+        fontSize: 9,
+        letterSpacing: "0.18em",
+        textTransform: "uppercase",
+        color: "var(--mm-fg-3)",
+        fontWeight: 600,
+        padding: "3px 8px",
+        border: "1px solid var(--mm-charcoal)",
+      }}
+    >
+      Demo build
+    </span>
   );
 }
 
@@ -280,10 +289,10 @@ function WorkRow({
         style={{
           width: "100%",
           display: "grid",
-          gridTemplateColumns: "60px 2fr 2fr 1.5fr 1fr 60px",
+          gridTemplateColumns: "60px 2fr 1.5fr 110px 1fr 60px",
           alignItems: "center",
           gap: 24,
-          padding: "36px 0",
+          padding: "32px 0",
           paddingLeft: hover || open ? 24 : 0,
           paddingRight: hover || open ? 24 : 0,
           borderTop: "1px solid var(--mm-charcoal)",
@@ -308,7 +317,7 @@ function WorkRow({
         </div>
         <div
           style={{
-            fontSize: 28,
+            fontSize: 26,
             fontWeight: 600,
             letterSpacing: "-0.02em",
             color: hover || open ? "var(--mm-accent)" : "var(--mm-fg-1)",
@@ -317,8 +326,12 @@ function WorkRow({
         >
           {project.client}
         </div>
-        <div style={{ fontSize: 14, color: "var(--mm-fg-2)" }}>{project.work}</div>
-        <div style={{ fontSize: 18, fontWeight: 500, color: "var(--mm-fg-1)" }}>{project.metric}</div>
+        <div style={{ fontSize: 14, color: "var(--mm-fg-2)" }}>
+          {project.trade}
+        </div>
+        <div>
+          <StatusBadge status={project.status} />
+        </div>
         <div
           style={{
             fontSize: 11,
@@ -327,7 +340,7 @@ function WorkRow({
             color: "var(--mm-fg-3)",
           }}
         >
-          {project.location} · {project.year}
+          {project.location}
         </div>
         <div
           style={{
@@ -365,32 +378,33 @@ export default function Proof() {
       style={{ padding: "160px 48px" }}
     >
       <div className="max-w-[1400px] mx-auto">
+        <Eyebrow number="06" label="Recent work" />
+
         <div
+          className="grid"
           style={{
-            display: "flex",
-            alignItems: "baseline",
-            justifyContent: "space-between",
+            marginTop: 56,
             marginBottom: 80,
-            gap: 64,
-            flexWrap: "wrap",
+            gridTemplateColumns: "1.4fr 1fr",
+            gap: 96,
+            alignItems: "flex-end",
           }}
         >
-          <div>
-            <Eyebrow number="06" label="Recent work" />
-            <h2
-              style={{
-                margin: 0,
-                fontSize: "clamp(36px, 5vw, 76px)",
-                letterSpacing: "-0.035em",
-                lineHeight: 0.95,
-                fontWeight: 600,
-              }}
-            >
-              Numbers,
-              <br />
-              <span style={{ color: "var(--mm-fg-3-inv)" }}>not adjectives.</span>
-            </h2>
-          </div>
+          <h2
+            style={{
+              margin: 0,
+              fontSize: "clamp(36px, 5vw, 76px)",
+              letterSpacing: "-0.035em",
+              lineHeight: 0.95,
+              fontWeight: 600,
+            }}
+          >
+            One live client.
+            <br />
+            <span style={{ color: "var(--mm-fg-3-inv)" }}>
+              The rest are sites I built to demonstrate how I work.
+            </span>
+          </h2>
           <p
             style={{
               margin: 0,
@@ -400,7 +414,7 @@ export default function Proof() {
               maxWidth: 380,
             }}
           >
-            Five engagements from the last 14 months. Click any row to expand the case study.
+            I&apos;m new. I&apos;m honest about it. Click any row to see the actual site I built and what I&apos;d ship for you.
           </p>
         </div>
 
@@ -415,55 +429,20 @@ export default function Proof() {
           ))}
         </div>
 
-        <div
-          className="grid"
+        {/* Honest closing line — no fake testimonial */}
+        <p
           style={{
-            marginTop: 96,
-            gridTemplateColumns: "1fr 2fr",
-            gap: 64,
-            alignItems: "flex-start",
+            margin: "64px 0 0",
+            fontSize: 16,
+            color: "var(--mm-fg-2)",
+            lineHeight: 1.55,
+            maxWidth: 720,
+            paddingTop: 48,
             borderTop: "1px solid var(--mm-charcoal)",
-            paddingTop: 64,
           }}
         >
-          <div
-            style={{
-              fontSize: 11,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "var(--mm-fg-3)",
-              fontWeight: 500,
-            }}
-          >
-            Client — Acme Drywall
-            <br />
-            <span style={{ color: "var(--mm-fg-3)" }}>Chicago · 2026</span>
-          </div>
-          <blockquote style={{ margin: 0 }}>
-            <p
-              style={{
-                margin: 0,
-                fontSize: "clamp(28px, 3.4vw, 44px)",
-                letterSpacing: "-0.02em",
-                lineHeight: 1.2,
-                fontWeight: 500,
-                color: "var(--mm-fg-1)",
-                maxWidth: 1000,
-              }}
-            >
-              &ldquo;Three agencies told me drywall guys can&apos;t run real ads. Nico had us booking 60+ calls a month inside 4 weeks. We hired one guy just to handle the work.&rdquo;
-            </p>
-            <div
-              style={{
-                marginTop: 28,
-                fontSize: 14,
-                color: "var(--mm-fg-3)",
-              }}
-            >
-              — D. Reyes, owner, Acme Drywall
-            </div>
-          </blockquote>
-        </div>
+          You&apos;re looking at the actual state of my client list. One paying client (606 Property Services in Chicago — Matthew). Three more sites built spec for prospects I&apos;m actively talking to. Real work, real URLs, no inflated case studies.
+        </p>
       </div>
     </section>
   );

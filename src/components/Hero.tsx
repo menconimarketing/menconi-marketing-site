@@ -25,8 +25,8 @@ const SplineScene = SPLINE_SCENE_URL
   : null;
 
 const STATS: [string, string][] = [
-  ["62", "booked calls · 30 days"],
-  ["9", "days to launch · avg"],
+  ["1", "active client · chicago"],
+  ["5", "sites built · across trades"],
   ["$5K", "starting · monthly"],
   ["1", "person · no agency layer"],
 ];

@@ -12,9 +12,9 @@ const PHASES = [
     body:
       "I build the site first. Custom code. Conversion-built. Fast on a contractor’s phone in a parking lot. Indexed by Google in week one. This is the surface every dollar after this lands on.",
     stats: [
-      ["9 days", "to launch · avg"],
-      ["68%", "form completion lift"],
-      ["100/100", "pagespeed mobile"],
+      ["Custom", "no templates · no themes"],
+      ["Mobile-first", "<3s load on 4G"],
+      ["Week one", "indexed by google"],
     ] as [string, string][],
   },
   {
@@ -24,9 +24,9 @@ const PHASES = [
     body:
       "Meta + Google lead-gen. Built around your CRM and call calendar — not vanity dashboards. Ads point at the new site, which converts at a rate the old one couldn’t, so the same dollar buys more calls.",
     stats: [
-      ["$28", "avg cost per booked call"],
-      ["62", "calls in 30 days"],
-      ["daily", "monitored by me"],
+      ["Meta + Google", "lead-gen channels"],
+      ["Daily", "monitored · me"],
+      ["Per-trade", "creative + targeting"],
     ] as [string, string][],
   },
   {
@@ -36,28 +36,44 @@ const PHASES = [
     body:
       "Intake agents, follow-up automations, quote calculators. They answer the form fill at 11pm, qualify the lead, and book the call before a competitor calls back. Same ad spend, more booked jobs.",
     stats: [
-      ["71%", "answer rate · iron range hvac"],
-      ["<2 min", "follow-up · 24/7"],
-      ["+38%", "close rate vs manual"],
+      ["<5 min", "auto-text · 24/7"],
+      ["Chat · SMS · voice", "agent channels"],
+      ["Per-trade", "qualifying + booking"],
     ] as [string, string][],
   },
 ];
 
-const PHASE_1_DEMOS = [
+type PhaseDemo = {
+  name: string;
+  trade: string;
+  url: string;
+  status: "live" | "demo";
+};
+
+const PHASE_1_DEMOS: PhaseDemo[] = [
   {
-    name: "Acme Drywall",
-    trade: "Drywall · Chicago, IL",
+    name: "606 Property Services",
+    trade: "Property Maintenance · Chicago, IL",
     url: "https://606propertyservices.menconimarketing.com",
+    status: "live",
   },
   {
-    name: "Northshore Roofing",
-    trade: "Roofing · Evanston, IL",
+    name: "ParaBeach Plastering",
+    trade: "Plastering · Norwalk, CA",
     url: "https://parabeachplastering.menconimarketing.com",
+    status: "demo",
   },
   {
-    name: "Lakeside Electric",
-    trade: "Electrical · Chicago, IL",
+    name: "Martinez Landscaping",
+    trade: "Landscaping · Riverside, CA",
     url: "https://martinezlandscaping.menconimarketing.com",
+    status: "demo",
+  },
+  {
+    name: "Sergio's Lawn Care",
+    trade: "Lawn Care · California",
+    url: "https://sergioslawncare.menconimarketing.com",
+    status: "demo",
   },
 ];
 
@@ -92,29 +108,20 @@ function AdsDashboard() {
             fontWeight: 500,
           }}
         >
-          Acme Drywall · Meta + Google · Last 30 days
+          Example dashboard · 30-day engagement
         </div>
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            fontSize: 11,
+            fontSize: 9,
             letterSpacing: "0.18em",
             textTransform: "uppercase",
-            color: "var(--mm-positive)",
-            fontWeight: 500,
+            color: "var(--mm-fg-3)",
+            fontWeight: 600,
+            padding: "2px 6px",
+            border: "1px solid var(--mm-charcoal)",
           }}
         >
-          <span
-            style={{
-              width: 6,
-              height: 6,
-              background: "var(--mm-positive)",
-              boxShadow: "0 0 0 4px rgba(111,207,151,0.15)",
-            }}
-          />
-          Live
+          Illustrative
         </div>
       </div>
 
@@ -196,7 +203,7 @@ function AdsDashboard() {
         </div>
       </div>
 
-      {/* Footer status */}
+      {/* Footer */}
       <div
         style={{
           padding: "12px 20px",
@@ -204,16 +211,9 @@ function AdsDashboard() {
           fontSize: 11,
           color: "var(--mm-fg-3)",
           letterSpacing: "0.04em",
-          display: "flex",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: 8,
         }}
       >
-        <span>Last optimized 2h ago · N.M.</span>
-        <span style={{ fontFamily: "ui-monospace, monospace" }}>
-          v2.4 · ROAS 4.2x
-        </span>
+        Numbers shown are typical 30-day targets — actuals vary by trade and market.
       </div>
     </div>
   );
@@ -236,6 +236,7 @@ function AISmsThread() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          gap: 12,
         }}
       >
         <div>
@@ -246,7 +247,7 @@ function AISmsThread() {
               color: "var(--mm-fg-1)",
             }}
           >
-            Mike Johnson
+            Example flow · missed call → booked job
           </div>
           <div
             style={{
@@ -261,25 +262,17 @@ function AISmsThread() {
         </div>
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            fontSize: 11,
+            fontSize: 9,
             letterSpacing: "0.18em",
             textTransform: "uppercase",
-            color: "var(--mm-positive)",
-            fontWeight: 500,
+            color: "var(--mm-fg-3)",
+            fontWeight: 600,
+            padding: "2px 6px",
+            border: "1px solid var(--mm-charcoal)",
+            flexShrink: 0,
           }}
         >
-          <span
-            style={{
-              width: 6,
-              height: 6,
-              background: "var(--mm-positive)",
-              boxShadow: "0 0 0 4px rgba(111,207,151,0.15)",
-            }}
-          />
-          Booked
+          Illustrative
         </div>
       </div>
 
@@ -387,50 +380,27 @@ function AISmsThread() {
         </div>
       </div>
 
-      {/* Footer stat */}
+      {/* Footer */}
       <div
         style={{
           padding: "12px 20px",
           borderTop: "1px solid var(--mm-charcoal)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: 8,
+          fontSize: 11,
+          color: "var(--mm-fg-3)",
+          letterSpacing: "0.04em",
         }}
       >
-        <div
-          style={{
-            fontSize: 11,
-            color: "var(--mm-fg-3)",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-          }}
-        >
-          Answer rate
-        </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "baseline",
-            gap: 8,
-            fontSize: 13,
-          }}
-        >
-          <span style={{ color: "var(--mm-fg-3)" }}>38%</span>
-          <span style={{ color: "var(--mm-accent)" }}>→</span>
-          <span style={{ color: "var(--mm-fg-1)", fontWeight: 600 }}>71%</span>
-        </div>
+        Auto-text fires inside 5 minutes. Quotes, calendars, and follow-ups configured per trade.
       </div>
     </div>
   );
 }
 
-// Phase 1 — client demos list
+// Phase 1 — client demos list (1 live client + 3 demo builds)
 function Phase1Demos({
   onOpen,
 }: {
-  onOpen: (d: (typeof PHASE_1_DEMOS)[0]) => void;
+  onOpen: (d: PhaseDemo) => void;
 }) {
   return (
     <div
@@ -450,7 +420,7 @@ function Phase1Demos({
           fontWeight: 500,
         }}
       >
-        Live client sites · click any to preview
+        Sites I&apos;ve built · click any to preview
       </div>
       <div>
         {PHASE_1_DEMOS.map((d, i) => (
@@ -469,6 +439,7 @@ function Phase1Demos({
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              gap: 16,
               fontFamily: "inherit",
               cursor: "pointer",
               color: "var(--mm-fg-1)",
@@ -481,30 +452,68 @@ function Phase1Demos({
               (e.currentTarget.style.background = "transparent")
             }
           >
-            <span style={{ textAlign: "left" }}>
+            <span style={{ textAlign: "left", minWidth: 0, flex: 1 }}>
               <span
                 style={{
-                  display: "block",
-                  fontSize: 16,
-                  fontWeight: 500,
-                  letterSpacing: "-0.01em",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  marginBottom: 4,
                 }}
               >
-                {d.name}
+                <span
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 500,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {d.name}
+                </span>
+                {d.status === "live" ? (
+                  <span
+                    style={{
+                      fontSize: 9,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      color: "var(--mm-positive)",
+                      fontWeight: 600,
+                      padding: "2px 6px",
+                      border: "1px solid var(--mm-positive)",
+                    }}
+                  >
+                    Live client
+                  </span>
+                ) : (
+                  <span
+                    style={{
+                      fontSize: 9,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      color: "var(--mm-fg-3)",
+                      fontWeight: 600,
+                      padding: "2px 6px",
+                      border: "1px solid var(--mm-charcoal)",
+                    }}
+                  >
+                    Demo build
+                  </span>
+                )}
               </span>
               <span
                 style={{
                   display: "block",
                   fontSize: 12,
                   color: "var(--mm-fg-3)",
-                  marginTop: 4,
                   letterSpacing: "0.04em",
                 }}
               >
                 {d.trade}
               </span>
             </span>
-            <span style={{ fontSize: 18, color: "var(--mm-fg-3)" }}>→</span>
+            <span style={{ fontSize: 18, color: "var(--mm-fg-3)", flexShrink: 0 }}>
+              →
+            </span>
           </button>
         ))}
       </div>
@@ -514,9 +523,7 @@ function Phase1Demos({
 
 export default function Mechanism() {
   const [active, setActive] = useState(0);
-  const [activeDemo, setActiveDemo] = useState<
-    (typeof PHASE_1_DEMOS)[0] | null
-  >(null);
+  const [activeDemo, setActiveDemo] = useState<PhaseDemo | null>(null);
 
   const phase = PHASES[active];
 
