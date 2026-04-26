@@ -3,7 +3,7 @@
 import Eyebrow from "./Eyebrow";
 
 const FACTS: [string, string, string][] = [
-  ["Active retainers", "4 / 6", "Capped, on purpose"],
+  ["Active retainers", "1 / 6", "Capped, on purpose"],
   ["Years in", "8", "Ads · sites · automation"],
   ["Reply window", "< 24h", "Mon–Thu, 9–5 CT"],
   ["Stack", "Custom", "No WordPress themes"],

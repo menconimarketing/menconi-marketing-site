@@ -572,7 +572,7 @@ export default function Mechanism() {
               flexShrink: 0,
             }}
           >
-            Click any phase to see what it actually looks like. Most clients start at 01 and stop when the math stops making sense to push further.
+            Click any phase to see what it actually looks like. Most engagements start at 01 and only move forward when the math says they should.
           </p>
         </div>
 

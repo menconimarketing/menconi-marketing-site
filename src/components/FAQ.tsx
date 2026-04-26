@@ -9,24 +9,32 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const faqs = [
   {
-    q: "I\u2019ve been burned by a marketing company before. Why is this different?",
-    a: "Because you don\u2019t pay for the next step until the current one is working. Phase 2 doesn\u2019t start until Phase 1 proves itself. That\u2019s the opposite of \u201Cpay us $2K a month and hope for the best.\u201D",
+    q: "I’ve been burned by an agency before. Why is this different?",
+    a: "You hired a sales rep and got handed to a junior team. Here you get me — the person doing the work — every week. No proxy layer. If the work slips, you hear it from me first.",
+  },
+  {
+    q: "You only have one live client. Why should I trust the system?",
+    a: "Fair question. The site you’re looking at IS the system. The other sites in Recent Work are spec builds for prospects I’m actively talking to. Click through every one. I’d rather show you real in-progress work than fabricate case studies.",
   },
   {
     q: "Will this work for my trade?",
-    a: "I\u2019ve built for landscapers, plasterers, property maintenance companies, and more. The system works across trades. Scroll up and look at the sites.",
+    a: "I’ve built for landscapers, plasterers, property maintenance, and lawn care so far. The mechanism doesn’t care about the trade. It cares whether you’re willing to claim a position your competitors aren’t.",
   },
   {
-    q: "I don\u2019t have a website at all. Can I still start?",
-    a: "That\u2019s the best scenario. No bad habits to undo. I build from scratch, and you skip the audit entirely.",
+    q: "I don’t have a website at all. Can I still start?",
+    a: "Best scenario. No bad habits to undo. I build from scratch.",
   },
   {
     q: "What if I already have a decent website?",
-    a: "Then we start with an audit. If your site is already converting, we skip Phase 1 and go straight to ads. You only pay for what you need.",
+    a: "We audit it. If it’s converting, we skip Phase 1 and go straight to ads. You pay for what you need.",
   },
   {
     q: "How long does it take?",
-    a: "A pilot takes about 5 business days. A full Phase 1 site build takes 4\u20138 weeks depending on scope. You\u2019ll see progress throughout, not just a big reveal at the end.",
+    a: "Site: 4–8 weeks. Ads turn on the week the site goes live. AI follow-up the week after. Progress every week. No big reveal at the end.",
+  },
+  {
+    q: "How much does it cost?",
+    a: "Starts at $5,000/month. Three-month minimum on monthly engagements. One-time projects billed 50% up front. Booked through email after a 30-minute call.",
   },
 ];
 
@@ -34,9 +42,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div
-      className={`faq-item-${index} border-b border-iron/40 group`}
-    >
+    <div className={`faq-item-${index} border-b border-iron/40 group`}>
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between py-6 text-left"
@@ -64,7 +70,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
       </button>
       <div
         className={`overflow-hidden transition-all duration-400 ease-out ${
-          open ? "max-h-48 pb-6" : "max-h-0"
+          open ? "max-h-64 pb-6" : "max-h-0"
         }`}
       >
         <p className="text-silver leading-relaxed pr-12 font-[var(--font-afacad)]">
@@ -115,7 +121,6 @@ export default function FAQ() {
             "linear-gradient(90deg, transparent, var(--iron), transparent)",
         }}
       />
-
       <div className="absolute inset-0 dot-grid opacity-15 pointer-events-none" />
 
       <div className="max-w-[800px] mx-auto px-6 relative z-10">
