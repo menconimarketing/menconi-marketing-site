@@ -5,8 +5,7 @@ import Eyebrow from "./Eyebrow";
 
 const fmt = (n: number) => "$" + Math.round(n).toLocaleString();
 
-// Simple model — close rate held constant at 25% (industry default).
-// Position lift translates to ~2.4x revenue (combined leads + AOV uplift).
+// Math: avg job × monthly leads × 25% close rate × 2.4x position lift
 const POSITION_LIFT = 2.4;
 const ASSUMED_CLOSE = 0.25;
 
@@ -34,13 +33,13 @@ function Slider({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "baseline",
-          marginBottom: 14,
+          marginBottom: 12,
         }}
       >
         <label
           style={{
-            fontSize: 12,
-            letterSpacing: "0.16em",
+            fontSize: 11,
+            letterSpacing: "0.18em",
             textTransform: "uppercase",
             color: "var(--mm-fg-3)",
             fontWeight: 500,
@@ -50,7 +49,7 @@ function Slider({
         </label>
         <div
           style={{
-            fontSize: 32,
+            fontSize: 22,
             fontWeight: 600,
             letterSpacing: "-0.02em",
             color: "var(--mm-fg-1)",
@@ -79,7 +78,7 @@ function Slider({
         style={{
           display: "flex",
           justifyContent: "space-between",
-          marginTop: 8,
+          marginTop: 6,
           fontSize: 11,
           color: "var(--mm-fg-3)",
         }}
@@ -98,6 +97,7 @@ export default function Calculator() {
   const todayRev = leads * ASSUMED_CLOSE * job;
   const newRev = todayRev * POSITION_LIFT;
   const monthlyDelta = newRev - todayRev;
+  const annualDelta = monthlyDelta * 12;
 
   return (
     <section
@@ -108,6 +108,7 @@ export default function Calculator() {
       <div className="max-w-[1400px] mx-auto">
         <Eyebrow number="07" label="Position value" />
 
+        {/* Headline + intro */}
         <div
           className="grid"
           style={{
@@ -141,17 +142,18 @@ export default function Calculator() {
               maxWidth: 420,
             }}
           >
-            Two numbers. Move them to your business. The gap between &ldquo;today&rdquo; and &ldquo;with positioning&rdquo; is what you&apos;re leaving on the table.
+            Move the two sliders to your numbers. The number below is what your business is leaving on the table — every month.
           </p>
         </div>
 
-        {/* Sliders row — clean, no card */}
+        {/* Sliders — quiet, context-setting, side by side at the top */}
         <div
           className="grid"
           style={{
             gridTemplateColumns: "1fr 1fr",
             gap: 64,
-            marginBottom: 96,
+            paddingBottom: 56,
+            borderBottom: "1px solid var(--mm-charcoal)",
           }}
         >
           <Slider
@@ -174,154 +176,134 @@ export default function Calculator() {
           />
         </div>
 
-        {/* Before / after split — two big numbers, one arrow, one delta */}
+        {/* HERO — the big delta number takes the stage */}
         <div
           style={{
-            paddingTop: 64,
-            borderTop: "1px solid var(--mm-charcoal)",
+            paddingTop: 80,
+            paddingBottom: 24,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
           }}
         >
           <div
-            className="grid mm-calc-result"
             style={{
-              gridTemplateColumns: "1fr 80px 1fr",
-              gap: 32,
-              alignItems: "center",
+              fontSize: 11,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--mm-fg-3)",
+              fontWeight: 500,
+              marginBottom: 24,
             }}
           >
-            {/* Today */}
-            <div>
-              <div
-                style={{
-                  fontSize: 11,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: "var(--mm-fg-3)",
-                  fontWeight: 500,
-                  marginBottom: 16,
-                }}
-              >
-                Today · monthly revenue
-              </div>
-              <div
-                style={{
-                  fontSize: "clamp(56px, 7vw, 96px)",
-                  fontWeight: 600,
-                  letterSpacing: "-0.04em",
-                  lineHeight: 1,
-                  color: "var(--mm-fg-2)",
-                }}
-              >
-                {fmt(todayRev)}
-              </div>
-            </div>
-
-            {/* Arrow */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <svg
-                width="80"
-                height="20"
-                viewBox="0 0 80 20"
-                fill="none"
-                style={{ color: "var(--mm-accent)" }}
-              >
-                <line
-                  x1="0"
-                  y1="10"
-                  x2="70"
-                  y2="10"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  strokeDasharray="3 3"
-                />
-                <path
-                  d="M62 2L78 10L62 18"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  fill="none"
-                />
-              </svg>
-            </div>
-
-            {/* With positioning — gradient number */}
-            <div>
-              <div
-                style={{
-                  fontSize: 11,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: "var(--mm-fg-3)",
-                  fontWeight: 500,
-                  marginBottom: 16,
-                }}
-              >
-                With your position owned
-              </div>
-              <div
-                className="mm-gradient-text"
-                style={{
-                  fontSize: "clamp(56px, 7vw, 96px)",
-                  fontWeight: 600,
-                  letterSpacing: "-0.04em",
-                  lineHeight: 1,
-                }}
-              >
-                {fmt(newRev)}
-              </div>
-            </div>
+            What you&apos;re leaving on the table — every month
           </div>
 
-          {/* Single delta line */}
           <div
+            className="mm-gradient-text mm-delta-hero"
             style={{
-              marginTop: 56,
-              paddingTop: 32,
-              borderTop: "1px solid var(--mm-charcoal)",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              gap: 24,
-              flexWrap: "wrap",
+              fontSize: "clamp(72px, 13vw, 200px)",
+              fontWeight: 600,
+              letterSpacing: "-0.05em",
+              lineHeight: 0.9,
+              marginBottom: 24,
             }}
           >
-            <div
-              style={{
-                fontSize: 28,
-                fontWeight: 600,
-                letterSpacing: "-0.02em",
-                color: "var(--mm-fg-1)",
-              }}
-            >
-              + {fmt(monthlyDelta)} more per month
+            + {fmt(monthlyDelta)}
+          </div>
+
+          <div
+            style={{
+              fontSize: "clamp(20px, 2vw, 28px)",
+              color: "var(--mm-fg-1)",
+              lineHeight: 1.3,
+              letterSpacing: "-0.015em",
+              fontWeight: 500,
+              maxWidth: 760,
+            }}
+          >
+            More revenue. Per month. From positioning — not from spending more on ads.
+          </div>
+        </div>
+
+        {/* Supporting evidence — small, quiet */}
+        <div
+          style={{
+            marginTop: 64,
+            paddingTop: 32,
+            borderTop: "1px solid var(--mm-charcoal)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "baseline",
+            gap: 32,
+            flexWrap: "wrap",
+            fontSize: 14,
+            color: "var(--mm-fg-3)",
+          }}
+        >
+          <div style={{ display: "flex", gap: 32, flexWrap: "wrap" }}>
+            <div>
+              <span
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  color: "var(--mm-fg-3)",
+                  marginRight: 12,
+                }}
+              >
+                Today
+              </span>
+              <span style={{ color: "var(--mm-fg-2)", fontWeight: 500 }}>
+                {fmt(todayRev)}/mo
+              </span>
             </div>
-            <div
-              style={{
-                fontSize: 14,
-                color: "var(--mm-fg-3)",
-                letterSpacing: "0.04em",
-              }}
-            >
-              ({fmt(monthlyDelta * 12)} per year, at this rate)
+            <div>
+              <span
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  color: "var(--mm-fg-3)",
+                  marginRight: 12,
+                }}
+              >
+                With positioning
+              </span>
+              <span style={{ color: "var(--mm-fg-1)", fontWeight: 500 }}>
+                {fmt(newRev)}/mo
+              </span>
+            </div>
+            <div>
+              <span
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  color: "var(--mm-fg-3)",
+                  marginRight: 12,
+                }}
+              >
+                Annualized
+              </span>
+              <span style={{ color: "var(--mm-fg-1)", fontWeight: 500 }}>
+                + {fmt(annualDelta)}/yr
+              </span>
             </div>
           </div>
         </div>
 
+        {/* Math explainer */}
         <p
           style={{
-            margin: "48px 0 0",
-            fontSize: 13,
+            margin: "24px 0 0",
+            fontSize: 12,
             color: "var(--mm-fg-3)",
             lineHeight: 1.5,
             maxWidth: 720,
           }}
         >
-          Math: avg job value × monthly leads × 25% close rate × 2.4x position lift. The lift is the median uplift across the last 14 months of full engagements (site + ads + AI). Yours will vary. The number on a real call is more honest — and usually higher.
+          Math: avg job value × monthly leads × 25% close rate × 2.4x position lift. The lift is the median uplift across the last 14 months of full engagements (site + ads + AI). Your number on a real call is more honest — and usually higher.
         </p>
       </div>
 
@@ -334,14 +316,14 @@ export default function Calculator() {
           -webkit-appearance: none;
           appearance: none;
           width: 14px;
-          height: 28px;
+          height: 24px;
           background: var(--mm-fg-1);
           cursor: pointer;
           border-radius: 0;
         }
         .mm-slider::-moz-range-thumb {
           width: 14px;
-          height: 28px;
+          height: 24px;
           background: var(--mm-fg-1);
           border: none;
           cursor: pointer;
