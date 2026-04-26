@@ -75,7 +75,7 @@ export default function Mechanism() {
             <h2
               style={{
                 margin: 0,
-                fontSize: "clamp(48px, 7vw, 104px)",
+                fontSize: "clamp(36px, 5vw, 76px)",
                 letterSpacing: "-0.035em",
                 lineHeight: 0.95,
                 fontWeight: 600,
@@ -203,7 +203,7 @@ export default function Mechanism() {
             <h3
               style={{
                 margin: 0,
-                fontSize: "clamp(48px, 6vw, 88px)",
+                fontSize: "clamp(36px, 4.8vw, 68px)",
                 letterSpacing: "-0.035em",
                 lineHeight: 0.95,
                 fontWeight: 600,

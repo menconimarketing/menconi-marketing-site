@@ -109,7 +109,7 @@ export default function Difference() {
             <h2
               style={{
                 margin: 0,
-                fontSize: "clamp(48px, 6.5vw, 96px)",
+                fontSize: "clamp(36px, 5vw, 72px)",
                 letterSpacing: "-0.035em",
                 lineHeight: 0.95,
                 fontWeight: 600,

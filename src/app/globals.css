@@ -378,3 +378,185 @@ select:focus-visible {
   opacity: 0.02;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
+
+/* ============================================================
+   MOBILE RESPONSIVE LAYER
+   Overrides inline grid/padding patterns at narrow viewports
+   ============================================================ */
+
+/* Tablet — collapse 3+ col grids */
+@media (max-width: 1024px) {
+  /* Section side padding tightens */
+  section[id],
+  section[data-screen-label] {
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
+  /* Generic grid-3 → 1 col */
+  section .grid {
+    gap: 32px !important;
+  }
+}
+
+/* Mobile — full collapse */
+@media (max-width: 767px) {
+  /* Section padding trims hard */
+  section[id],
+  section[data-screen-label] {
+    padding-top: 80px !important;
+    padding-bottom: 80px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* All inline grids → single column */
+  section .grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  /* Headline sizes — tighter on small screens */
+  section h1 {
+    font-size: clamp(36px, 11vw, 64px) !important;
+    line-height: 1 !important;
+  }
+  section h2 {
+    font-size: clamp(32px, 9vw, 48px) !important;
+    line-height: 1.05 !important;
+  }
+  section h3 {
+    font-size: clamp(22px, 6vw, 32px) !important;
+  }
+
+  /* Reduce huge inline display numbers */
+  section [style*="clamp(64px"],
+  section [style*="clamp(56px"],
+  section [style*="clamp(48px"] {
+    font-size: clamp(32px, 9vw, 48px) !important;
+  }
+
+  /* Stat grids inside hero / sections — keep 2 across */
+  section [style*="repeat(4, 1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+  section [style*="repeat(3, 1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+  section [style*="repeat(2, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Day picker (5-col) → 5 across, smaller */
+  section [style*="repeat(5, 1fr)"] {
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 4px !important;
+  }
+
+  /* Audit form row: input + input + button → stack */
+  section [style*="1.5fr 1fr auto"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Audit findings row: 3-col → stack */
+  section [style*="2fr 1fr 4fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+  /* Work case study row collapse */
+  section [style*="60px 2fr 2fr 1.5fr 1fr 60px"] {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 28px 0 !important;
+  }
+  /* Founder photo + text: stack vertical */
+  section [style*="1fr 1.4fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  /* Calculator inputs/output, Contact calendar/form: stack */
+  section [style*="1fr 1.2fr"],
+  section [style*="1.4fr 1fr"],
+  section [style*="1.3fr 1fr"],
+  section [style*="1.2fr 1fr"],
+  section [style*="1.1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Borders that were "right" in horizontal grids → become bottom only on stack */
+  section .grid > div[style*="borderRight"] {
+    border-right: none !important;
+    border-bottom: 1px solid var(--mm-charcoal) !important;
+  }
+
+  /* Footer 4-col → 2x2 */
+  footer .grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 32px !important;
+  }
+  footer .grid > div:first-child {
+    grid-column: 1 / -1;
+  }
+  footer {
+    padding: 64px 20px 32px !important;
+  }
+
+  /* Sticky founder photo — stop being sticky on mobile */
+  section [style*="position: sticky"][style*="top: 96px"],
+  section [style*="position:sticky"] {
+    position: static !important;
+  }
+
+  /* Hero specific tweaks */
+  section#top {
+    padding-top: 80px !important;
+    padding-bottom: 80px !important;
+    min-height: auto !important;
+  }
+  section#top h1 {
+    font-size: clamp(40px, 11vw, 72px) !important;
+  }
+
+  /* Audit form input row: wrap vertically */
+  section#audit form,
+  section#audit [class="grid"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Mechanism bar viz: 3 boxes stack but bars stay */
+  section#how-it-works .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Reduce gap between large flex layouts */
+  section [style*="gap: 96px"] {
+    gap: 32px !important;
+  }
+  section [style*="gap: 64px"] {
+    gap: 24px !important;
+  }
+
+  /* Buttons: full-width on mobile */
+  .mm-btn-primary,
+  .mm-btn-ghost {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+  .mm-btn-ghost > .mm-btn-ghost-inner {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Nav inner */
+  .mm-nav-inner {
+    padding: 14px 20px !important;
+  }
+  .mm-nav-logo {
+    height: 28px !important;
+  }
+
+  /* Tone down the giant footer wordmark */
+  footer [style*="clamp(80px, 14vw, 200px)"] {
+    font-size: clamp(40px, 14vw, 64px) !important;
+  }
+}

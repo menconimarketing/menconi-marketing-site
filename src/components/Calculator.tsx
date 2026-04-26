@@ -125,7 +125,7 @@ export default function Calculator() {
             <h2
               style={{
                 margin: 0,
-                fontSize: "clamp(48px, 7vw, 104px)",
+                fontSize: "clamp(36px, 5vw, 76px)",
                 letterSpacing: "-0.035em",
                 lineHeight: 0.95,
                 fontWeight: 600,

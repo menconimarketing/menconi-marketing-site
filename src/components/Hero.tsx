@@ -149,7 +149,7 @@ export default function Hero() {
           style={{
             ...reveal(2),
             margin: 0,
-            fontSize: "clamp(56px, 9vw, 152px)",
+            fontSize: "clamp(40px, 6.5vw, 104px)",
             lineHeight: 0.92,
             letterSpacing: "-0.04em",
             fontWeight: 600,

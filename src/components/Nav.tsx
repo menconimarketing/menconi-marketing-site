@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 const LINKS = [
   { href: "#audit", label: "Audit" },
-  { href: "#how-it-works", label: "Process" },
+  { href: "#how-it-works", label: "System" },
   { href: "#results", label: "Work" },
   { href: "#about", label: "About" },
 ];
@@ -35,23 +35,33 @@ export default function Nav() {
       }}
     >
       <div
-        className="max-w-[1400px] mx-auto flex items-center justify-between"
-        style={{ padding: "18px 48px" }}
+        className="mm-nav-inner"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "20px 48px",
+          width: "100%",
+        }}
       >
         <a
           href="#top"
           className="flex items-center"
-          style={{ transition: "opacity 200ms cubic-bezier(0.2,0,0,1)" }}
+          aria-label="Menconi Marketing"
         >
           <img
             src="/brand/wordmark/wordmark-white.svg"
             alt="Menconi Marketing"
-            style={{ height: 22, width: "auto" }}
+            className="mm-nav-logo"
+            style={{ height: 36, width: "auto" }}
           />
         </a>
 
         {/* Desktop links */}
-        <div className="hidden md:flex items-center" style={{ gap: 36 }}>
+        <div
+          className="mm-nav-links hidden md:flex items-center"
+          style={{ gap: 40 }}
+        >
           {LINKS.map((l) => (
             <a
               key={l.href}
@@ -60,7 +70,7 @@ export default function Nav() {
                 color: "var(--mm-fg-1)",
                 textDecoration: "none",
                 fontSize: 13,
-                letterSpacing: "0.06em",
+                letterSpacing: "0.18em",
                 textTransform: "uppercase",
                 fontWeight: 500,
                 transition: "color 200ms cubic-bezier(0.2,0,0,1)",
@@ -78,7 +88,7 @@ export default function Nav() {
           <a
             href="#contact"
             className="mm-btn-primary"
-            style={{ fontSize: 13, padding: "10px 18px" }}
+            style={{ fontSize: 12, padding: "12px 20px" }}
           >
             Book a call <span aria-hidden>→</span>
           </a>
@@ -89,16 +99,21 @@ export default function Nav() {
           className="md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
-          style={{ background: "transparent", border: "none", color: "var(--mm-fg-1)" }}
+          style={{
+            background: "transparent",
+            border: "none",
+            color: "var(--mm-fg-1)",
+            padding: 8,
+            cursor: "pointer",
+          }}
         >
           <svg
-            width="22"
-            height="22"
+            width="26"
+            height="26"
             viewBox="0 0 22 22"
             fill="none"
             stroke="currentColor"
             strokeWidth="1.5"
-            strokeLinecap="butt"
           >
             {mobileOpen ? (
               <path d="M5 5l12 12M5 17L17 5" />
@@ -117,17 +132,19 @@ export default function Nav() {
       <div
         className="md:hidden overflow-hidden"
         style={{
-          maxHeight: mobileOpen ? 360 : 0,
+          maxHeight: mobileOpen ? 480 : 0,
           transition: "max-height 280ms cubic-bezier(0.2,0,0,1)",
           background: "rgba(10, 10, 10, 0.95)",
           backdropFilter: "blur(14px)",
           WebkitBackdropFilter: "blur(14px)",
-          borderBottom: mobileOpen ? "1px solid var(--mm-border-soft)" : "none",
+          borderBottom: mobileOpen
+            ? "1px solid var(--mm-border-soft)"
+            : "none",
         }}
       >
         <div
           className="flex flex-col"
-          style={{ padding: "16px 32px 32px", gap: 18 }}
+          style={{ padding: "20px 24px 32px", gap: 20 }}
         >
           {LINKS.map((l) => (
             <a
@@ -138,7 +155,7 @@ export default function Nav() {
                 color: "var(--mm-fg-1)",
                 textDecoration: "none",
                 fontSize: 18,
-                letterSpacing: "0.06em",
+                letterSpacing: "0.18em",
                 textTransform: "uppercase",
                 fontWeight: 500,
               }}
@@ -150,7 +167,12 @@ export default function Nav() {
             href="#contact"
             onClick={() => setMobileOpen(false)}
             className="mm-btn-primary"
-            style={{ fontSize: 14, padding: "14px 20px", justifyContent: "center", marginTop: 12 }}
+            style={{
+              fontSize: 14,
+              padding: "16px 20px",
+              justifyContent: "center",
+              marginTop: 12,
+            }}
           >
             Book a call <span aria-hidden>→</span>
           </a>
