@@ -4,15 +4,14 @@ import Hero from "@/components/Hero";
 import GradientHairline from "@/components/GradientHairline";
 
 // Below-the-fold sections — lazy-loaded.
-// Order is WWP-grounded:
-//  Hero (recognition) → Problem (pain named) → Audit (live proof of skill)
-//  → Mechanism (the system) → Proof (case studies) → Calculator (desire)
+// WWP-grounded order:
+//  Hero (recognition) → Problem (pain) → Audit (live skill proof)
+//  → Mechanism (the system) → Proof (case studies)
 //  → Founder (trust) → FAQ (objections) → Contact (action) → Footer
 const Problem = dynamic(() => import("@/components/Problem"));
 const PositioningAudit = dynamic(() => import("@/components/PositioningAudit"));
 const Mechanism = dynamic(() => import("@/components/Mechanism"));
 const Proof = dynamic(() => import("@/components/Proof"));
-const Calculator = dynamic(() => import("@/components/Calculator"));
 const Difference = dynamic(() => import("@/components/Difference"));
 const FAQ = dynamic(() => import("@/components/FAQ"));
 const CTA = dynamic(() => import("@/components/CTA"));
@@ -33,8 +32,6 @@ export default function Home() {
         <Mechanism />
         <GradientHairline />
         <Proof />
-        <GradientHairline />
-        <Calculator />
         <GradientHairline />
         <Difference />
         <GradientHairline />

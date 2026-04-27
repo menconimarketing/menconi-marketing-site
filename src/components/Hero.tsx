@@ -24,16 +24,14 @@ const SplineScene = SPLINE_SCENE_URL
   ? dynamic(() => import("./SplineScene"), { ssr: false })
   : null;
 
-const STATS: [string, string][] = [
-  ["1", "active client · chicago"],
-  ["5", "sites built · across trades"],
-  ["$5K", "starting · monthly"],
-  ["1", "person · no agency layer"],
+const PHASES_PREVIEW: [string, string, string][] = [
+  ["01", "Websites", "Custom site, built to book jobs."],
+  ["02", "Paid ads", "Meta + Google, run on top of the site."],
+  ["03", "AI revenue", "Auto follow-up so leads don’t go cold."],
 ];
 
 export default function Hero() {
   const [stage, setStage] = useState(0);
-  const [mins, setMins] = useState(7);
 
   useEffect(() => {
     const ts = [
@@ -41,14 +39,8 @@ export default function Hero() {
       setTimeout(() => setStage(2), 280),
       setTimeout(() => setStage(3), 520),
       setTimeout(() => setStage(4), 800),
-      setTimeout(() => setStage(5), 1100),
     ];
     return () => ts.forEach(clearTimeout);
-  }, []);
-
-  useEffect(() => {
-    const id = setInterval(() => setMins((m) => m + 1), 60000);
-    return () => clearInterval(id);
   }, []);
 
   const reveal = (n: number): React.CSSProperties => ({
@@ -61,20 +53,19 @@ export default function Hero() {
   return (
     <section
       id="top"
-      data-screen-label="01 Hero"
+      data-screen-label="00 Hero"
       style={{
-        padding: "120px 48px 64px",
+        padding: "120px 48px 96px",
         position: "relative",
         background:
           "radial-gradient(ellipse at 85% 15%, rgba(168,176,196,0.09) 0%, transparent 55%), radial-gradient(ellipse at 10% 90%, rgba(232,212,154,0.04) 0%, transparent 50%)",
         overflow: "hidden",
-        height: "100vh",
-        minHeight: 720,
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
       }}
     >
-      {/* Wave canvas — sits behind everything */}
+      {/* Wave canvas */}
       <div className="absolute inset-0 z-[1] pointer-events-none" aria-hidden>
         {SPLINE_SCENE_URL && SplineScene ? (
           <SplineScene sceneUrl={SPLINE_SCENE_URL} />
@@ -96,28 +87,26 @@ export default function Hero() {
         }}
       />
 
-      {/* Top eyebrow row */}
-      <div
-        style={{ position: "relative", zIndex: 10, marginBottom: 48 }}
-      >
+      {/* Top eyebrow */}
+      <div style={{ position: "relative", zIndex: 10, marginBottom: 64 }}>
         <div style={reveal(1)}>
           <Eyebrow number="00" label="Chicago, IL — by appointment" />
         </div>
       </div>
 
-      {/* Main split: Left = headline+sub+CTAs, Right = booking pill + stats column */}
+      {/* Main split */}
       <div
         className="grid"
         style={{
           position: "relative",
           zIndex: 10,
           flex: 1,
-          gridTemplateColumns: "1fr 280px",
+          gridTemplateColumns: "1fr 320px",
           gap: 64,
           alignItems: "stretch",
         }}
       >
-        {/* LEFT — headline column */}
+        {/* LEFT — headline + sub + CTAs */}
         <div
           style={{
             display: "flex",
@@ -135,6 +124,7 @@ export default function Hero() {
               letterSpacing: "-0.04em",
               fontWeight: 600,
               maxWidth: 1100,
+              color: "var(--mm-fg-1)",
             }}
           >
             I build websites,
@@ -144,7 +134,6 @@ export default function Hero() {
             tools{" "}
             <span
               style={{
-                color: "var(--mm-fg-3-inv)",
                 display: "inline-block",
                 paddingBottom: 6,
                 backgroundImage: "var(--mm-gradient)",
@@ -197,9 +186,8 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* RIGHT — booking pill + stats column */}
+        {/* RIGHT — booking pill + 3-phase preview */}
         <aside
-          className="mm-hero-rail"
           style={{
             ...reveal(4),
             display: "flex",
@@ -209,7 +197,7 @@ export default function Hero() {
             borderLeft: "1px solid var(--mm-charcoal)",
           }}
         >
-          {/* Booking pill at the top of the column */}
+          {/* Booking pill */}
           <div
             style={{
               display: "flex",
@@ -235,70 +223,91 @@ export default function Hero() {
             <span>Booking — May 2026</span>
           </div>
 
-          {/* Stats stacked vertically */}
+          {/* 3-phase preview list */}
+          <div
+            style={{
+              fontSize: 11,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--mm-fg-3)",
+              fontWeight: 500,
+            }}
+          >
+            What I build
+          </div>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: 24,
               flex: 1,
-              justifyContent: "space-between",
+              gap: 0,
             }}
           >
-            {STATS.map(([v, l]) => (
-              <div key={l}>
+            {PHASES_PREVIEW.map(([num, title, desc], i) => (
+              <a
+                key={num}
+                href="#how-it-works"
+                style={{
+                  display: "block",
+                  padding: "20px 0",
+                  borderTop: "1px solid var(--mm-charcoal)",
+                  borderBottom:
+                    i === PHASES_PREVIEW.length - 1
+                      ? "1px solid var(--mm-charcoal)"
+                      : "none",
+                  textDecoration: "none",
+                  color: "var(--mm-fg-1)",
+                  transition: "color 200ms cubic-bezier(0.2,0,0,1)",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = "var(--mm-accent)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = "var(--mm-fg-1)")
+                }
+              >
                 <div
                   style={{
-                    fontSize: "clamp(36px, 3.6vw, 56px)",
-                    fontWeight: 600,
-                    letterSpacing: "-0.04em",
-                    lineHeight: 1,
+                    display: "flex",
+                    alignItems: "baseline",
+                    gap: 12,
+                    marginBottom: 4,
                   }}
                 >
-                  {v}
+                  <span
+                    style={{
+                      fontFamily: "ui-monospace, monospace",
+                      fontSize: 11,
+                      color: "var(--mm-fg-3)",
+                      letterSpacing: "0.18em",
+                    }}
+                  >
+                    {num}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: 18,
+                      fontWeight: 600,
+                      letterSpacing: "-0.02em",
+                    }}
+                  >
+                    {title}
+                  </span>
                 </div>
                 <div
                   style={{
-                    marginTop: 8,
-                    fontSize: 11,
-                    letterSpacing: "0.16em",
-                    textTransform: "uppercase",
-                    color: "var(--mm-fg-3)",
-                    fontWeight: 500,
+                    fontSize: 13,
+                    color: "var(--mm-fg-2)",
+                    lineHeight: 1.4,
+                    paddingLeft: 28,
                   }}
                 >
-                  {l}
+                  {desc}
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </aside>
-      </div>
-
-      {/* Bottom status row — thin, doesn't compete with wave */}
-      <div
-        style={{
-          ...reveal(5),
-          position: "relative",
-          zIndex: 10,
-          marginTop: 32,
-          paddingTop: 16,
-          borderTop: "1px solid var(--mm-charcoal)",
-          display: "flex",
-          justifyContent: "space-between",
-          fontSize: 11,
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-          color: "var(--mm-fg-3)",
-          fontWeight: 500,
-          flexWrap: "wrap",
-          gap: 12,
-        }}
-      >
-        <span>Last call booked — {mins} min ago</span>
-        <span style={{ fontFamily: "ui-monospace, monospace" }}>
-          v1.0 · CHI · 41.88°N
-        </span>
       </div>
     </section>
   );

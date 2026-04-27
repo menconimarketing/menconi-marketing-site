@@ -11,9 +11,9 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const PAINS = [
   {
     n: "01",
-    title: "You’ve been burned.",
+    title: "You can’t tell if any of it’s working.",
     body:
-      "An agency took $4K/month for six months. They sent you weekly PDFs with charts. You got two leads. They blamed your industry.",
+      "An agency took $4K/month for six months. They sent you weekly PDFs with charts. The phone didn’t ring any more than it did before. They blamed your industry.",
   },
   {
     n: "02",
@@ -25,13 +25,13 @@ const PAINS = [
     n: "03",
     title: "Your growth is referrals only.",
     body:
-      "Which is great until your best referrer retires, sells, or just goes quiet for a quarter. Referral pipelines don’t scale. They can’t be turned up. They can be turned off.",
+      "Referrals don’t scale. You can’t turn them up. You can’t predict them. You can’t control which months they come. The day your best referrer retires or sells, your pipeline goes with them.",
   },
   {
     n: "04",
-    title: "Your site costs you jobs.",
+    title: "You’re losing leads you don’t even see.",
     body:
-      "It loads in 6 seconds on a phone. The form has 11 fields. The estimate flow is a PDF download. You’ve watched a homeowner give up on it in front of you.",
+      "Search your trade in your area — your business doesn’t show up. And when a lead does come in, you’re on a jobsite. By the time you call back, the homeowner already booked someone else.",
   },
 ];
 
@@ -54,11 +54,11 @@ export default function Problem() {
         ease: "power3.out",
         scrollTrigger: { trigger: ".problem-grid", start: "top 80%" },
       });
-      gsap.from(".problem-closing", {
+      gsap.from(".problem-transition", {
         y: 30,
         opacity: 0,
-        duration: 0.8,
-        scrollTrigger: { trigger: ".problem-closing", start: "top 85%" },
+        duration: 0.9,
+        scrollTrigger: { trigger: ".problem-transition", start: "top 80%" },
       });
     },
     { scope: container }
@@ -68,13 +68,13 @@ export default function Problem() {
     <section
       id="problem"
       ref={container}
-      data-screen-label="02 Problem"
+      data-screen-label="01 Problem"
       style={{ padding: "160px 48px", background: "var(--mm-black)", position: "relative" }}
     >
       <div className="max-w-[1400px] mx-auto">
-        <Eyebrow number="02" label="The problem" />
+        <Eyebrow number="01" label="The problem" />
 
-        {/* Triple gap between eyebrow and headline + right-side balance */}
+        {/* Headline + balance lede */}
         <div
           className="grid"
           style={{
@@ -94,18 +94,18 @@ export default function Problem() {
               lineHeight: 0.95,
               fontWeight: 600,
               maxWidth: 1100,
+              color: "var(--mm-fg-1)",
             }}
           >
             You don&apos;t need
             <br />
             more marketing.
             <br />
-            <span style={{ color: "var(--mm-fg-3-inv)" }}>
-              You need it to actually work.
-            </span>
+            You need it
+            <br />
+            to actually work.
           </h2>
 
-          {/* Right-side balance — bold lede + body that primes the four pain cards */}
           <div style={{ maxWidth: 380 }}>
             <p
               style={{
@@ -132,6 +132,7 @@ export default function Problem() {
           </div>
         </div>
 
+        {/* Pain grid */}
         <div
           className="problem-grid grid"
           style={{
@@ -171,6 +172,7 @@ export default function Problem() {
                   lineHeight: 1.05,
                   fontWeight: 600,
                   marginBottom: 18,
+                  color: "var(--mm-fg-1)",
                 }}
               >
                 {p.title}
@@ -190,25 +192,40 @@ export default function Problem() {
           ))}
         </div>
 
-        <div className="problem-closing" style={{ marginTop: 96, maxWidth: 760 }}>
+        {/* Transition line — the loud moment */}
+        <div
+          className="problem-transition"
+          style={{
+            marginTop: 128,
+            paddingTop: 64,
+            paddingBottom: 64,
+            borderTop: "1px solid var(--mm-charcoal)",
+            borderBottom: "1px solid var(--mm-charcoal)",
+            maxWidth: 980,
+            margin: "128px auto 0",
+            textAlign: "center",
+          }}
+        >
           <p
             style={{
               margin: 0,
-              fontSize: 28,
-              lineHeight: 1.3,
+              fontSize: "clamp(28px, 3.6vw, 48px)",
+              lineHeight: 1.2,
               color: "var(--mm-fg-1)",
-              letterSpacing: "-0.015em",
+              letterSpacing: "-0.025em",
+              fontWeight: 500,
             }}
           >
-            The fix isn&apos;t a louder ad campaign. It&apos;s owning a position in your market that nobody else is claiming &mdash; and then building the site, the ads, and the follow-up to defend it.
+            The fix isn&apos;t a louder ad campaign. It&apos;s{" "}
+            <span className="mm-gradient-text">owning a position</span> in your
+            market that nobody else is claiming &mdash; and then building the site, the ads, and the follow-up to defend it.
           </p>
           <p
             style={{
-              margin: "24px 0 0",
-              fontSize: 16,
+              margin: "32px 0 0",
+              fontSize: 14,
               color: "var(--mm-fg-3)",
-              lineHeight: 1.5,
-              maxWidth: 520,
+              letterSpacing: "0.04em",
             }}
           >
             That&apos;s what the next section does. In about 8 seconds.

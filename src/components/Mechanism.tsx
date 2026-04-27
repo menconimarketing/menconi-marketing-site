@@ -10,11 +10,11 @@ const PHASES = [
     title: "Websites",
     sub: "The foundation.",
     body:
-      "I build the site first. Custom code. Conversion-built. Fast on a contractor’s phone in a parking lot. Indexed by Google in week one. This is the surface every dollar after this lands on.",
+      "I build the site first. Designed and written around your trade — not a template. Built to turn visitors into phone calls and form submits. This is the surface every dollar after this lands on.",
     stats: [
-      ["Custom", "no templates · no themes"],
-      ["Mobile-first", "<3s load on 4G"],
-      ["Week one", "indexed by google"],
+      ["Custom", "designed for your trade"],
+      ["Mobile", "works on any phone"],
+      ["Google", "ranks from week one"],
     ] as [string, string][],
   },
   {
@@ -56,24 +56,6 @@ const PHASE_1_DEMOS: PhaseDemo[] = [
     trade: "Property Maintenance · Chicago, IL",
     url: "https://606propertyservices.menconimarketing.com",
     status: "live",
-  },
-  {
-    name: "ParaBeach Plastering",
-    trade: "Plastering · Norwalk, CA",
-    url: "https://parabeachplastering.menconimarketing.com",
-    status: "demo",
-  },
-  {
-    name: "Martinez Landscaping",
-    trade: "Landscaping · Riverside, CA",
-    url: "https://martinezlandscaping.menconimarketing.com",
-    status: "demo",
-  },
-  {
-    name: "Sergio's Lawn Care",
-    trade: "Lawn Care · California",
-    url: "https://sergioslawncare.menconimarketing.com",
-    status: "demo",
   },
 ];
 
@@ -413,6 +395,10 @@ function Phase1Demos({
         style={{
           padding: "16px 20px",
           borderBottom: "1px solid var(--mm-charcoal)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 12,
           fontSize: 11,
           letterSpacing: "0.18em",
           textTransform: "uppercase",
@@ -420,7 +406,19 @@ function Phase1Demos({
           fontWeight: 500,
         }}
       >
-        Sites I&apos;ve built · click any to preview
+        <span>Live client · click to preview</span>
+        <a
+          href="#results"
+          style={{
+            color: "var(--mm-fg-3)",
+            textDecoration: "none",
+            transition: "color 200ms cubic-bezier(0.2,0,0,1)",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--mm-accent)")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--mm-fg-3)")}
+        >
+          See all builds →
+        </a>
       </div>
       <div>
         {PHASE_1_DEMOS.map((d, i) => (
@@ -534,7 +532,7 @@ export default function Mechanism() {
       style={{ padding: "160px 48px", position: "relative" }}
     >
       <div className="max-w-[1400px] mx-auto">
-        <Eyebrow number="04" label="The system" />
+        <Eyebrow number="03" label="The system" />
 
         <div
           className="grid"
@@ -554,13 +552,12 @@ export default function Mechanism() {
               lineHeight: 0.95,
               fontWeight: 600,
               maxWidth: 1100,
+              color: "var(--mm-fg-1)",
             }}
           >
             Three phases.
             <br />
-            <span style={{ color: "var(--mm-fg-3-inv)" }}>
-              Each one feeds the next.
-            </span>
+            <span className="mm-gradient-text">Each one feeds the next.</span>
           </h2>
           <p
             style={{

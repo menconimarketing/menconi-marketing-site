@@ -4,10 +4,11 @@ import { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Eyebrow from "./Eyebrow";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const faqs = [
+const FAQS: { q: string; a: string }[] = [
   {
     q: "I’ve been burned by an agency before. Why is this different?",
     a: "You hired a sales rep and got handed to a junior team. Here you get me — the person doing the work — every week. No proxy layer. If the work slips, you hear it from me first.",
@@ -34,48 +35,94 @@ const faqs = [
   },
   {
     q: "How much does it cost?",
-    a: "Starts at $5,000/month. Three-month minimum on monthly engagements. One-time projects billed 50% up front. Booked through email after a 30-minute call.",
+    a: "Depends on what we’re building. A site-only build is different from a full site + ads + AI engagement. After a 30-minute call, you get a fixed number in an email — no ongoing surprises. No fixed minimum until we both know what we’re scoping.",
   },
 ];
 
-function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
-  const [open, setOpen] = useState(false);
-
+function FAQItem({
+  q,
+  a,
+  index,
+  open,
+  onToggle,
+}: {
+  q: string;
+  a: string;
+  index: number;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  const [hover, setHover] = useState(false);
   return (
-    <div className={`faq-item-${index} border-b border-iron/40 group`}>
+    <div
+      className={`faq-item-${index}`}
+      style={{ borderTop: "1px solid var(--mm-charcoal)" }}
+    >
       <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between py-6 text-left"
+        onClick={onToggle}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        style={{
+          width: "100%",
+          background: hover || open ? "var(--mm-ink)" : "transparent",
+          border: "none",
+          padding: "28px 24px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 24,
+          cursor: "pointer",
+          fontFamily: "inherit",
+          color: "inherit",
+          textAlign: "left",
+          transition: "background 200ms cubic-bezier(0.2,0,0,1)",
+        }}
       >
-        <span className="text-bone text-lg font-medium pr-8 group-hover:text-chalk transition-colors duration-300 font-[var(--font-afacad)]">
+        <span
+          style={{
+            fontSize: 18,
+            fontWeight: 500,
+            letterSpacing: "-0.01em",
+            color: "var(--mm-fg-1)",
+            paddingRight: 16,
+          }}
+        >
           {q}
         </span>
         <span
-          className={`text-accent shrink-0 transition-all duration-300 ${
-            open ? "rotate-45 text-accent-bright" : ""
-          }`}
+          style={{
+            fontSize: 22,
+            color: hover || open ? "var(--mm-accent)" : "var(--mm-fg-3)",
+            transition:
+              "color 200ms cubic-bezier(0.2,0,0,1), transform 200ms cubic-bezier(0.2,0,0,1)",
+            transform: open ? "rotate(45deg)" : "rotate(0deg)",
+            flexShrink: 0,
+          }}
+          aria-hidden
         >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          >
-            <line x1="9" y1="3" x2="9" y2="15" />
-            <line x1="3" y1="9" x2="15" y2="9" />
-          </svg>
+          +
         </span>
       </button>
       <div
-        className={`overflow-hidden transition-all duration-400 ease-out ${
-          open ? "max-h-64 pb-6" : "max-h-0"
-        }`}
+        style={{
+          maxHeight: open ? 320 : 0,
+          overflow: "hidden",
+          transition: "max-height 380ms cubic-bezier(0.2,0,0,1)",
+        }}
       >
-        <p className="text-silver leading-relaxed pr-12 font-[var(--font-afacad)]">
-          {a}
-        </p>
+        <div style={{ padding: "0 24px 28px" }}>
+          <p
+            style={{
+              margin: 0,
+              fontSize: 16,
+              lineHeight: 1.6,
+              color: "var(--mm-fg-2)",
+              maxWidth: 720,
+            }}
+          >
+            {a}
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -83,6 +130,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
 
 export default function FAQ() {
   const container = useRef<HTMLDivElement>(null);
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   useGSAP(
     () => {
@@ -90,22 +138,15 @@ export default function FAQ() {
         y: 40,
         opacity: 0,
         duration: 0.8,
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top 80%",
-        },
+        scrollTrigger: { trigger: container.current, start: "top 80%" },
       });
-
-      faqs.forEach((_, i) => {
+      FAQS.forEach((_, i) => {
         gsap.from(`.faq-item-${i}`, {
           y: 20,
           opacity: 0,
           duration: 0.6,
           ease: "power3.out",
-          scrollTrigger: {
-            trigger: `.faq-item-${i}`,
-            start: "top 90%",
-          },
+          scrollTrigger: { trigger: `.faq-item-${i}`, start: "top 90%" },
         });
       });
     },
@@ -113,27 +154,60 @@ export default function FAQ() {
   );
 
   return (
-    <section ref={container} className="relative py-32 md:py-44 overflow-hidden">
-      <div
-        className="absolute top-0 left-0 w-full h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, var(--iron), transparent)",
-        }}
-      />
-      <div className="absolute inset-0 dot-grid opacity-15 pointer-events-none" />
+    <section
+      ref={container}
+      data-screen-label="06 FAQ"
+      style={{ padding: "160px 48px", position: "relative" }}
+    >
+      <div className="max-w-[1400px] mx-auto">
+        <Eyebrow number="06" label="Common questions" />
 
-      <div className="max-w-[800px] mx-auto px-6 relative z-10">
-        <h2
-          className="faq-headline font-[var(--font-afacad)] text-chalk font-extrabold mb-12 tracking-[-0.01em]"
-          style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)" }}
+        <div
+          className="grid"
+          style={{
+            marginTop: 56,
+            marginBottom: 80,
+            gridTemplateColumns: "1.4fr 1fr",
+            gap: 96,
+            alignItems: "flex-end",
+          }}
         >
-          Common questions.
-        </h2>
+          <h2
+            className="faq-headline"
+            style={{
+              margin: 0,
+              fontSize: "clamp(36px, 5vw, 76px)",
+              letterSpacing: "-0.035em",
+              lineHeight: 0.95,
+              fontWeight: 600,
+              color: "var(--mm-fg-1)",
+            }}
+          >
+            Common questions.
+          </h2>
+          <p
+            style={{
+              margin: 0,
+              fontSize: 17,
+              color: "var(--mm-fg-2)",
+              lineHeight: 1.5,
+              maxWidth: 380,
+            }}
+          >
+            The honest answers to the questions I get on every first call.
+          </p>
+        </div>
 
-        <div>
-          {faqs.map((faq, i) => (
-            <FAQItem key={i} q={faq.q} a={faq.a} index={i} />
+        <div style={{ borderBottom: "1px solid var(--mm-charcoal)" }}>
+          {FAQS.map((faq, i) => (
+            <FAQItem
+              key={i}
+              q={faq.q}
+              a={faq.a}
+              index={i}
+              open={openIdx === i}
+              onToggle={() => setOpenIdx(openIdx === i ? null : i)}
+            />
           ))}
         </div>
       </div>

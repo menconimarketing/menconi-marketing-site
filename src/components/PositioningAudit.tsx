@@ -117,40 +117,35 @@ export default function PositioningAudit() {
       }}
     >
       <div className="max-w-[1400px] mx-auto">
-        <Eyebrow number="03" label="Live positioning audit" />
-
         <div
-          className="grid"
           style={{
-            marginTop: 56,
-            marginBottom: 80,
-            gridTemplateColumns: "1.2fr 1fr",
-            gap: 96,
-            alignItems: "flex-end",
+            textAlign: "center",
+            maxWidth: 760,
+            margin: "0 auto 64px",
           }}
         >
+          <div style={{ display: "inline-block" }}>
+            <Eyebrow number="02" label="Live positioning audit" />
+          </div>
           <h2
             style={{
-              margin: 0,
+              margin: "32px 0 0",
               fontSize: "clamp(36px, 5vw, 76px)",
               letterSpacing: "-0.035em",
               lineHeight: 0.95,
               fontWeight: 600,
+              color: "var(--mm-fg-1)",
             }}
           >
-            What&apos;s broken
-            <br />
-            <span style={{ color: "var(--mm-fg-3-inv)" }}>
-              in how you show up.
-            </span>
+            What&apos;s broken in how you show up.
           </h2>
           <p
             style={{
-              margin: 0,
+              margin: "32px auto 0",
               fontSize: 17,
               color: "var(--mm-fg-2)",
               lineHeight: 1.5,
-              maxWidth: 420,
+              maxWidth: 540,
             }}
           >
             Type your business below. I&apos;ll run the same diagnostic I run on day one of a paid engagement. No email. No download. Just the report.

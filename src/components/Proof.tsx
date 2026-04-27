@@ -12,7 +12,8 @@ type Project = {
   location: string;
   url: string;
   status: "live" | "demo";
-  summary: string;
+  industryIssue: string;
+  whatSiteDoes: string;
   slides: Slide[];
 };
 
@@ -24,15 +25,17 @@ const PROJECTS: Project[] = [
     location: "Chicago, IL",
     url: "https://606propertyservices.menconimarketing.com",
     status: "live",
-    summary:
-      "Active client. Site built around Matthew's full-service property maintenance offer — the only company in his market built around landlords + investors instead of homeowners. Ongoing engagement.",
+    industryIssue:
+      "[Active client — case study copy pending Nico's input. Need: real audit findings, what's being fixed, what's working.]",
+    whatSiteDoes:
+      "[Active client — describe the live site once Nico provides specifics.]",
     slides: [
       {
-        caption: "Hero — landlord-direct positioning",
+        caption: "Hero",
         bg: "linear-gradient(135deg,#1F1F1F 0%,#2A2A2A 50%,#0A0A0A 100%)",
       },
       {
-        caption: "Service grid + lead capture",
+        caption: "Service grid",
         bg: "linear-gradient(135deg,#141414 0%,#1F1F1F 50%,#0A0A0A 100%)",
       },
     ],
@@ -44,11 +47,13 @@ const PROJECTS: Project[] = [
     location: "Norwalk, CA",
     url: "https://parabeachplastering.menconimarketing.com",
     status: "demo",
-    summary:
-      "Speculative build. Built for Cesar Cruz as part of outreach — full positioning + custom site demonstrating the kind of work I'd do on a paid engagement. Not yet engaged.",
+    industryIssue:
+      "Plastering and stucco contractors all lead with the same lines: license number, family-owned since 19XX, free estimates. Nothing on a homepage tells a homeowner why to call them over the next bid.",
+    whatSiteDoes:
+      "Built the demo around a specific kind of work and a specific buyer — not a list of services. Hero leads with the work itself, before/after gallery sits above the fold, lead form is short enough to fill out from a phone.",
     slides: [
       {
-        caption: "Stucco-specialist hero",
+        caption: "Hero — work-first",
         bg: "linear-gradient(135deg,#2A2A2A 0%,#0A0A0A 100%)",
       },
       {
@@ -64,11 +69,13 @@ const PROJECTS: Project[] = [
     location: "Riverside, CA",
     url: "https://martinezlandscaping.menconimarketing.com",
     status: "demo",
-    summary:
-      "Speculative build. Full landscaping site with a before/after gallery angle — sample of what a paid engagement looks like for residential landscapers in California. Not yet engaged.",
+    industryIssue:
+      "Residential landscapers compete on price because they can't show their actual work — sites are all stock photos and service lists. Homeowners can't tell the difference between any of them, so they pick the cheapest quote.",
+    whatSiteDoes:
+      "Built the demo around real before/after work as the proof. Every project is documented visually so a prospect can compare quality, not just price. Booking flow short enough that a homeowner can request an estimate without a phone call.",
     slides: [
       {
-        caption: "Before/after gallery hero",
+        caption: "Before / after gallery",
         bg: "linear-gradient(135deg,#1F1F1F 0%,#0A0A0A 100%)",
       },
       {
@@ -84,11 +91,13 @@ const PROJECTS: Project[] = [
     location: "California",
     url: "https://sergioslawncare.menconimarketing.com",
     status: "demo",
-    summary:
-      "Speculative build. Local lawn-care site demonstrating a route-based recurring service positioning angle. Not yet engaged.",
+    industryIssue:
+      "Lawn-care companies sell one-off mows when the real money is in route-based recurring contracts — but every site is built around single-job pricing, so customers default to one-time service.",
+    whatSiteDoes:
+      "Built the demo around the recurring-contract model. Front page leads with monthly plans instead of one-off jobs, customers can see service history once they're signed up, autopay capture is built into the booking flow.",
     slides: [
       {
-        caption: "Recurring-service hero",
+        caption: "Recurring-plan hero",
         bg: "linear-gradient(135deg,#2A2A2A 0%,#1F1F1F 100%)",
       },
       {
@@ -203,18 +212,41 @@ function ProjectExpansion({ project }: { project: Project }) {
               marginBottom: 16,
             }}
           >
-            {project.status === "live" ? "Active engagement" : "Demo build"}
+            {project.status === "live" ? "Active engagement" : "Industry issue"}
           </div>
           <p
             style={{
               margin: 0,
-              fontSize: 17,
+              fontSize: 16,
+              lineHeight: 1.55,
+              color: "var(--mm-fg-1)",
+              marginBottom: 24,
+            }}
+          >
+            {project.industryIssue}
+          </p>
+          <div
+            style={{
+              fontSize: 11,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--mm-fg-3)",
+              fontWeight: 500,
+              marginBottom: 16,
+            }}
+          >
+            What this site does
+          </div>
+          <p
+            style={{
+              margin: 0,
+              fontSize: 16,
               lineHeight: 1.55,
               color: "var(--mm-fg-1)",
               marginBottom: 32,
             }}
           >
-            {project.summary}
+            {project.whatSiteDoes}
           </p>
           <a
             href={project.url}
@@ -357,7 +389,7 @@ function WorkRow({
       </button>
       <div
         style={{
-          maxHeight: open ? 1200 : 0,
+          maxHeight: open ? 1400 : 0,
           overflow: "hidden",
           transition: "max-height 380ms cubic-bezier(0.2,0,0,1)",
         }}
@@ -374,11 +406,11 @@ export default function Proof() {
   return (
     <section
       id="results"
-      data-screen-label="06 Work"
+      data-screen-label="04 Work"
       style={{ padding: "160px 48px" }}
     >
       <div className="max-w-[1400px] mx-auto">
-        <Eyebrow number="06" label="Recent work" />
+        <Eyebrow number="04" label="Recent work" />
 
         <div
           className="grid"
@@ -397,13 +429,10 @@ export default function Proof() {
               letterSpacing: "-0.035em",
               lineHeight: 0.95,
               fontWeight: 600,
+              color: "var(--mm-fg-1)",
             }}
           >
-            One live client.
-            <br />
-            <span style={{ color: "var(--mm-fg-3-inv)" }}>
-              The rest are sites I built to demonstrate how I work.
-            </span>
+            Sites I&apos;ve built.
           </h2>
           <p
             style={{
@@ -414,7 +443,7 @@ export default function Proof() {
               maxWidth: 380,
             }}
           >
-            I&apos;m new. I&apos;m honest about it. Click any row to see the actual site I built and what I&apos;d ship for you.
+            Click any row. You&apos;ll see what was broken in that industry, what the site does about it, and the live URL.
           </p>
         </div>
 
@@ -428,21 +457,6 @@ export default function Proof() {
             />
           ))}
         </div>
-
-        {/* Honest closing line — no fake testimonial */}
-        <p
-          style={{
-            margin: "64px 0 0",
-            fontSize: 16,
-            color: "var(--mm-fg-2)",
-            lineHeight: 1.55,
-            maxWidth: 720,
-            paddingTop: 48,
-            borderTop: "1px solid var(--mm-charcoal)",
-          }}
-        >
-          You&apos;re looking at the actual state of my client list. One paying client (606 Property Services in Chicago — Matthew). Three more sites built spec for prospects I&apos;m actively talking to. Real work, real URLs, no inflated case studies.
-        </p>
       </div>
     </section>
   );

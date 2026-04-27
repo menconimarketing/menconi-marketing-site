@@ -90,30 +90,34 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Oversized wordmark watermark — the "really nice touch" */}
+        {/* Oversized wordmark — SVG so it scales to fit any width perfectly */}
         <div
           style={{
             borderTop: "1px solid var(--mm-charcoal)",
             borderBottom: "1px solid var(--mm-charcoal)",
-            padding: "32px 0",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            padding: "24px 0",
             overflow: "hidden",
           }}
         >
-          <div
-            style={{
-              fontSize: "clamp(48px, 9.2vw, 140px)",
-              fontWeight: 600,
-              letterSpacing: "-0.04em",
-              lineHeight: 0.9,
-              color: "var(--mm-ink)",
-              whiteSpace: "nowrap",
-            }}
+          <svg
+            viewBox="0 0 1000 140"
+            preserveAspectRatio="xMidYMid meet"
+            style={{ width: "100%", height: "auto", display: "block" }}
+            aria-hidden
           >
-            MENCONI MARKETING
-          </div>
+            <text
+              x="500"
+              y="115"
+              textAnchor="middle"
+              fontFamily="var(--font-afacad), Afacad, sans-serif"
+              fontWeight="600"
+              fontSize="148"
+              letterSpacing="-5"
+              fill="var(--mm-ink)"
+            >
+              MENCONI MARKETING
+            </text>
+          </svg>
         </div>
 
         <div

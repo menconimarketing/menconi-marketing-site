@@ -2,18 +2,18 @@
 
 import Eyebrow from "./Eyebrow";
 
-const FACTS: [string, string, string][] = [
-  ["Active retainers", "1 / 6", "Capped, on purpose"],
-  ["Years in", "8", "Ads · sites · automation"],
-  ["Reply window", "< 24h", "Mon–Thu, 9–5 CT"],
-  ["Stack", "Custom", "No WordPress themes"],
+const CONTACT: [string, string][] = [
+  ["Email", "nico@menconimarketing.com"],
+  ["Phone", "219-293-5148"],
+  ["Location", "Chicago, IL"],
+  ["Stack", "Custom code · no themes"],
 ];
 
 export default function Difference() {
   return (
     <section
       id="about"
-      data-screen-label="08 Founder"
+      data-screen-label="05 Founder"
       style={{
         padding: "160px 48px",
         position: "relative",
@@ -41,7 +41,6 @@ export default function Difference() {
                 overflow: "hidden",
               }}
             >
-              {/* Faux portrait — typographic monogram on darkroom plate */}
               <div
                 style={{
                   position: "absolute",
@@ -89,7 +88,19 @@ export default function Difference() {
             </div>
             <div
               style={{
-                marginTop: 20,
+                marginTop: 16,
+                fontSize: 11,
+                color: "var(--mm-fg-3)",
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                textAlign: "center",
+              }}
+            >
+              Photo coming.
+            </div>
+            <div
+              style={{
+                marginTop: 12,
                 display: "flex",
                 justifyContent: "space-between",
                 fontSize: 11,
@@ -105,21 +116,20 @@ export default function Difference() {
 
           {/* Right column */}
           <div>
-            <Eyebrow number="08" label="Who you actually work with" />
+            <Eyebrow number="05" label="Who you actually work with" />
             <h2
               style={{
-                margin: 0,
-                fontSize: "clamp(36px, 5vw, 72px)",
+                margin: "32px 0 0",
+                fontSize: "clamp(36px, 5vw, 76px)",
                 letterSpacing: "-0.035em",
                 lineHeight: 0.95,
                 fontWeight: 600,
+                color: "var(--mm-fg-1)",
               }}
             >
               One person.
               <br />
-              <span style={{ color: "var(--mm-fg-3-inv)" }}>
-                That&apos;s the entire org chart.
-              </span>
+              That&apos;s the entire org chart.
             </h2>
 
             <div
@@ -152,64 +162,52 @@ export default function Difference() {
               >
                 That&apos;s not a constraint I&apos;m apologizing for. It&apos;s the entire offer. When you hire an agency, you usually buy a sales rep with access to a junior team. When you hire me, you get the person making the decisions on your account &mdash; directly, every week, no proxy layer.
               </p>
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: 17,
-                  lineHeight: 1.55,
-                  color: "var(--mm-fg-2)",
-                }}
-              >
-                I cap the studio at six active retainers. If I can&apos;t do your account well, I won&apos;t take it. If I take it and the work slips, you&apos;ll hear it from me first.
-              </p>
             </div>
 
+            {/* Contact block — real, honest, evergreen */}
             <div
               style={{
                 marginTop: 64,
-                display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
-                gap: 0,
+                display: "flex",
+                flexDirection: "column",
                 border: "1px solid var(--mm-charcoal)",
               }}
             >
-              {FACTS.map(([k, v, sub], i) => (
+              {CONTACT.map(([label, value], i) => (
                 <div
-                  key={k}
+                  key={label}
                   style={{
-                    padding: "28px 24px",
-                    borderRight:
-                      i % 2 === 0 ? "1px solid var(--mm-charcoal)" : "none",
+                    padding: "20px 24px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 24,
                     borderBottom:
-                      i < 2 ? "1px solid var(--mm-charcoal)" : "none",
+                      i < CONTACT.length - 1
+                        ? "1px solid var(--mm-charcoal)"
+                        : "none",
                   }}
                 >
-                  <div
+                  <span
                     style={{
                       fontSize: 11,
                       letterSpacing: "0.18em",
                       textTransform: "uppercase",
                       color: "var(--mm-fg-3)",
                       fontWeight: 500,
-                      marginBottom: 12,
                     }}
                   >
-                    {k}
-                  </div>
-                  <div
+                    {label}
+                  </span>
+                  <span
                     style={{
-                      fontSize: 32,
-                      fontWeight: 600,
-                      letterSpacing: "-0.02em",
-                      lineHeight: 1,
-                      marginBottom: 8,
+                      fontSize: 16,
+                      color: "var(--mm-fg-1)",
+                      fontWeight: 500,
                     }}
                   >
-                    {v}
-                  </div>
-                  <div style={{ fontSize: 13, color: "var(--mm-fg-3)" }}>
-                    {sub}
-                  </div>
+                    {value}
+                  </span>
                 </div>
               ))}
             </div>
@@ -237,7 +235,7 @@ export default function Difference() {
                 — N.M.
               </div>
               <a
-                href="#contact"
+                href="mailto:nico@menconimarketing.com"
                 className="mm-link"
                 style={{
                   fontSize: 13,
@@ -245,7 +243,7 @@ export default function Difference() {
                   textTransform: "uppercase",
                 }}
               >
-                Email me direct →
+                Email me directly →
               </a>
             </div>
           </div>

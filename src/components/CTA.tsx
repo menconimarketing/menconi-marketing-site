@@ -58,22 +58,23 @@ export default function CTA() {
     >
       <div className="max-w-[1400px] mx-auto">
         <div style={{ marginBottom: 96 }}>
-          <Eyebrow number="10" label="Book a call" />
+          <Eyebrow number="07" label="Book a call" />
           <h2
             style={{
-              margin: 0,
+              margin: "32px 0 0",
               fontSize: "clamp(40px, 6.5vw, 96px)",
               letterSpacing: "-0.04em",
               lineHeight: 0.92,
               fontWeight: 600,
               maxWidth: 1500,
+              color: "var(--mm-fg-1)",
             }}
           >
             30 minutes.
             <br />
             <span className="mm-gradient-text">No pitch.</span>
             <br />
-            <span style={{ color: "var(--mm-fg-3-inv)" }}>Just the audit.</span>
+            Just the audit.
           </h2>
           <p
             style={{
